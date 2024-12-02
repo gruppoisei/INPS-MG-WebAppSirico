@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.12.35514.174 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "INPS-MVC_WebAppSirico", "INPS-MVC_WebAppSirico\INPS-MVC_WebAppSirico.csproj", "{EC3A15D5-1D22-4E93-BD27-17941BA898C2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "INPS-MG-WebAppSirico", "INPS-MG-WebAppSirico.csproj", "{EC3A15D5-1D22-4E93-BD27-17941BA898C2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

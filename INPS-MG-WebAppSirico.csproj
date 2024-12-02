@@ -4,7 +4,7 @@
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>INPS_MVC_WebAppSirico</RootNamespace>
+    <RootNamespace>INPS-MG-WebAppSirico</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
