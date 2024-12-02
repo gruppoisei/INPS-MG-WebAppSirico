@@ -7,7 +7,8 @@ export const environment = {
   test: false,
   baseUrl: '',
   API_URI: 'http://localhost:5250/api/',
-  MG_URL: 'https://localhost:7299/microgateaway/',
+/*   MG_URL: 'https://localhost:7299/microgateaway/', */
+  MG_URL: 'http://localhost:5157/microgateaway/',
   useHash: false,
   loginIDM: false,
 };

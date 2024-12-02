@@ -49,7 +49,8 @@ namespace INPS_MVC_WebAppSirico.Controllers
                 else
                 {
                     // Gestisci eventuali errori
-                    return StatusCode((int)response.StatusCode, "Errore nel microservizio.");
+                    var result = await response.Content.ReadAsStringAsync();
+                    return StatusCode((int)response.StatusCode, result);
                 }
 
             }
