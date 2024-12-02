@@ -28,6 +28,7 @@
     "@angular/platform-browser-dynamic": "~13.2.0",
     "@angular/router": "~13.2.0",
     "@fontsource/lora": "^5.0.17",
+    "@fontsource/titillium-web": "^5.1.0",
     "@microsoft/signalr": "^8.0.7",
     "@ng-matero/extensions": "^13.0.1",
     "@ng-matero/extensions-moment-adapter": "^13.0.0",
