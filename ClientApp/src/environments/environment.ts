@@ -7,7 +7,7 @@ export const environment = {
   test: false,
   baseUrl: '',
   API_URI: 'http://localhost:5250/api/',
-  //API_URI_MOCK: 'http://localhost:3001/',
+  MG_URL: 'https://localhost:7299/microgateaway/',
   useHash: false,
   loginIDM: false,
 };

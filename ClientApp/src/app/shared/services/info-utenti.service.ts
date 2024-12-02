@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { IdmUser } from '@shared/interfaces/Idm-user';
-import { InfoUtente } from '@shared/interfaces/info-utente';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -13,13 +12,14 @@ export class InfoUtentiService {
   constructor(private http : HttpClient) { }
 
   private apiUrl = environment.API_URI + 'Account/'
+  private mgUrl = environment.MG_URL + 'Headers/'
 
 /*   infoUtente() : Observable<InfoUtente>{
     return this.http.get<InfoUtente>(environment.API_URI+'account');
   } */
 
   newInfoUtente() : Observable<IdmUser>{
-    return this.http.get<IdmUser>((`${this.apiUrl}GetUtenteLoggato`))
+    return this.http.get<IdmUser>((`${this.mgUrl}ForwardHeaders`))
   }
 
   getInfoUtenteByUsername(loginUsername: string) : Observable<IdmUser>{
