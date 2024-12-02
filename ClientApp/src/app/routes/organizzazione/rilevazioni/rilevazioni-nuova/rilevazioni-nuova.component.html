@@ -1,0 +1,488 @@
+<page-header></page-header>
+
+<mat-stepper [linear]="isLinear" #stepper (selectionChange)="stepperChange($event)">
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Dati generali</ng-template>
+
+      <!-- CASO INSERIMENTO NUOVO PRODOTTO -->
+      <!-- <div *ngIf="loadTipoSegnalazioni == 'Prodotto'" class="container-data"> -->
+        <div class="container-data">
+          <mat-form-field class="child-data">
+            <input matInput placeholder="Settore/Materia*" [formControl]="settoreCtrl" [matAutocomplete]="autoSettore" (focus)="onFocus(settoreCtrl)">
+            <mat-autocomplete #autoSettore="matAutocomplete" (optionSelected)="settoreSelected($event)" [displayWith]="displaySettore">
+              <mat-option *ngFor="let option of filteredSettoreMateria | async" [value]="option">
+                {{option.nome}}
+              </mat-option>
+            </mat-autocomplete>
+            <button mat-icon-button matSuffix *ngIf="settoreCtrl.value" (click)="clearSettore()">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field class="child-data">
+            <input matInput placeholder="Area/Prodotto*" [formControl]="areaCtrl" [matAutocomplete]="autoArea" (focus)="onFocus(areaCtrl)">
+            <mat-autocomplete #autoArea="matAutocomplete" (optionSelected)="areaSelected($event)" [displayWith]="displayArea">
+              <mat-option *ngFor="let option of filteredAreaProdotto | async" [value]="option">
+                {{option.nome}}
+              </mat-option>
+            </mat-autocomplete>
+            <button mat-icon-button matSuffix *ngIf="areaCtrl.value" (click)="clearArea()">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </mat-form-field>
+
+          <mat-form-field class="child-data">
+            <input matInput placeholder="Sede*" [formControl]="sedeCtrl" [matAutocomplete]="autoSede" (focus)="onFocus(sedeCtrl)">
+            <mat-autocomplete #autoSede="matAutocomplete" (optionSelected)="sedeSelected($event)" [displayWith]="displaySede">
+              <mat-option *ngFor="let option of filteredSede | async" [value]="option">
+                {{displaySede(option)}}
+              </mat-option>
+            </mat-autocomplete>
+            <button mat-icon-button matSuffix *ngIf="sedeCtrl.value" (click)="clearSede()">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </mat-form-field>
+
+        </div>
+      <!-- FINE caso inserimento nuovo prodotto  -->
+
+      <!-- CASO INSERIMENTO NUOVO CONTENZIOSO -->
+      <div *ngIf="loadTipoSegnalazioni == 'Contenzioso'" class="container-data">
+        <mat-form-field class="child-data">
+          <input matInput placeholder="Tipologia contenzioso*" [formControl]="tipologiaCtrl" [matAutocomplete]="autoTipologia" (focus)="onFocus(tipologiaCtrl)">
+          <mat-autocomplete #autoTipologia="matAutocomplete" (optionSelected)="tipologiaSelected($event)" [displayWith]="displayTipologia">
+            <mat-option *ngFor="let option of filteredTipologia | async" [value]="option">
+              {{option.nome}}
+            </mat-option>
+          </mat-autocomplete>
+          <button mat-icon-button matSuffix *ngIf="tipologiaCtrl.value" (click)="clearTipologia()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <div class="child-data"></div>
+
+        <div class="child-data"></div>
+
+      </div>
+
+      <div class="container-data">
+        <button mat-button (click)="toggleAllegaDatiGenerali()" [disabled]=" showGestioneFileDatiGenerali">
+          <mat-icon>attach_file</mat-icon> Inserisci Allegato
+        </button>
+      </div>
+
+      <div class="container-data" *ngIf="showGestioneFileDatiGenerali && !isFileDatiGenerali">
+        <app-gestione-file
+          [idAspetto]="0"
+          (fileEvent)="onFilesAddedDatiGenerali($event)"
+          (fileRemovedEvent)="removeFileSegnalazione($event)">
+        </app-gestione-file>
+      </div>
+
+      <div class="container-data" *ngIf="isFileDatiGenerali">
+        <table mat-table [dataSource]="dataFileSegnalazione">
+          <tr mat-header-row *matHeaderRowDef="fileColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: fileColumns;"></tr>
+          <ng-container matColumnDef="fileName">
+            <th mat-header-cell *matHeaderCellDef>Nome del File</th>
+            <td mat-cell *matCellDef="let element">{{element.fileName}}</td>
+          </ng-container>
+          <ng-container matColumnDef="fileSize">
+            <th mat-header-cell *matHeaderCellDef>Dimensione del File</th>
+            <td mat-cell *matCellDef="let element">{{element.fileSize | number: '1.2-2'}} Mb</td>
+          </ng-container>
+          <ng-container matColumnDef="download">
+            <th mat-header-cell *matHeaderCellDef>Download</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-green-600
+              hover:bg-green-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+              (click)="downloadFileSegnalazione()">
+                <mat-icon>save_alt</mat-icon>
+              </button>
+            </td>
+          </ng-container>
+          <!-- <ng-container matColumnDef="rimuovi">
+            <th mat-header-cell *matHeaderCellDef>Rimuovi</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-red-600
+                    hover:bg-red-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+                    (click)="deleteFileSegnalazione(element.fileName)">
+              <mat-icon>delete</mat-icon>
+              </button>
+            </td>
+          </ng-container> -->
+          <ng-container matColumnDef="rimuovi">
+            <th mat-header-cell mat-header="rimuovi" *matHeaderCellDef>Rimuovi</th>
+            <td mat-cell *matCellDef="let element">
+            <div class="btn-dlt-container" [ngClass]="{'tooltip': !element.showConfirm}">
+              <button mat-button class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-red-600
+                hover:bg-red-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+                    (click)="element.showConfirm = !element.showConfirm">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <div class="tooltiptext" *ngIf="element.showConfirm">
+                  Eliminare definitivamente?<br>
+                <button class="btn-def btn-def-yes" (click)="deleteFileSegnalazione(element.fileName)">Sì</button>
+                <button class="btn-def btn-def-no" (click)="element.showConfirm = false">No</button>
+              </div>
+            </div>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+
+
+      <div class="container-buttons">
+        <button mat-button (click)="invia(1)" [disabled]="statoSegnalazione !== 1 || !isValidDatiGenerali()" class="child-buttons child-buttons-salvainbozza">
+          Salva in bozza
+        </button>
+        <button mat-button matStepperNext class="child-buttons child-buttons-conferma">
+          Avanti
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="secondFormGroup" label="Criticità">
+    <form [formGroup]="secondFormGroup">
+      <div class="container-data">
+        <!--<mat-form-field class="child-data select-aspetto">
+          <mat-label>Aspetti da valutare</mat-label>
+          <mat-select formControlName="step2Aspetti" required>
+            <mat-option *ngFor="let aspetti of aspettiDaValutare"
+                        title="{{aspetti.descrizioneAspetto}}"
+                        [value]="aspetti.idAspetto">{{aspetti.nomeAspetto}}</mat-option>
+            <mat-option (click)="dialogStepperCreazioneAspetto()">Altro</mat-option>
+          </mat-select>
+        </mat-form-field>-->
+        <!-- <mat-form-field class="child-data"> -->
+        <mat-form-field appearance="standard">
+          <input matInput placeholder="Aspetti da valutare"
+          [formControl]="aspettiCtrl"
+          [matAutocomplete]="autoAspetto">
+          <mat-autocomplete #autoAspetto="matAutocomplete" (optionSelected)="aspettoSelected($event.option.value)" [displayWith]="displayAspetto">
+            <mat-option *ngFor="let option of filteredAspettiDaValutare | async" [value]="option">
+              {{ option.nomeAspetto }}
+            </mat-option>
+            <mat-option *ngIf="!checkNuovoAspetto" (click)="dialogStepperCreazioneAspetto()">
+              Altro
+            </mat-option>
+          </mat-autocomplete>
+          <button mat-icon-button matSuffix *ngIf="aspettiCtrl.value" (click)="clearAspetto()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field class="child-data">
+          <mat-label>Criticità</mat-label>
+          <textarea matInput maxlength="65535" type="text" rows="7" class="textarea"
+                    formControlName="step2Criticita"></textarea>
+        </mat-form-field>
+      </div>
+
+      <div class="container-data">
+        <button mat-button (click)="aggiungiAspettoCriticita()"
+        [disabled]="!canAddAspect()"
+                class="child-buttons child-buttons-conferma">
+          Aggiungi</button>
+      </div>
+      <br>
+
+      <div *ngIf="listaAspettiAggiunti.length != 0" class="title">ASPETTI AGGIUNTI</div>
+      <div *ngIf="listaAspettiAggiunti.length != 0" class="container-data">
+
+        <table mat-table [dataSource]="listaAspettiAggiunti" class="mat-elevation-z8"
+               #tableStep2 matTableId="tableStep2">
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsStep2"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsStep2;"></tr>
+
+          <ng-container matColumnDef="modifica">
+            <th mat-header-cell mat-header="modifica" *matHeaderCellDef>Modifica
+            </th>
+            <td mat-cell *matCellDef="let element" class="center-icon">
+              <button mat-button (click)="modifica(element,'Criticita')"
+                      class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-green-600
+                          hover:bg-green-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"><mat-icon>edit</mat-icon></button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="rimuovi">
+            <th mat-header-cell mat-header="rimuovi" *matHeaderCellDef>Rimuovi</th>
+            <td mat-cell *matCellDef="let element">
+            <div class="btn-dlt-container" [ngClass]="{'tooltip': !element.showConfirm}">
+              <button mat-button class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-red-600
+                hover:bg-red-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+                    (click)="element.showConfirm = !element.showConfirm">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <div class="tooltiptext" *ngIf="element.showConfirm">
+                  Eliminare definitivamente l'aspetto?<br>
+                <button class="btn-def btn-def-yes" (click)="rimuoviAspettoAggiunto(element.idAspetto)">Sì</button>
+                <button class="btn-def btn-def-no" (click)="element.showConfirm = false">No</button>
+              </div>
+            </div>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="nomeAspetto">
+            <th mat-header-cell mat-header="nomeAspetto" *matHeaderCellDef>Nome Aspetto</th>
+            <td mat-cell *matCellDef="let element"> {{element.nomeAspetto}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="descrizioneCriticita">
+            <th mat-header-cell mat-header="descrizioneCriticita" *matHeaderCellDef>Criticità
+            </th>
+            <td mat-cell truncate (click)="show(element.descrizioneCriticita)"
+                *matCellDef="let element"> {{
+              showDescrizioneTroncata(element.descrizioneCriticita)}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="allegato">
+            <th mat-header-cell mat-header="allegato" *matHeaderCellDef>Allegato
+            </th>
+            <td mat-cell *matCellDef="let element">
+              <app-gestione-file *ngIf="!element.hasAllegato"
+                [idAspetto]="element.idAspetto"
+                (fileEvents)="onFilesAddedCriticita($event)"
+                (fileRemovedEvents)="removeFileAspetti($event)">
+              </app-gestione-file>
+
+              <div *ngIf="element.hasAllegato" class="file-container">
+                <span class="file-name" [matTooltip]="getNomeFileAspetto(element.idAspetto)!">{{truncateText(getNomeFileAspetto(element.idAspetto), 15)}}</span>
+
+                <button mat-button style="margin-right: 10px" class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-red-600
+                    hover:bg-red-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+                    (click)="element.showConfirmAllegato = !element.showConfirmAllegato">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+            <div class="tooltiptext" *ngIf="element.showConfirmAllegato">
+              Eliminare definitivamente l'allegato?<br>
+            <button class="btn-def btn-def-yes" (click)="deleteFileAspetto(element.idAspetto)">Sì</button>
+            <button class="btn-def btn-def-no" (click)="element.showConfirmAllegato = false">No</button>
+          </div>
+
+            <button mat-button class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-green-600
+            hover:bg-green-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"
+            (click)="downloadFileAspetto(element.idAspetto)">
+              <mat-icon>save_alt</mat-icon>
+            </button>
+              </div>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+
+      <div class="container-buttons">
+        <button mat-button matStepperPrevious class="child-buttons child-buttons-conferma">
+          Indietro
+        </button>
+        <button mat-button (click)="invia(1)" [disabled]="statoSegnalazione !== 1 || !isValidDatiGenerali()" class="child-buttons child-buttons-salvainbozza">
+          Salva in bozza
+        </button>
+        <button mat-button matStepperNext class="child-buttons child-buttons-conferma">
+          Avanti
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step [stepControl]="thirdFormGroup" label="Soluzioni e Suggerimenti">
+    <form [formGroup]="thirdFormGroup">
+
+      <div *ngIf="listaAspettiAggiunti.length == 0" class="title">
+        <br><br>
+        Non sono ancora stati aggiunti aspetti da valutare e le relative criticità.
+        <br><br>
+      </div>
+
+      <div *ngIf="listaAspettiAggiunti.length != 0" class="title">
+        <br>
+        ASPETTI AGGIUNTI</div>
+      <div *ngIf="listaAspettiAggiunti.length != 0" class="container-data">
+
+        <table mat-table [dataSource]="listaAspettiAggiunti" class="mat-elevation-z8"
+               #tableStep3 matTableId="tableStep3">
+          <tr mat-header-row *matHeaderRowDef="displayedColumnsStep3"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumnsStep3;"></tr>
+
+          <ng-container matColumnDef="modifica">
+            <th mat-header-cell mat-header="modifica" *matHeaderCellDef>Modifica
+            <th>
+            <td mat-cell *matCellDef="let element" class="center-icon">
+              <button mat-button (click)="modifica(element,'Suggerimento')"
+              class="material-icons w-auto h-auto text-base border-2 shadow-md text-white bg-green-600
+              hover:bg-green-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center"><mat-icon>edit</mat-icon></button>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="nomeAspetto">
+            <th mat-header-cell mat-header="nomeAspetto" *matHeaderCellDef>Nome Aspetto</th>
+            <td mat-cell *matCellDef="let element"> {{element.nomeAspetto}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="descrizioneCriticita">
+            <th mat-header-cell mat-header="descrizioneCriticita" *matHeaderCellDef>Criticità
+            </th>
+            <td mat-cell *matCellDef="let element"> {{
+              showDescrizioneTroncata(element.descrizioneCriticita) }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="descrizioneSuggerimento">
+            <th mat-header-cell mat-header="descrizioneSuggerimento" *matHeaderCellDef>
+              Suggerimento
+            </th>
+            <td mat-cell *matCellDef="let element"> {{
+              showDescrizioneTroncata(element.descrizioneSuggerimento) }} </td>
+          </ng-container>
+
+        </table>
+        <br>
+      </div>
+
+      <!-- <div class="flex flex-row justify-end mt-10"> -->
+      <div class="container-buttons">
+        <button mat-button matStepperPrevious class="child-buttons child-buttons-conferma">
+          Indietro
+        </button>
+        <button mat-button (click)="invia(1)" [disabled]="statoSegnalazione !== 1 || !isValidDatiGenerali()" class="child-buttons child-buttons-salvainbozza">
+          Salva in bozza
+        </button>
+        <button mat-button matStepperNext class="child-buttons child-buttons-conferma">
+          Avanti
+        </button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+    <ng-template matStepLabel>Riepilogo</ng-template>
+    <!-- DATI INCOMPLETI - CASO PRODOTTO -->
+    <div *ngIf="loadTipoSegnalazioni == 'Prodotto'" class="container-data">
+      <div class="datiincompleti" *ngIf="!isAllFieldsValidProdotto()">
+        <a class="title">Dati generali incompleti</a>
+        <button (click)="moveToStep(1)" class="child-buttons child-buttons-salvainbozza">
+          COMPLETA
+        </button>
+      </div>
+    </div>
+
+    <!-- STAMPA DEI DATI DI RIEPILOGO - CASO PRODOTTO -->
+    <div *ngIf="loadTipoSegnalazioni == 'Prodotto'">
+      <div *ngIf="isAllFieldsValidProdotto()" class="title">
+          <div class="display-title">
+          <div>
+            <h3><span class="top-title">Settore/Materia</span>
+            <span class="sub-title">{{nomeSettoreMateria}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Area/Prodotto</span>
+            <span class="sub-title">{{nomeAreaProdotto}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Sede</span>
+            <span class="sub-title">{{nomeSede}}</span></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- DATI INCOMPLETI - CASO CONTENZIOSO -->
+    <div *ngIf="loadTipoSegnalazioni == 'Contenzioso'" class="container-data">
+      <div class="datiincompleti" *ngIf="!isAllFieldsValidContenzioso()">
+        <a class="title">Dati generali incompleti</a>
+        <button (click)="moveToStep(1)" class="child-buttons child-buttons-salvainbozza">
+          COMPLETA
+        </button>
+      </div>
+    </div>
+
+    <!-- STAMPA DEI DATI DI RIEPILOGO - CASO CONTENZIOSO -->
+    <div *ngIf="loadTipoSegnalazioni == 'Contenzioso'">
+      <div *ngIf="isAllFieldsValidContenzioso()" class="title">
+        <div class="display-title">
+          <div>
+            <h3><span class="top-title">Tipologia Contezioso</span>
+            <span class="sub-title">{{nomeTipologiaContenzioso}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Settore/Materia</span>
+            <span class="sub-title">{{nomeSettoreMateria}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Area/Prodotto</span>
+            <span class="sub-title">{{nomeAreaProdotto}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Sede</span>
+            <span class="sub-title">{{nomeSede}}</span></h3>
+          </div>
+        </div>
+      </div>
+
+      <!--aggiungi contenzioso-->
+
+
+    </div>
+
+    <div *ngIf="listaAspettiAggiunti.length != 0" class="title">ASPETTI AGGIUNTI</div>
+    <div *ngIf="listaAspettiAggiunti.length == 0" class="container-data">
+      <div class="datiincompleti">
+        <a class="title">Aspetti aggiunti incompleti</a>
+        <button (click)="moveToStep(2)" class="child-buttons child-buttons-salvainbozza">
+          COMPLETA
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="listaAspettiAggiunti.length != 0" class="container-data">
+
+      <table mat-table [dataSource]="listaAspettiAggiunti" class="mat-elevation-z8"
+             #tableStep4 matTableId="tableStep4">
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsStep4"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsStep4;"></tr>
+
+        <ng-container matColumnDef="nomeAspetto">
+          <th mat-header-cell mat-header="nomeAspetto" *matHeaderCellDef>Nome Aspetto</th>
+          <td mat-cell *matCellDef="let element"> {{element.nomeAspetto}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descrizioneCriticita">
+          <th mat-header-cell mat-header="descrizioneCriticita" *matHeaderCellDef>Criticità
+          </th>
+          <td mat-cell *matCellDef="let element"> {{
+            showDescrizioneTroncata(element.descrizioneCriticita) }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descrizioneSuggerimento">
+          <th mat-header-cell mat-header="descrizioneSuggerimento" *matHeaderCellDef>
+            Suggerimento
+          </th>
+          <td mat-cell *matCellDef="let element"> {{
+            showDescrizioneTroncata(element.descrizioneSuggerimento) }} </td>
+        </ng-container>
+
+      </table>
+    </div>
+
+    <!-- </div> -->
+    <div class="container-buttons">
+      <!-- <button mat-button (click)="stepper.reset()">Reset</button> -->
+      <button mat-button matStepperPrevious class="child-buttons child-buttons-conferma">
+        Indietro
+      </button>
+      <button mat-button (click)="invia(1)" [disabled]="statoSegnalazione !== 1 || !isValidDatiGenerali()" class="child-buttons child-buttons-salvainbozza">
+        Salva in bozza
+      </button>
+<!--       <button (click)="invia(2)" [disabled]="statoSegnalazione !== 1 || !isValidFormGroup()" class="child-buttons child-buttons-conferma">
+        Salva
+      </button> -->
+      <button mat-button (click)="invia(3)" [disabled]="statoSegnalazione !== 1 || !isValidDatiGenerali() || this.listaAspettiAggiunti.length == 0" class="child-buttons child-buttons-conferma">
+        Salva ed Invia
+      </button>
+    </div>
+  </mat-step>
+</mat-stepper>
+<!-- </form> -->

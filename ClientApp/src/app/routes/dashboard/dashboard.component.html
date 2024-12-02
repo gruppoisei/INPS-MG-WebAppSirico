@@ -1,0 +1,89 @@
+<page-header></page-header>
+
+<app-alert-segnalazioni-tab *ngIf="allRoles.includes(ruoloAmministratore) || allRoles.includes(ruoloCentraleAmministrativoDCO)"></app-alert-segnalazioni-tab>
+
+
+<ng-container *ngIf="messaggioAttivo && !disableRowClick; else emptySpace" >
+<!-- <ng-container *ngIf="messaggioAttivo; else emptySpace"> -->
+  <mat-card-actions *ngIf="messaggioAttivo" align="end" class="container-cards-buttons" style="margin-top: 4%;">
+    <button mat-raised-button type="button" class="child-buttons-conferma"
+            (click)="handleRowClick(null,'Inserimento')">
+      <mat-icon>add</mat-icon>&nbsp;Nuovo Messaggio
+    </button>
+  </mat-card-actions>
+</ng-container>
+
+<ng-template #emptySpace>
+  <div [ngStyle]="{ 'margin-top': disableRowClick ? '4%' : '9.6%' }"></div>
+  <!-- <div [ngStyle]="{ 'margin-top': disableRowClick ? '4%' : '12.3%' }"></div> -->
+</ng-template>
+
+<div style="display: flex; justify-content: space-between; align-items: center;">
+  <p class="section-title">Ricerca Messaggi {{displayFieldAttivo(messaggioAttivo)}} | {{data.length }} risultati su {{elemNum}}</p>
+
+  <div *ngIf="!disableRowClick">
+  <!-- <div *ngIf="!disableRowClick" style="display: flex; justify-content: end; margin-bottom: -3.5%; margin-top: 4%;"> -->
+    <mat-slide-toggle (change)="inizializzaPaginazione()" [(ngModel)]="messaggioAttivo">Messaggi Attivi</mat-slide-toggle>
+  </div>
+</div>
+
+<div *ngIf="data.length > 0; else nessunRisultato" class="table">
+
+  <table #table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="data" class="mat-elevation-z8">
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="handleRowClick(row,'Modifica')"></tr>
+
+    <ng-container matColumnDef="dataInserimento">
+      <th mat-header-cell mat-sort-header="dataInserimento" *matHeaderCellDef>Data Inserimento</th>
+      <td mat-cell *matCellDef="let element"> {{displayFieldData(element.dataInserimento)}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="oggetto">
+      <th mat-header-cell mat-sort-header="oggetto" *matHeaderCellDef style="padding-left: 2%; text-align: left;">Oggetto</th>
+      <td mat-cell *matCellDef="let element"  style="padding-left: 2%; text-align: left;"> {{element.oggetto}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="messaggio">
+      <th mat-header-cell mat-sort-header="messaggio" *matHeaderCellDef  style="padding-left: 2%; text-align: left;">Messaggio</th>
+      <td mat-cell *matCellDef="let element"
+      style="padding-left: 2%; text-align: left;">
+      {{truncateText(element.messaggio, 50)}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="nomeCognome">
+      <th mat-header-cell mat-sort-header="nomeCognome" *matHeaderCellDef  style="padding-left: 2%; text-align: left;">Utente</th>
+      <td mat-cell *matCellDef="let element" style="padding-left: 2%; text-align: left;"> {{element.cognome}} {{element.nome}} </td>
+    </ng-container>
+
+  </table>
+
+</div>
+
+  <div *ngIf="data.length > 0" class="mat-paginator-mod">
+    <div class="pagination">
+      <a *ngIf="pageCurr > 1" (click)="pageFirst()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+      <a (click)="pagePrev()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+      <a *ngFor="let ln of layoutNumbers" [ngClass]="ln === pageCurr ? 'active' : ''" (click)="setPageCurr(ln)">{{ln}}</a>
+      <a (click)="pageNext()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+      <a *ngIf="pageCurr < pageNum" (click)="pageLast()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+    </div>
+    <div class="paginator-numelem">
+      <mat-select class="paginator-numelem-select" name="numElem" [(ngModel)]="pageDim">
+        <mat-option *ngFor="let num of numPages" value="{{num}}"
+                    (click)="inizializzaPaginazione()">{{num}}</mat-option>
+      </mat-select>
+    </div>
+    <div class="paginator-info">Pagina {{pageCurr}} di {{pageNum}}</div>
+  </div>
+
+  <ng-template #nessunRisultato>
+    <br>
+    <br>
+    <mat-card>
+      <div class="rotation-div">
+        <h1 class="nessuna-corr">
+          <mat-icon class="rotation">cached</mat-icon>
+        </h1>
+      </div>
+    </mat-card>
+  </ng-template>

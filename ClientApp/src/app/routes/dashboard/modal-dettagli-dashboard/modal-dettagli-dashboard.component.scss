@@ -1,0 +1,30 @@
+.container-data {
+    display: flex;              
+    flex-direction: column;    
+    align-items: center;       
+    justify-content: center;   
+    margin: 5% 0;           
+}
+
+.input-form {
+    width: 100%;               
+    max-width: 80%;        
+}
+
+.child-data {
+    display: flex;
+    flex-direction: column; 
+    align-items: center; 
+}
+
+label {
+    color: #2f6dd5;
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 1%; 
+}
+
+:disabled {
+    color: black;
+    background-color: #f2f2f2;
+}

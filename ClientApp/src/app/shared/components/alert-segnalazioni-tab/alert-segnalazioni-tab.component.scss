@@ -1,0 +1,52 @@
+.container-card {
+  padding: 16px;
+}
+
+.card-content-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around; /* Spaziatura uniforme tra le card */
+  gap: 10px; /* Spazio tra le card */
+}
+
+.alert-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 33%; /* Larghezza delle singole card */
+  height: 20%; /* Altezza delle singole card */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra */
+  transition: box-shadow 0.3s ease-in-out; /* Transizione dell'ombra */
+  border: 2px solid #ccc; /* Bordo grigio chiaro */
+  border-radius: 8px; /* Angoli arrotondati */
+}
+
+.alert-card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Ombra al passaggio del mouse */
+  border-color: #999; /* Colore del bordo al passaggio del mouse */
+}
+
+
+.less30{
+  color: #28a745!important;
+  font-size: xx-large;
+}
+
+.between30and45{
+  color: #ffc107!important;
+  font-size: xx-large;
+}
+
+.over60{
+  color: #dc3545!important;
+  font-size: xx-large;
+}
+
+.divider{
+  height: 15px;
+  background: linear-gradient(to right, #2f6dd5, #2196f3);
+  border: none;
+  border-radius: 2px;
+  margin: 5px;
+}

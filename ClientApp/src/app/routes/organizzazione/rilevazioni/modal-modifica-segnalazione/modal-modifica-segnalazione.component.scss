@@ -1,0 +1,88 @@
+.modal-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 90vh;
+}
+
+.modal-content {
+  overflow-y: auto;
+  padding-right: 20px;
+  flex-grow: 1;
+  padding-bottom: 0px;
+  margin-bottom: 0;
+}
+
+.container-buttons {
+  display: flex;
+  justify-content: center;
+  padding: 5px 0 0 0;
+  background-color: white;
+  position: sticky;
+  bottom: 0;
+  margin-top: 22px;
+  margin-bottom: 3px;
+}
+
+th {
+  font-size: 12pt;
+}
+
+.title {
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.align-elements {
+  padding-left: 1%;
+}
+
+.mat-header-cell {
+  padding-right: 65px;
+}
+
+.display-title {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-title div {
+  margin: 0 20px;
+}
+
+.top-title {
+  color: #878787;
+  font-size: medium;
+  display: block;
+  text-align: center;
+}
+
+.sub-title {
+  font-size: larger;
+  line-height: 1.5;
+  display: block;
+  text-align: center;
+}
+
+.btn-dlt {
+  background-color: #ff0000 !important;
+  color: white;
+}
+
+.btn-mod {
+  background-color: #2f6dd5 !important;
+  color: white;
+}
+
+.btn-back {
+  background: #606470 !important;
+  color: white;
+}

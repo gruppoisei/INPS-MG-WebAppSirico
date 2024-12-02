@@ -1,0 +1,177 @@
+// nuovi css
+.display-title {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-items: center; /* Allinea verticalmente gli elementi al centro */
+  justify-content: center; /* Allinea orizzontalmente gli elementi al centro */
+}
+
+table{
+  table-layout: fixed;
+}
+
+.display-title div {
+  margin: 0 20px; /* Aggiunge spazio orizzontale tra gli elementi */
+}
+
+.top-title {
+  color: #878787;
+  font-size: medium;
+  display: block; /* Assicura che ogni titolo grigio sia un blocco separato */
+  text-align: center; /* Centra il testo grigio */
+}
+
+.sub-title {
+  font-size: larger;
+  line-height: 1.5; /* Allinea verticalmente le scritte nere con quelle grigie */
+  display: block; /* Assicura che ogni sottotitolo nero sia un blocco separato */
+  text-align: center; /* Centra il testo nero */
+}
+
+p {
+  font-size: 16px;
+  color: #2f6dd5;
+  text-align: center;
+}
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th, td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    vertical-align: top; /* Align the text to the top */
+  }
+
+  th {
+    background-color: #3f51b5;
+    color: white;
+    font-size: 16px;
+  }
+
+  td {
+    vertical-align: top;
+  }
+
+  textarea[matInput] {
+    border: 1px solid #959595;
+    border-radius: 4px;
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: #f5f5f5;
+    resize: both;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  textarea[matInput]:focus {
+    border-color: #3f51b5; /* Cambia il colore del bordo quando la textarea è in focus */
+    outline: none; /* Rimuovi il contorno predefinito */
+    background-color: #f5f5f5;
+  }
+
+
+  .mat-cell, .mat-header-cell {
+    padding: 8px;
+  }
+
+  .btn-back {
+    background: #606470 !important;
+    // background: #5e5e5e !important;
+    color: white;
+  }
+
+  .btn-insert{
+    background: #4e95d9;
+    color: white;
+  }
+
+  .btn-aspetto{
+    background: #00b050;
+    color: white;
+  }
+
+  .btn-def{
+    width: 30%;
+    margin: 2px;
+    padding:2px;
+    cursor: pointer;
+    border: none;
+    border-radius: 2px;
+  }
+
+  .btn-def:disabled{
+    cursor: default;
+  }
+
+  .btn-def-yes{
+    background: #00b050 !important;
+    color: white;
+  }
+
+  .btn-add-container{
+    margin-left: 9px;
+    text-decoration: none;
+  }
+
+  .tooltip .tooltiptext {
+
+    opacity: 1;
+    width: 288px;
+    padding:12px;
+    background-color: rgb(65 65 65 / 95%);
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 1;
+    bottom: 126%;
+    left: -256%;
+    margin-left: -60px;
+
+    transition: opacity 0.5s;
+  }
+
+  .tooltip {
+    position: relative;
+    display: inline-block;
+    transition: all 0.5s;
+  }
+
+  .btn-def-no{
+    background: #2f6dd5 !important;
+    // background: #4c99ff !important;
+    color: white;
+  }
+
+  .background-nuovAsp{
+    background-color: #a6caec !important;
+  }
+
+  .textarea-container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .title {
+    color: black;
+    font-size: larger;
+    font-weight: bold;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.error-message{
+  color: red;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+}
+

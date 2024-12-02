@@ -1,0 +1,200 @@
+.table {
+  min-width: 900px;
+}
+
+tr {
+  text-align: left;
+}
+
+.title {
+  position: relative;
+  top: -2px;
+  left: 0px;
+  font-size: 12px;
+  color: rgb(101, 101, 101);
+  // font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+}
+
+.content {
+  position: relative;
+  top: -20px;
+  left: 0px;
+  font-size: 22px;
+}
+
+.mat-dialog-container {
+  padding: 0 !important;
+}
+
+.btn-back {
+  background: #5e5e5e !important;
+  color: white;
+}
+
+.btn-mod {
+  background: #2f6dd5 !important;
+  // background: #4c99ff !important;
+  color: white;
+}
+
+.btn-done{
+  background: #00b050;
+  color: white;
+}
+
+.btn-mod:disabled {
+  background: #2f6dd574 !important;
+  color: rgb(255, 255, 255);
+}
+
+.btn-dlt {
+  background: #fd5959 !important;
+  // background: #ff4c4c !important;
+  color: white;
+}
+
+.btn-dlt:disabled {
+  background: #f6d9d9 !important;
+  color: white;
+}
+
+.btn-dlt-container{
+  margin-left: 9px;
+  text-decoration: none;
+}
+
+.rotation {
+  animation-duration: 1s;
+  animation-name: rotate-s-loader;
+  animation-timing-function: linear;
+  zoom: 1.2;
+}
+
+.ult-mod {
+  color: #00000073;
+  position: relative;
+  font-size: 15px;
+  left: -10px;
+}
+
+.full-width {
+  min-width: 550px;
+}
+
+@keyframes rotate-s-loader {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+
+.elem-ico {
+  zoom: 1;
+  position: relative;
+  top: 0px;
+  right: 0px;
+
+  color: #00000073 !important;
+}
+
+.btn {
+  width: 49%;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #0000001a;
+}
+
+.btn-def{
+  width: 30%;
+  margin: 2px;
+  padding:2px;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
+}
+.btn-def:disabled{
+  cursor: default;
+}
+
+.btn-def-yes{
+  background: #ff0000 !important;
+  color: white;
+}
+
+.btn-def-no{
+  background: #2f6dd5 !important;
+  // background: #4c99ff !important;
+  color: white;
+}
+
+.btn-box {
+  position: relative;
+  top: -28px;
+}
+
+.main-ico {
+  position: relative;
+  top: 2px;
+  left: -4px;
+  zoom: 0.8;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+.tooltip .tooltiptext {
+
+  opacity: 0;
+  width: 288px;
+  padding:12px;
+  background-color: rgb(65 65 65 / 95%);
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 126%;
+  left: -256%;
+  margin-left: -60px;
+
+  transition: opacity 0.5s;
+}
+
+.opacity-100{
+  opacity: 100 !important;
+
+}
+
+.display-title{
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  align-items: center;
+  justify-content: center;
+}
+
+.display-title div {
+  margin: 0 20px; /* Aggiunge spazio orizzontale tra Oggetto e Tipo Comunicazione */
+}
+
+.top-title{
+  color: #878787;
+  font-size: medium;
+}
+
+.sub-title{
+  font-size: larger;
+}
+
+h2{
+  font-size: 20px;
+}

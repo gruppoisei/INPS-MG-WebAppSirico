@@ -1,0 +1,10 @@
+<div class="container">
+    <input type = "file" class= "custom-file-input" (change)="onFileSelected($event)" #fileUploader>
+    <button mat-button *ngIf="selectedFile" class="btn-del" (click)="showDeletePopup = !showDeletePopup"><mat-icon>delete</mat-icon></button>
+</div>
+
+<div class="tooltiptext" *ngIf="showDeletePopup">
+    Eliminare definitivamente l'allegato?<br>
+    <button class="btn-def btn-def-yes" (click)="removeFile()">Sì</button>
+    <button class="btn-def btn-def-no" (click)="showDeletePopup = false">No</button>
+</div>

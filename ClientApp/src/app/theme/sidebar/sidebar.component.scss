@@ -1,0 +1,47 @@
+@use '../style/variables';
+@use '../style/breakpoints';
+
+.matero-sidebar-header {
+  position: relative;
+  margin-top: 10px;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  height: variables.$toolbar-height-desktop;
+  padding: 0 10px;
+  // overflow: hidden;
+
+  @include breakpoints.bp-lt(small) {
+    & {
+      height: variables.$toolbar-height-mobile;
+    }
+  }
+
+  // Colorful
+  .matero-header-white & {
+    background-color: white;
+  }
+}
+
+.matero-sidebar-main {
+  margin-top: 50%;
+  // height: calc(100% - #{variables.$toolbar-height-desktop});
+  overflow: auto;
+
+  @include breakpoints.bp-lt(small) {
+    & {
+      height: calc(100% - #{variables.$toolbar-height-mobile});
+    }
+  }
+
+  .mat-row:nth-child(even){
+    background-color: red;
+}
+
+.mat-row:nth-child(odd){
+    background-color: black;
+}
+
+}

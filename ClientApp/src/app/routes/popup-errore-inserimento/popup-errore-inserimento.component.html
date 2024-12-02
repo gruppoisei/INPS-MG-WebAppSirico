@@ -1,0 +1,6 @@
+<h2 mat-dialog-title *ngIf="data.titolo" [innerHTML]="data.titolo"></h2>
+<h2 mat-dialog-title *ngIf="!data.titolo">Info:</h2>
+<mat-dialog-content [innerHTML]="data.message"></mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onClose()">OK</button>
+</mat-dialog-actions>

@@ -1,0 +1,31 @@
+<div *ngIf="tipoLogin == false" class="container">
+  <div class="content">
+    <div>
+      <mat-icon class="icon">person</mat-icon>
+    </div>
+    <div>
+      <p>Inserisci l'username con cui accedere</p>
+      <form class="form" [formGroup]="form1" (submit)="getAccountLoggato()">
+      <!-- <form class="form" [formGroup]="form1" (submit)="onSubmit()"> -->
+        <br>
+        <mat-form-field>
+          <mat-label>Username</mat-label>
+          <input matInput placeholder="username" value="" formControlName="loginUsername">
+        </mat-form-field>
+        <br>
+        <br>
+        <button mat-raised-button class="child-buttons-conferma" type="submit">Accedi</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="tipoLogin == true">
+  <div class="container">
+    <div *ngIf="emptyPage == true" class="emptyPage">
+      <p class="connectionFailed">Errore durante il login. Riprovare.</p>
+      <button type="button" (click)="getAccountIdmLoggato()">Riprova</button>
+    </div>
+  </div>
+</div>

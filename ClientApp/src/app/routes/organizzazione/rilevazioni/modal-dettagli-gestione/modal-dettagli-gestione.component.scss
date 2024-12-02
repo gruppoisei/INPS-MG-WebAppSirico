@@ -1,0 +1,105 @@
+.display-title {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-items: center; /* Allinea verticalmente gli elementi al centro */
+  justify-content: center; /* Allinea orizzontalmente gli elementi al centro */
+}
+
+.display-title div {
+  margin: 0 20px; /* Aggiunge spazio orizzontale tra gli elementi */
+}
+
+.top-title {
+  color: #878787;
+  font-size: medium;
+  display: block; /* Assicura che ogni titolo grigio sia un blocco separato */
+  text-align: center; /* Centra il testo grigio */
+}
+
+.sub-title {
+  font-size: larger;
+  line-height: 1.5; /* Allinea verticalmente le scritte nere con quelle grigie */
+  display: block; /* Assicura che ogni sottotitolo nero sia un blocco separato */
+  text-align: center; /* Centra il testo nero */
+}
+
+
+p {
+  font-size: 16px;
+  color: #2f6dd5;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 8px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  vertical-align: top; /* Align the text to the top */
+}
+
+th {
+  background-color: #3f51b5;
+  color: white;
+  font-size: 16px;
+}
+
+td {
+  vertical-align: top;
+}
+
+.mat-cell, .mat-header-cell {
+  padding: 8px;
+}
+
+.divButton{
+  margin-left: 5px;
+}
+
+.btn-back {
+  background: #606470 !important;
+  // background: #5e5e5e !important;
+  color: white;
+}
+
+.btn-insert{
+  background: #4e95d9;
+  color: white;
+}
+
+.btn-conferma{
+  background:#00b050;
+  color: white;
+  margin-left: 5px;
+}
+
+.background-nuovAsp{
+  background-color: #fefc85 !important
+}
+
+.textarea-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  margin-top: 25px;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.progress-container{
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 5px;
+  align-items: center;
+}

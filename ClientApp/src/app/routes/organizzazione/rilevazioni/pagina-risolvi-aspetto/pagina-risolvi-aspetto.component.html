@@ -1,0 +1,67 @@
+<page-header></page-header>
+
+<!-- <div class="flex justify-center my-10 text-4xl font-bold"> -->
+<div class="title">
+  <h2>Risolvi Aspetti</h2>
+</div>
+<!-- <div class="flex flex-row justify-center my-10"> -->
+<!-- <div class="container-data"> -->
+<div  class="container-table">
+  <!-- <table class="text-base text-left rtl:text-right"> -->
+  <table class="table">
+    <thead class="text-sm uppercase text-white bg-blue-600">
+      <tr>
+        <th scope="col" class="px-6 py-3">NOME ASPETTO</th>
+        <th scope="col" class="px-6 py-3">CRITICITÀ</th>
+        <th scope="col" class="px-6 py-3">SUGGERIMENTO</th>
+        <!-- <th scope="col" class="px-6 py-3">ELIMINA</th> -->
+        <th scope="col" class="px-6 py-3">NOTE AGGIUNTIVE</th>
+      </tr>
+    </thead>
+
+    <tbody><!-- da aggiungere la condizione per il check del nuovo aspetto -->
+      <tr *ngFor="let aspetto of listaAspettiConNote"
+          [ngClass]="{'bg-yellow-500 cursor-pointer': aspetto.idAspetto === 9}"
+          (dblclick)="aspetto.idAspetto === 9 ? handleSpecialClick(aspetto,true) : handleSpecialClick(aspetto,false)"
+          (click)="aspetto.idAspetto !== 9 ? null : $event.stopPropagation()">
+      <!-- <tr *ngFor="let aspetto of aspetti"
+          [ngClass]="{'bg-yellow-500 cursor-pointer': aspetto.idAspetto === 9}"
+          (dblclick)="aspetto.idAspetto === 9 ? handleSpecialClick(aspetto) : null"
+          (click)="aspetto.idAspetto !== 9 ? null : $event.stopPropagation()"> -->
+        <td class="px-6 py-4 truncate">{{ aspetto.nomeAspetto }}</td>
+        <td class="px-6 py-4 truncate nota-cell">{{ showDescrizioneTroncata(aspetto.descrizioneCriticita) }}</td>
+        
+        <!-- <td class="px-6 py-4 truncate" (click)="mostraTesto(la.descrizioneCriticita, la.idAspetto)">
+          {{( la.descrizioneCriticita.length > 10)? ( la.descrizioneCriticita | slice:0:8)+ '...':(
+          la.descrizioneCriticita )}}</td> -->
+         
+        <td class="px-6 py-4 truncate nota-cell">{{ showDescrizioneTroncata(aspetto.descrizioneSuggerimento) }}</td>
+        <!-- <td class="px-6 py-4 truncate"
+            (click)="mostraTesto(la.descrizioneSuggerimento, la.idAspetto)">{{(
+          la.descrizioneSuggerimento.length > 10)? ( la.descrizioneSuggerimento | slice:0:8)+
+          '...':( la.descrizioneSuggerimento )}}</td> -->
+
+        <!-- <td class="px-6 py-4 truncate">
+          <button class="text-red-600 hover:text-red-700"
+                  (click)="eliminaAspetto(la, $event)"><mat-icon>delete_forever</mat-icon></button>
+        </td> -->
+        <!-- <td class="align-text-center">
+          <button type="button" (click)="eliminaAspetto(la, $event)"
+            class="material-icons w-auto h-auto text-base border-2 shadow-md text-black bg-red-600 hover:bg-red-700 focus:ring-4 rounded-2xl px-5 py-2.5 text-center">delete</button>
+        </td> -->
+
+        <td class="px-6 py-4 truncate nota-cell">{{ showDescrizioneTroncata(aspetto.descrizioneNote) }}</td>
+
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- <div class="flex justify-center w-full my-10"> -->
+<div class="container-buttons">
+  <button type="button" (click)="goBack()" class="child-buttons child-buttons-chiudi">
+    Indietro</button>
+  <button type="submit" class="child-buttons child-buttons-risolvi">
+    Manda a conferma
+  </button>
+</div>

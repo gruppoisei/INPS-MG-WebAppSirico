@@ -1,0 +1,35 @@
+<mat-card appearance="outlined" class="container-card">
+  <mat-card-header>
+    <h2>Alert Segnalazioni</h2>
+  </mat-card-header>
+  <mat-card-content class="card-content-container">
+    <mat-card class="alert-card" appearance="outlined" (click)="navigateWithDates(null, 30)">
+      <mat-card-header>
+        <mat-card-title><mat-icon class="less30">error_outline</mat-icon></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Ci sono {{count30Days}} segnalazioni aperte da meno di 30 giorni
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="alert-card" appearance="outlined" (click)="navigateWithDates(30,45)">
+      <mat-card-header>
+        <mat-card-title><mat-icon class="between30and45">error_outline</mat-icon></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+      Ci sono {{countFrom30To45Days}} segnalazioni aperte da quasi 45 giorni.
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="alert-card" appearance="outlined" (click)="navigateWithDates(45,60)">
+      <mat-card-header>
+        <mat-card-title><mat-icon class="over60">error_outline</mat-icon></mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        Ci sono {{countFrom45To60Days}} segnalazioni aperte da quasi 60 giorni.
+      </mat-card-content>
+    </mat-card>
+  </mat-card-content>
+</mat-card>
+<!-- <mat-divider class="divider"></mat-divider>
+ -->

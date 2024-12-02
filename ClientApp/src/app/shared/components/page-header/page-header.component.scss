@@ -1,0 +1,80 @@
+// .matero-page-header {
+//   display: block;
+//   margin: -20px -20px 20px;
+//   padding: 16px;
+//   color: #fff;
+//   //background-color: #2196f3;
+//   background: linear-gradient(to right, #2f6dd5, #2196f3);
+
+//   .matero-breadcrumb {
+//     margin-top: 8px;
+//     margin-bottom: 0;
+//   }
+// }
+
+// .matero-page-title {
+//   margin: 0;
+//   font-weight: 400;
+//   font-size: 24px;
+// }
+
+// .container {
+//   display: flex; 
+// }
+
+// .matero-page-header-left {
+//   margin-right: auto;
+// }
+// .matero-page-header-right {
+//   margin-left: auto;
+// }
+
+/* Stile principale della pagina header */
+.matero-page-header {
+  display: block;
+  margin: -20px -20px 20px;
+  padding: 16px;
+  color: #fff;
+  background: linear-gradient(to right, #2f6dd5, #2196f3);
+}
+
+.matero-breadcrumb {
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.matero-page-title {
+  margin: 0;
+  font-weight: 400;
+  font-size: 24px;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.matero-page-header-left {
+  margin-right: auto;
+}
+
+.matero-page-header-right {
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+/* icona utente */
+.user-icon {
+  font-size: 55px;
+  width: 55px;
+  height: 55px;
+  margin-right: 10px;
+}
+
+/* informazioni utente */
+.user-info {
+  display: flex;
+  flex-direction: column;
+}

@@ -1,0 +1,45 @@
+<!-- TITOLO -->
+<div class="title">{{ titolo }}</div>
+
+<!-- CAMPO DA MODIFICARE -->
+<div class="container-data">
+
+    <mat-form-field class="child-data">
+        <mat-label>Aspetti da valutare</mat-label>
+        <input matInput formControlName="nomeAspetto" value="{{ aspettoDaModificare?.nomeAspetto }}" [disabled]="true">
+    </mat-form-field>
+
+    <!--  CASO CRITICITA -->
+    <mat-form-field *ngIf="titolo == 'Criticita'" class="child-data">
+        <mat-label>{{ titolo }}</mat-label>
+        <textarea matInput maxlength="65535" type="text" rows="7" [(ngModel)]="descrizione"
+            value="{{ aspettoDaModificare?.descrizioneCriticita }}" required></textarea>
+    </mat-form-field>
+
+    <!--  CASO SUGGERIMENTO -->
+    <mat-form-field *ngIf="titolo == 'Suggerimento'" class="child-data">
+        <mat-label>Criticita</mat-label>
+        <textarea disabled matInput maxlength="65535" type="text" rows="7"
+            value="{{ aspettoDaModificare?.descrizioneCriticita }}" required></textarea>
+    </mat-form-field>
+
+    <mat-form-field *ngIf="titolo == 'Suggerimento'" class="child-data">
+        <mat-label>{{ titolo }}</mat-label>
+        <textarea matInput maxlength="65535" type="text" rows="7" 
+        value="{{ aspettoDaModificare?.descrizioneSuggerimento }}" [(ngModel)]="descrizione"></textarea>
+    </mat-form-field>
+
+</div>
+
+<!-- BOTTONI -->
+<div class="container-buttons">
+    <button (click)="closeDialogStepperModifica()"
+        class="child-buttons child-buttons-chiudi">
+        Chiudi</button>
+    <button *ngIf="titolo == 'Criticita'" (click)="confirmDialogStepperModifica()" [disabled]="descrizione == ''"
+        class="child-buttons child-buttons-conferma">
+        Conferma</button>
+    <button *ngIf="titolo == 'Suggerimento'" (click)="confirmDialogStepperModifica()"
+        class="child-buttons child-buttons-conferma">
+        Conferma</button>
+</div>

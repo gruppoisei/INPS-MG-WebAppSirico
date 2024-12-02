@@ -1,0 +1,66 @@
+<container-element [ngSwitch]="tipoDettaglio">
+  <div *ngSwitchCase="0">
+    <mat-dialog-content align="center">
+      <h2>Comunicazione agli utenti</h2>
+      <div class="display-title">
+        <div>
+          <h3><span class="top-title">Oggetto</span>
+            <br>
+            <span class="sub-title">{{this.comunicazione.oggetto}}</span></h3>
+        </div>
+        <div>
+          <h3><span class="top-title">Tipo Comunicazione</span>
+            <br>
+            <span class="sub-title">{{this.tipoComunicazioni?.nome}}</span></h3>
+        </div>
+      </div>
+      <hr>
+
+      <div class="displa-title">
+        <div>
+          <span class="top-title">Messaggio</span>
+        </div>
+      </div>
+      <h4>{{this.comunicazione.messaggio}}</h4>
+
+      <mat-checkbox name="chkLetta" labelPosition="before" [(ngModel)]="checked" >Seleziona per presa visione</mat-checkbox>
+      <br><br><br>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="btn-box" align="center">
+      <button mat-button mat-dialog-close class="btn-done" (click)="salvaComunicazioneLetta()" [disabled]="!this.checked"><mat-icon>done</mat-icon>Conferma</button>
+      <button mat-button mat-dialog-close class="btn-mod"><mat-icon>arrow_forward</mat-icon>Chiudi</button>
+    </mat-dialog-actions>
+  </div>
+
+  <div *ngSwitchCase="1">
+    <mat-dialog-content align="center">
+      <h2>Comunicazione agli utenti</h2>
+      <div class="display-title">
+        <div>
+          <h3><span class="top-title">Oggetto</span>
+            <br>
+            <span class="sub-title">{{this.comunicazione.oggetto}}</span></h3>
+        </div>
+        <div>
+          <h3><span class="top-title">Tipo Comunicazione</span>
+            <br>
+            <span class="sub-title">{{this.tipoComunicazioni?.nome}}</span></h3>
+        </div>
+      </div>
+      <hr>
+
+      <div class="displa-title">
+        <div>
+          <span class="top-title">Messaggio</span>
+        </div>
+      </div>
+      <h4>{{this.comunicazione.messaggio}}</h4>
+      <br><br><br>
+    </mat-dialog-content>
+
+    <mat-dialog-actions class="btn-box" align="center">
+      <button mat-button mat-dialog-close class="btn-mod"><mat-icon>arrow_forward</mat-icon>Chiudi</button>
+    </mat-dialog-actions>
+  </div>
+</container-element>

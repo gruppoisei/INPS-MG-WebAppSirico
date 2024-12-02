@@ -1,0 +1,72 @@
+<form class="form" [formGroup]="form" (ngSubmit)="modifica()">
+
+    <div class="container-data">
+        <div class="child-data">
+            <label class="label">Oggetto</label>
+            <mat-form-field class="input-form">
+                <input class="sub-title"  [readonly]="!disableButton"  matInput formControlName="oggettoMessaggio" style="padding-left: 2%;">
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="container-data">
+        <div class="child-data">
+            <label class="label">Messaggio</label>
+            <mat-form-field class="input-form">
+                <textarea matInput
+                  [readonly]="!disableButton"
+                  value=""
+                  formControlName="contenutoMessaggio"
+                  style="resize: none; min-height: 175px;  padding-left: 2%; padding-top: 2%">
+                </textarea>
+                <!-- <textarea matInput value="" formControlName="contenutoMessaggio"
+                    style="resize: none; min-height: 175px; padding-left: 2%; padding-top: 2%">
+                </textarea> -->
+            </mat-form-field>
+        </div>
+    </div>
+
+    <div class="container-buttons">
+
+      <!-- Primo Pulsante -->
+      <button
+          *ngIf="messaggioAttivo && disableButton"
+          type="submit"
+          [disabled]="this.form.get('oggettoMessaggio')?.value.trim() == '' || this.form.get('contenutoMessaggio')?.value.trim() == ''"
+          mat-button
+          class="child-buttons child-buttons-conferma">
+        {{nomeBottone}}
+      </button>
+
+      <!-- Secondo Pulsante -->
+      <button
+          *ngIf="messaggioAttivo && !disableElimina && disableButton"
+          type="button"
+          (click)="disattivaMessaggio()"
+          mat-button
+          class="child-buttons child-buttons-elimina">
+        Disattiva
+      </button>
+
+      <!-- Terzo Pulsante -->
+      <button
+          *ngIf="!messaggioAttivo && disableButton"
+          type="button"
+          (click)="riattivaMessaggio()"
+          mat-button
+          class="child-buttons child-buttons-excel">
+        Riattiva
+      </button>
+
+      <!-- Pulsante Chiudi (Sempre Visibile) -->
+      <button
+          type="button"
+          (click)="closeDialog()"
+          mat-button
+          class="child-buttons child-buttons-chiudi">
+        Chiudi
+      </button>
+    </div>
+
+
+</form>

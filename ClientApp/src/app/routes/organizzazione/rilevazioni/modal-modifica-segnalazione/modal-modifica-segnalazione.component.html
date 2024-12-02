@@ -1,0 +1,125 @@
+<div class="modal-container">
+
+  <div class="modal-content">
+
+    <div class="title">Dettaglio Segnalazione {{ titolo }}</div> <br>
+
+    <div class="container-data">
+      <div class="table">
+        <div class="display-title" *ngIf="titolo == 'Prodotto'">
+          <div>
+            <h3><span class="top-title">Data Creazione</span>
+              <span class="sub-title">{{segnalazioneProdotto.data1}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Settore/Materia</span>
+              <span class="sub-title">{{segnalazioneProdotto.settoreMateria}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Area/Prodotto</span>
+              <span class="sub-title">{{segnalazioneProdotto.areaProdotto}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Sede</span>
+              <span class="sub-title">{{segnalazioneProdotto.sede}}</span></h3>
+          </div>
+          <div *ngIf="isAllegatoSegnalazione">
+            <h3><span class="top-title">Allegato</span>
+            <button class="sub-title" mat-button (click)="downloadFileSegnalazione()"><mat-icon>attachment</mat-icon></button></h3>
+          </div>
+        </div>
+
+        <div class="display-title" *ngIf="titolo == 'Contenzioso'">
+          <div>
+            <h3><span class="top-title">Data Creazione</span>
+              <span class="sub-title">{{segnalazioneContenzioso.data1}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Tipologia Contenzioso</span>
+              <span class="sub-title">{{segnalazioneContenzioso.contenziosoDesc}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Settore/Materia</span>
+              <span class="sub-title">{{segnalazioneContenzioso.settoreMateria}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Area/Prodotto</span>
+              <span class="sub-title">{{segnalazioneContenzioso.areaProdotto}}</span></h3>
+          </div>
+          <div>
+            <h3><span class="top-title">Sede</span>
+              <span class="sub-title">{{segnalazioneContenzioso.sede}}</span></h3>
+          </div>
+          <div *ngIf="isAllegatoSegnalazione">
+            <h3>
+              <span class="top-title">Allegato</span>
+              <mat-icon>attach_file</mat-icon>
+            </h3>
+          </div>
+        </div>
+
+        <div *ngIf="listaAspettiAggiunti.length == 0" class="title">Nessun aspetto aggiunto</div> <br>
+
+        <div *ngIf="listaAspettiAggiunti.length > 0" class="title">Aspetti Aggiunti</div> <br>
+
+        <table *ngIf="listaAspettiAggiunti.length > 0" mat-table [dataSource]="listaAspettiAggiunti"
+          class="mat-elevation-z8">
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="openDettagli(row.idAspettoSegnalazione)"></tr>
+
+          <ng-container matColumnDef="nomeAspetto">
+            <th mat-header-cell mat-header="nomeAspetto" *matHeaderCellDef>Nome Aspetto</th>
+            <td mat-cell *matCellDef="let element"> {{element.nomeAspetto}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="descrizioneCriticita">
+            <th mat-header-cell mat-header="descrizioneCriticita" *matHeaderCellDef>Criticità</th>
+            <td mat-cell *matCellDef="let element"> {{ showDescrizioneTroncata(element.criticita) }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="descrizioneSuggerimento">
+            <th mat-header-cell mat-header="descrizioneSuggerimento" *matHeaderCellDef>Suggerimento</th>
+            <td mat-cell *matCellDef="let element"> {{ showDescrizioneTroncata(element.suggerimento) }} </td>
+          </ng-container>
+
+          <ng-container *ngIf="this.statoSegnalazione == 5 && (ruolo.includes('P12689') || ruolo.includes('P12801'))" matColumnDef="integrazioneDR">
+            <th mat-header-cell mat-header="integrazioneDR" *matHeaderCellDef>Integrazione DR</th>
+            <td mat-cell *matCellDef="let element"> {{ showDescrizioneTroncata(element.integrazioneDR) }} </td>
+          </ng-container>
+
+          <ng-container *ngIf="statoSegnalazione == 5 && (ruolo.includes('P12689') || ruolo.includes('P12801'))" matColumnDef="integrazioneDC">
+            <th mat-header-cell mat-header="integrazioneDC" *matHeaderCellDef>Integrazione DC</th>
+            <td mat-cell *matCellDef="let element"> {{ showDescrizioneTroncata(element.integrazioneDC) }} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="allegato">
+            <th mat-header-cell *matHeaderCellDef>Allegato</th>
+            <td mat-cell *matCellDef="let element">
+              <button mat-button *ngIf="element.hasAllegato" (click)="downloadFileAspetto(element.idAspetto); $event.stopPropagation()" ><mat-icon>attachment</mat-icon></button>
+            </td>
+          </ng-container>
+
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-buttons">
+    <button *ngIf="statoSegnalazione == 1" mat-button (click)="modifyDialogStepperModifica()" class="btn-mod">
+      <mat-icon>edit</mat-icon>Modifica
+    </button>
+
+    <button *ngIf="statoSegnalazione == 1" mat-button (click)="deleteDialogStepperModifica()" class="btn-dlt">
+      <mat-icon>delete</mat-icon>Elimina
+    </button>
+
+    <button *ngIf="statoSegnalazione == 2" mat-button (click)="sendDialogStepperModifica()" class="btn-mod">Invia
+    </button>
+
+    <button (click)="closeDialogStepperModifica()" mat-button class="btn-back">
+      <mat-icon>arrow_back</mat-icon>Chiudi
+    </button>
+  </div>
+
+</div>

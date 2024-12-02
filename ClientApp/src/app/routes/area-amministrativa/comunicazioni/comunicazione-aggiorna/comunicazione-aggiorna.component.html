@@ -1,0 +1,104 @@
+<p><mat-icon class="main-ico">build</mat-icon>Modifica Comunicazione</p>
+<form class="form" [formGroup]="form1" (ngSubmit)="onSubmit()">
+  <!-- oggetto -->
+  <mat-form-field appearance="fill" >
+    <mat-label>Oggetto</mat-label>
+    <input matInput
+      placeholder="Oggetto"
+      formControlName="inputOggetto"
+      maxlength="250"
+      (focus)="isOggettoFocused = true"
+      (blur)="isOggettoFocused = false"
+    >
+    <mat-hint align="end" *ngIf="isOggettoFocused">
+      {{ form1.get('inputOggetto')?.value?.length || 0 }}/250
+    </mat-hint>
+    <mat-error *ngIf="form1.get('inputOggetto')?.hasError('maxlength')">
+      L'oggetto non può superare 250 caratteri.
+    </mat-error>
+  </mat-form-field>&nbsp;&nbsp;&nbsp;&nbsp;
+
+  <!-- tipo -->
+  <mat-form-field appearance="fill">
+    <mat-label>Tipo</mat-label>
+    <mat-select
+            required
+            placeolder="Tipo"
+            formControlName="inputTipo" >
+      <mat-option *ngFor="let tipocomunicazione of listaTipiComunicazione" [value]="tipocomunicazione.id">
+        {{tipocomunicazione.nome}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <br>
+
+  <!-- messaggio -->
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Messaggio</mat-label>
+    <textarea matInput
+          [style.width.px]="550"
+          [style.height.px]="100"
+          [rows]="10"
+          [cols]="40"
+          resize="none"
+          formControlName="inputMessaggio"
+          >
+    </textarea>
+  </mat-form-field>
+
+  <br>
+
+  <!-- periodo validità -->
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Periodo di validità *</mat-label>
+    <mat-date-range-input [rangePicker]="picker" (click)="picker.open()">
+      <input matStartDate matInput placeholder="Dal" formControlName="validitaDal" >
+      <input matEndDate matInput placeholder="Al" formControlName="validitaAl" >
+    </mat-date-range-input>
+    <mat-datepicker-toggle matSuffix [for]="picker" [disabled]="false">
+      <mat-icon matDatepickerToggleIcon>
+        date_range
+      </mat-icon>
+    </mat-datepicker-toggle>
+    <mat-date-range-picker #picker [disabled]="false"></mat-date-range-picker>
+  </mat-form-field>
+  <br>
+
+  <div class="full-width" appearance="fill" >
+    <mat-label>Ruoli destinatari: *</mat-label>
+    <span class="toggleAll">
+      <mat-checkbox [checked]="allRolesSelected" (change)="toggleAllRoles($event.checked)">Seleziona tutti</mat-checkbox>
+    </span>
+    <div class="scrollable-list">
+      <mat-selection-list #ruoliLista
+        formControlName="selectedRole"
+        (selectionChange)="onSelectionChange(ruoliLista.selectedOptions.selected)">
+        <mat-list-option checkboxPosition="before" *ngFor="let ruolo of ruoliList" [value]="ruolo.codice" [selected]="isChecked(ruolo.codice)">
+          {{ruolo.nome}}
+        </mat-list-option>
+      </mat-selection-list>
+    </div>
+  </div>
+  <br>
+
+  <mat-dialog-actions class="btn-box" align="center">
+    <button mat-button mat-dialog-close class="btn-back"><mat-icon>arrow_back</mat-icon>Chiudi</button>
+
+    <button type="submit" mat-button class="btn-mod" (click)="buttonClicked = 'modifica'" [disabled]="!form1.valid || !this.ruoloSelezionato || isSubmitting">
+      <mat-icon>edit</mat-icon>Modifica
+    </button>
+
+    <div class="btn-dlt-container tooltip">
+      <button mat-button class="btn-dlt" (click)="clickDelete()" [disabled]="!form1.valid || !this.ruoloSelezionato">
+          <mat-icon>delete</mat-icon>
+      </button>
+      <span *ngIf="deleteButton" class="tooltiptext" [ngClass]="deleteButton ? 'opacity-100' : ''">
+          Eliminare definitivamente?<br>
+              <button class="btn-def btn-def-yes" (click)="elimina()" [disabled]="!form1.valid || !this.ruoloSelezionato">si</button>
+              <button class="btn-def btn-def-no" (click)="clickDelete()" [disabled]="!form1.valid || !this.ruoloSelezionato">no</button>
+      </span>
+  </div>
+</mat-dialog-actions>
+
+</form>
+

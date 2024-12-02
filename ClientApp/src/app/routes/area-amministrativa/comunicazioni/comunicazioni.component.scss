@@ -1,0 +1,204 @@
+table {
+  width: 100%;
+}
+
+th {
+  // background-color: #2f6dd5 !important;
+  // // background-color: #2196f3 !important;
+  // color: white !important;
+  font-size: 16px;
+}
+
+// .mat-row {
+//   cursor: pointer;
+// }
+
+// .mat-row:hover {
+//   background-color: rgb(231, 231, 231) !important;
+// }
+
+// .mat-row:nth-child(even) {
+//   background-color: rgb(255, 255, 255);
+// }
+
+// .mat-row:nth-child(odd) {
+//   background-color: rgb(245, 245, 245);
+// }
+
+.new-button {
+  margin-right: 10px;
+}
+
+.dx {
+  float: right;
+}
+
+.new-ico {
+  position: relative;
+  top: -1px;
+  right: 5px;
+  zoom: 1.2;
+}
+
+.top-border {
+  height: 50px;
+  background-color: #2f6dd5;
+  // background-color: #2196f3;
+  margin-top: 20px;
+}
+.mat-card-title-mod {
+  color: white;
+  position: relative;
+  top: 6px;
+  right: -19px;
+}
+.mat-card-ico-mod {
+  position: relative;
+  top: 4px;
+  right: 4px;
+  zoom: 1.2;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.rotation {
+  animation-duration: 1s;
+  animation-name: rotate-s-loader;
+  animation-timing-function: linear;
+  zoom: 1.2;
+  position: relative;
+  top: 28px;
+}
+
+.rotation-div {
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  height: 100px;
+}
+
+.ricerca {
+  float: right;
+  margin-bottom: 10px;
+  padding: 5px;
+  position: relative;
+  top: 12px;
+  right: 2px;
+}
+
+.section-title {
+  float: left;
+}
+
+.filter-ico {
+  float: right;
+  position: relative;
+  top: 12px;
+  right: 5px;
+  zoom: 1.2;
+  color: #838383;
+}
+
+.mat-paginator-empty {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+}
+.section-filtro-att {
+  float: left;
+  position: relative;
+  top: 16px;
+}
+.box-filtro {
+  display: inline;
+  padding: 5px 30px 5px 8px;
+  border-radius: 25px;
+  background-color: #00000085;
+  color: white;
+  -webkit-box-shadow: 0px 0px 22px -5px rgba(0, 0, 0, 0.53);
+  box-shadow: 0px 0px 22px -5px rgba(0, 0, 0, 0.53);
+}
+
+.clear-filter-ico {
+  float: right;
+  position: relative;
+  top: 0px;
+  right: 30px;
+  cursor: pointer;
+  zoom: 0.8;
+  color: #ffffff;
+}
+
+.clear-filter-ico:hover {
+  color: #e3e3e3;
+}
+
+@keyframes rotate-s-loader {
+  from {
+    transform: rotate(360deg);
+  }
+  to {
+    transform: rotate(0);
+  }
+}
+
+//paginator style
+
+//container
+// .mat-paginator-mod {
+//   background-color: rgb(255, 255, 255);
+//   height: 50px;
+//   padding:5px;
+//   text-align: center;
+// }
+
+// .pagination {
+//   display: inline-block;
+// }
+
+// .pagination a {
+//   color: black;
+//   float: left;
+//   border-radius: 5px;
+//   padding: 8px 16px;
+//   text-decoration: none;
+//   cursor: pointer;
+// }
+
+// .pagination a.active {
+//   transition: all 0.3s;
+//   background-color: #40a8fb;
+//   border-radius: 5px;
+//   color: white;
+// }
+
+// .pagination a:hover:not(.active) {
+//   transition: all 0.5s;
+//   background-color: #ddd;
+// }
+
+
+// .paginator-info{
+//   position: relative;
+//   top: 12px;
+//   left: -26px;
+//   color:grey;
+//   font-size: 13px;
+//   float: right;
+// }
+
+// .paginator-numelem{
+//   float: left;
+//   position: relative;
+//   top:5px;
+//   left: 10px;
+//   padding:5px;
+//   border: 1px solid #ddd;
+//   font-size: 13px;
+
+// }
+
+// .paginator-numelem-select{
+//   width:80px !important;
+//   color: grey;
+// }

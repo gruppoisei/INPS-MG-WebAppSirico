@@ -1,0 +1,391 @@
+<page-header></page-header>
+<mat-tab-group>
+
+  <mat-tab class="tab" label="Segnalazioni Prodotto"> <br>
+
+    <!-- <mat-card-actions align="end" class="mat-form-actions col-sm-12"> -->
+    <mat-card-actions align="end" class="container-cards-buttons">
+      <button mat-raised-button type="submit" color="primary" (click)="exportAsXLSX('Prodotto')"
+              class="child-buttons-excel">
+        <mat-icon> cloud_download</mat-icon>&nbsp;Genera Excel
+      </button>
+    </mat-card-actions>
+
+    <br> <br>
+  <form [formGroup]="formRicerca">
+    <div class="container-data">
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Settore/Materia" [formControl]="settoreCtrl"
+               [matAutocomplete]="autoSettore" (focus)="onFocus(settoreCtrl)">
+        <mat-autocomplete #autoSettore="matAutocomplete"
+                          (optionSelected)="settoreSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredSettore | async" [value]="option.id">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="settoreCtrl.value" (click)="clearSettore()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Area/Prodotto" [formControl]="areaCtrl"
+               [matAutocomplete]="autoArea" (focus)="onFocus(areaCtrl)">
+        <mat-autocomplete #autoArea="matAutocomplete"
+                          (optionSelected)="areaSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredArea | async" [value]="option.id">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="areaCtrl.value" (click)="clearArea()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+    </div>
+
+    <div class="container-data">
+      <mat-form-field class="child-data">
+        <mat-label>Data invio da</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="dataInizio" (dateChange)="onDateChange('startDate')" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <button mat-icon-button matSuffix *ngIf="dataInizio.value" (click)="clearDate('dataInizio')">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="child-data">
+        <mat-label>Data invio a</mat-label>
+        <input matInput [matDatepicker]="picker1" [formControl]="dataFine" (dateChange)="onDateChange('endDate')" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1></mat-datepicker>
+        <button mat-icon-button matSuffix *ngIf="dataFine.value" (click)="clearDate('dataFine')">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+    <div class="container-data">
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Sede" [formControl]="sedeCtrl" [matAutocomplete]="autoSede" (focus)="onFocus(sedeCtrl)">
+        <mat-autocomplete #autoSede="matAutocomplete" (optionSelected)="sedeSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredSede | async" [value]="option.id">
+            {{showFieldSede(option.id!, option.nome)}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="sedeCtrl.value" (click)="clearSede()">
+          <mat-icon>clear</mat-icon>
+        </button>
+        </mat-form-field>
+        <div class="child-data toggle">
+          <mat-slide-toggle formControlName="slideToggleDaRisolvere">Da risolvere</mat-slide-toggle>
+        </div>
+    </div>
+
+      </form>
+
+    <!-- Buttons -->
+    <div class="container-buttons">
+      <button type="submit" mat-button class="child-buttons child-buttons-conferma"
+              (click)="inizializzaPaginazione('Prodotto')">
+        Cerca
+      </button>
+      <button type="button" mat-button class="child-buttons child-buttons-chiudi" (click)="resetRicerca('Prodotto')">
+        Annulla</button>
+    </div>
+
+    <br><br>
+
+  <p class="section-title">Ricerca Segnalazioni Prodotto inviate | {{prodotti.length }} risultati su {{elemNumProdotto}}</p>
+
+    <div *ngIf="prodotti.length > 0; else nessunRisultato" class="table">
+
+      <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="prodotti"
+             class="mat-elevation-z8">
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsProdotto"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsProdotto;"
+            (click)="handleRowClickProdotto(row)"
+            [ngClass]="{
+              'background-aspetto': row.nuovoAspetto === true && (row.statoId === 3 || row.statoId === 4),
+              'daRisolvere-background': row.statoId === 3 || row.statoId === 4,
+              'confermata-background' : row.statoId === 5
+              }">
+        </tr>
+
+        <ng-container matColumnDef="data1">
+          <th mat-header-cell mat-sort-header="data1" *matHeaderCellDef>Data Invio</th>
+          <td mat-cell *matCellDef="let element"> {{element.data1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data2">
+          <th mat-header-cell mat-sort-header="data2" *matHeaderCellDef>Data Risoluzione</th>
+          <td mat-cell *matCellDef="let element"> {{element.data2}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="settoreMateria">
+          <th mat-header-cell mat-sort-header="settoreMateria" *matHeaderCellDef>Settore/Materia
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.settoreMateria}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="areaProdotto">
+          <th mat-header-cell mat-sort-header="areaProdotto" *matHeaderCellDef>Area/Prodotto</th>
+          <td mat-cell *matCellDef="let element"> {{element.areaProdotto}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sede">
+          <th mat-header-cell mat-sort-header="sede" *matHeaderCellDef>Sede</th>
+          <td mat-cell *matCellDef="let element"> {{showFieldSede(element.sedeId, element.sede)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stato">
+          <th mat-header-cell mat-sort-header="stato" *matHeaderCellDef>Stato</th>
+          <td mat-cell *matCellDef="let element" class="align-elements">  {{showFieldStato(element.statoId)}}
+          </td>
+        </ng-container>
+
+      </table>
+
+      <div class="mat-paginator-mod">
+
+        <div class="pagination">
+          <a *ngIf="pageCurrProdotto > 1" (click)="pageFirstProdotto()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+          <a (click)="pagePrevProdotto('Prodotto')"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+          <a *ngFor="let ln of layoutNumbersProdotto" [ngClass]="ln === pageCurrProdotto ? 'active' : ''" (click)="setPageCurrProdotto(ln, 'Prodotto')">{{ln}}</a>
+          <a (click)="pageNextProdotto('Prodotto')"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+          <a *ngIf="pageCurrProdotto < pageNumProdotto" (click)="pageLastProdotto()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+        </div>
+        <div class="paginator-numelem">
+          <mat-select class="paginator-numelem-select" name="numElem" [(ngModel)]="pageDimProdotto">
+            <mat-option *ngFor="let num of numPages" value="{{num}}"
+            (click)="modificaPaginazione('Prodotto')">{{num}}</mat-option>
+          </mat-select>
+        </div>
+        <div class="paginator-info">Pagina {{pageCurrProdotto}} di {{pageNumProdotto}}</div>
+      </div>
+    </div>
+
+      <ng-template #nessunRisultato>
+      <br>
+      <br>
+      <mat-card>
+        <div class="rotation-div">
+          <h1 class="nessuna-corr">
+            <mat-icon class="rotation">cached</mat-icon>
+          </h1>
+        </div>
+      </mat-card>
+    </ng-template>
+
+  </mat-tab>
+
+
+  <mat-tab class="tab" label="Segnalazioni Contenzioso"> <br>
+    <mat-card-actions align="end" class="container-cards-buttons">
+      <button mat-raised-button type="submit" color="primary" (click)="exportAsXLSX('Contenzioso')"
+              class="child-buttons-excel">
+        <mat-icon> cloud_download</mat-icon>&nbsp;Genera Excel
+      </button>
+    </mat-card-actions>
+
+    <br> <br>
+  <form [formGroup]="formRicerca">
+    <div class="container-data">
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Settore/Materia" [formControl]="settoreCtrl"
+               [matAutocomplete]="autoSettore" (focus)="onFocus(settoreCtrl)">
+        <mat-autocomplete #autoSettore="matAutocomplete"
+                          (optionSelected)="settoreSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredSettore | async" [value]="option.id">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="settoreCtrl.value" (click)="clearSettore()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Area/Prodotto" [formControl]="areaCtrl"
+               [matAutocomplete]="autoArea" (focus)="onFocus(areaCtrl)">
+        <mat-autocomplete #autoArea="matAutocomplete"
+                          (optionSelected)="areaSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredArea | async" [value]="option.id">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="areaCtrl.value" (click)="clearArea()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div class="container-data">
+      <mat-form-field class="child-data">
+        <mat-label>Data invio da</mat-label>
+        <input matInput [matDatepicker]="picker2" [formControl]="dataInizioContenzioso" (dateChange)="onDateChange('startDateContenzioso')" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2></mat-datepicker>
+        <button mat-icon-button matSuffix *ngIf="dataInizioContenzioso.value" (click)="clearDate('dataInizioContenzioso')">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="child-data">
+        <mat-label>Data invio a</mat-label>
+        <input matInput [matDatepicker]="picker3" [formControl]="dataFineContenzioso" [min]="dataInizioContenzioso.value" (dateChange)="onDateChange('endDateContenzioso')" readonly>
+        <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+        <mat-datepicker #picker3></mat-datepicker>
+        <button mat-icon-button matSuffix *ngIf="dataFineContenzioso.value" (click)="clearDate('dataFineContenzioso')">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+    </div>
+
+    <div class="container-data">
+
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Sede" [formControl]="sedeCtrl" [matAutocomplete]="autoSede" (focus)="onFocus(sedeCtrl)">
+        <mat-autocomplete #autoSede="matAutocomplete"
+                          (optionSelected)="sedeSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredSede | async" [value]="option.id">
+            {{showFieldSede(option.id!, option.nome)}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="sedeCtrl.value" (click)="clearSede()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+
+      <mat-form-field class="child-data">
+        <input matInput placeholder="Tipologia Contenzioso" [formControl]="tipologiaContenziosoCtrl"
+               [matAutocomplete]="autoTipologiaContenzioso" (focus)="onFocus(tipologiaContenziosoCtrl)">
+        <mat-autocomplete #autoTipologiaContenzioso="matAutocomplete"
+                          (optionSelected)="tipologiaContenziosoSelected($event.option.value)">
+          <mat-option *ngFor="let option of filteredTipologiaContenzioso | async"
+                      [value]="option.id">
+            {{option.nome}}
+          </mat-option>
+        </mat-autocomplete>
+        <button mat-icon-button matSuffix *ngIf="tipologiaContenziosoCtrl.value"
+                (click)="clearTipologiaContenzioso()">
+          <mat-icon>clear</mat-icon>
+        </button>
+      </mat-form-field>
+      <div class="child-data toggle contenzioso">
+        <mat-slide-toggle formControlName ="slideToggleDaRisolvereContenzioso">Da risolvere</mat-slide-toggle>
+      </div>
+    </div>
+    </form>
+
+
+
+
+    <!-- Buttons -->
+    <div class="container-buttons">
+      <button type="submit" mat-button class="child-buttons child-buttons-conferma"
+              (click)="inizializzaPaginazione('Contenzioso')">Cerca
+      </button>
+      <button type="button" mat-button class="child-buttons child-buttons-chiudi" (click)="resetRicerca('Contenzioso')">
+        Annulla</button>
+    </div>
+
+    <br><br>
+
+    <p class="section-title">Ricerca Segnalazioni Contenzioso inviate | {{contenziosi.length }} risultati su {{elemNumContenzioso}}</p>
+
+    <div *ngIf="contenziosi.length > 0; else nessunRisultato" class="table">
+
+      <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="contenziosi"
+             class="mat-elevation-z8">
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsContenzioso"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsContenzioso;"
+            (click)="handleRowClickContenzioso(row)"
+            [ngClass]="{
+              'background-aspetto': row.nuovoAspetto === true && (row.statoId === 3 || row.statoId === 4),
+              'daRisolvere-background': row.statoId === 3 || row.statoId === 4,
+              'confermata-background' : row.statoId === 5
+              }"></tr>
+
+        <ng-container matColumnDef="data1">
+          <th mat-header-cell mat-sort-header="data1" *matHeaderCellDef>Data Invio</th>
+          <td mat-cell *matCellDef="let element"> {{element.data1}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data2">
+          <th mat-header-cell mat-sort-header="data2" *matHeaderCellDef>Data Risoluzione</th>
+          <td mat-cell *matCellDef="let element"> {{element.data2}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipologiaContenzioso">
+          <th mat-header-cell mat-sort-header="tipologiaContenzioso" *matHeaderCellDef>Tipologia
+            Contenzioso</th>
+          <td mat-cell *matCellDef="let element"> {{element.contenziosoDesc}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="settoreMateria">
+          <th mat-header-cell mat-sort-header="settoreMateria" *matHeaderCellDef>Settore/Materia
+          </th>
+          <td mat-cell *matCellDef="let element"> {{element.settoreMateria}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="areaProdotto">
+          <th mat-header-cell mat-sort-header="areaProdotto" *matHeaderCellDef>Area/Prodotto</th>
+          <td mat-cell *matCellDef="let element"> {{element.areaProdotto}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="sede">
+          <th mat-header-cell mat-sort-header="sede" *matHeaderCellDef>Sede</th>
+          <td mat-cell *matCellDef="let element"> {{showFieldSede(element.sedeId, element.sede)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="stato">
+          <th mat-header-cell mat-sort-header="stato" *matHeaderCellDef>Stato</th>
+          <td mat-cell *matCellDef="let element" class="align-elements">
+            {{showFieldStato(element.statoId)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="inviata">
+          <th mat-header-cell mat-sort-header="inviata" *matHeaderCellDef>Inviata</th>
+          <td mat-cell *matCellDef="let element" class="align-elements">
+            {{showFieldInviata(element.inviata)}} </td>
+        </ng-container>
+
+      </table>
+
+    <div class="mat-paginator-mod">
+      <div class="pagination">
+        <a *ngIf="pageCurrContenzioso > 1" (click)="pageFirstContenzioso()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+        <a (click)="pagePrevContenzioso('Contenzioso')"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+        <a *ngFor="let ln of layoutNumbersContenzioso" [ngClass]="ln === pageCurrContenzioso ? 'active' : ''" (click)="setPageCurrContenzioso(ln, 'Contenzioso')">{{ln}}</a>
+        <a (click)="pageNextContenzioso('Contenzioso')"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+        <a *ngIf="pageCurrContenzioso < pageNumContenzioso" (click)="pageLastContenzioso()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+      </div>
+      <div class="paginator-numelem">
+        <mat-select class="paginator-numelem-select" name="numElem"
+                    [(ngModel)]="pageDimContenzioso">
+          <mat-option *ngFor="let num of numPages" value="{{num}}"
+                      (click)="modificaPaginazione('Contenzioso')">{{num}}</mat-option>
+        </mat-select>
+      </div>
+      <div class="paginator-info">Pagina {{pageCurrContenzioso}} di {{pageNumContenzioso}}</div>
+    </div>
+  </div>
+
+    <ng-template #nessunRisultato>
+      <br>
+      <br>
+      <mat-card>
+        <div class="rotation-div">
+          <h1 class="nessuna-corr">
+            <mat-icon class="rotation">cached</mat-icon>
+          </h1>
+        </div>
+      </mat-card>
+    </ng-template>
+
+  </mat-tab>
+
+</mat-tab-group>

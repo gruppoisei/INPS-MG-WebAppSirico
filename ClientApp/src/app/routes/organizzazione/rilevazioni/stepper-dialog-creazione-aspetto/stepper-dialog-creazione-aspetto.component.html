@@ -1,0 +1,29 @@
+<!-- TITOLO -->
+<!-- <div class="font-bold text-2xl flex justify-center m-20 border-black">Inserisci nuova problematica</div> -->
+<div class="title">Inserisci nuova problematica</div>
+
+<!-- CAMPO DA MODIFICARE -->
+<!-- <div class="grid grid-flow-col justify-stretch m-50"> -->
+<div class="container-data">
+
+    <!-- <mat-form-field class="max-h-20 mr-auto ml-auto"> -->
+    <mat-form-field class="child-data">
+        <mat-label>Aspetti da valutare</mat-label>
+        <input matInput [(ngModel)]="nomeNuovoAspetto">
+    </mat-form-field>
+
+</div>
+
+<!-- BOTTONI -->
+<!-- <div class="flex flex-row justify-end mr-auto ml-auto mb-10 mt-10"> -->
+<div class="container-buttons">
+    <button (click)="closeDialogStepperNuovoAspetto()"
+        class="child-buttons child-buttons-chiudi">
+        Chiudi</button>
+        <!-- <button type="button" class= "flex items-center w-auto text-white text-base bg-gray-600 hover:bg-gray-700 focus:ring-4 focus:outline-none focus:ring-sky-300 font-medium rounded-lg mx-5 px-5 py-2.5 text-center">
+            <mat-icon class="mr-2">refresh</mat-icon>
+            Annulla</button> -->
+    <button (click)="confirmDialogStepperNuovoAspetto()" [disabled]="nomeNuovoAspetto == ''"
+        class="child-buttons child-buttons-conferma">
+        Conferma</button>
+</div>

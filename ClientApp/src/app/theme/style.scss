@@ -1,0 +1,15 @@
+@use 'style/reboot';
+@use 'style/misc';
+@use 'style/colors';
+
+.padding-10 {
+    padding: 10px;
+}
+
+.text-white {
+    color: white;
+}
+
+#conteiner-switch-ruolo .mat-form-field-appearance-fill .mat-form-field-flex {
+    background-color: rgba(255, 255, 255, 1) !important;
+}

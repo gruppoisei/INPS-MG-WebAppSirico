@@ -1,0 +1,209 @@
+<container-element [ngSwitch]="formAttivo">
+<!-- case0: AREA -->
+  <div *ngSwitchCase="0">
+    <p><mat-icon class="main-ico">build</mat-icon>Nuova Area/Prodotto</p>
+    <form class="form" [formGroup]="form1" (ngSubmit)="newSalvaAreeProdotto()">
+      <!-- Settore/Materia -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Settore/Materia</mat-label>
+        <mat-select
+          required
+          placeholder="Settore/Materia"
+          name="settoreMateria"
+          formControlName="selectSettoreMateria"
+        >
+          <mat-option *ngFor="let listSett of listaSettori" [value]="listSett.id">
+            {{ listSett.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <br>
+
+      <!-- Nuova Area/Prodotto -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Nuova Area/Prodotto</mat-label>
+        <input
+          matInput
+          placeholder="Es. Area1"
+          formControlName="inputArea"
+          maxlength="50"
+          (focus)="isInputAreaFocused = true"
+          (blur)="isInputAreaFocused = false"
+          (paste)="onPaste($event, 50)"
+        >
+        <mat-hint align="end" *ngIf="isInputAreaFocused">
+          {{ form1.get('inputArea')?.value?.length || 0 }}/50
+        </mat-hint>
+        <mat-error *ngIf="form1.get('inputArea')?.hasError('maxlength')">
+          Il nome dell'Area/Prodotto non può superare 50 caratteri.
+        </mat-error>
+      </mat-form-field>
+      <br>
+
+      <!-- Messaggio di errore generale -->
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+      <br *ngIf="errorMessage">
+
+      <!-- Azioni del dialog -->
+      <mat-dialog-actions class="btn-box" align="center">
+        <button mat-button mat-dialog-close class="btn btn-back">
+          <mat-icon>arrow_back</mat-icon>Chiudi
+        </button>
+        <button
+          type="submit"
+          mat-button
+          class="btn btn-mod"
+          [disabled]="!form1.valid"
+        >
+          <mat-icon>add</mat-icon>Aggiungi
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+<!-- /case0 -->
+
+
+  <!--case1: SOTTOAREA-->
+  <div *ngSwitchCase="1">
+    <p><mat-icon class="main-ico">build</mat-icon>Nuova Sottoarea</p>
+    <form class="form" [formGroup]="form2" (ngSubmit)="salvaSottoArea()">
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Area</mat-label>
+      <mat-select name="area" formControlName="area">
+        <mat-option *ngFor="let listaaree_elem of listaAree" value="{{listaaree_elem.id}}">{{listaaree_elem.nome}}</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field class="full-width" appearance="fill">
+      <mat-label>Nome Sottoarea</mat-label>
+      <input matInput placeholder="Es. Area.1" value="" formControlName="inputSottoarea">
+    </mat-form-field>
+
+    <mat-dialog-actions class="btn-box" align="center">
+      <button mat-button mat-dialog-close class="btn btn-back"><mat-icon>arrow_back</mat-icon>Chiudi</button>
+      <button type="submit" mat-button class="btn btn-mod" [disabled]="!form2.valid"> <mat-icon>add</mat-icon> Aggiungi</button>
+    </mat-dialog-actions>
+</form>
+
+</div>
+  <!--/case1-->
+  <!--case2: PRODOTTO-->
+    <div *ngSwitchCase="2">
+
+      <p><mat-icon class="main-ico">build</mat-icon>Nuovo Prodotto</p>
+      <form class="form" [formGroup]="form3" (ngSubmit)="salvaProdotto()">
+
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Area</mat-label>
+            <mat-select
+                    required
+                    placeolder="Area"
+                    formControlName="area"
+                    (selectionChange)="onAreaSelectionChanged($event.value)">
+              <mat-option *ngFor="let listaaree_elem of listaAree" value="{{listaaree_elem.id}}">{{listaaree_elem.nome}}</mat-option>
+            </mat-select>
+            <!-- <mat-error *ngIf="this.hasError('areaId', 'required')">
+              Area obbligatoria
+          </mat-error>       -->
+          </mat-form-field>
+
+        <br>
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Sottoarea</mat-label>
+          <mat-select name="sottoarea" formControlName="sottoarea">
+            <mat-option *ngFor="let listasottoaree_elem of sottoareeFiltered" value="{{listasottoaree_elem.id}}">{{listasottoaree_elem.nome}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Nome Prodotto</mat-label>
+          <input matInput placeholder="Es. Prodotto.1" value="" formControlName="inputProdotto">
+        </mat-form-field>
+        <br>
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Tipologie Lavoratori</mat-label>
+          <mat-select formControlName="tiplav" multiple   (selectionChange)=" onTipLavSelectionChanged($event.value)">
+              <mat-option *ngFor="let tiplav of listaTipLav" [value]="tiplav.id">{{tiplav.nome}}</mat-option>
+          </mat-select>
+
+      </mat-form-field>
+     <!-- <p>Tipologie Lavoratori selezionate: {{tipLavSelected}}</p> -->
+
+
+
+        <mat-dialog-actions class="btn-box" align="center">
+          <button mat-button mat-dialog-close class="btn btn-back"><mat-icon>arrow_back</mat-icon>Chiudi</button>
+          <button type="submit" mat-button class="btn btn-mod" [disabled]="!form3.valid"> <mat-icon>add</mat-icon> Aggiungi</button>
+        </mat-dialog-actions>
+      </form>
+
+      </div>
+
+        <!--/case2-->
+
+  <!--case3: Tipologia Lavoratore-->
+  <div *ngSwitchCase="3">
+
+    <p><mat-icon class="main-ico">build</mat-icon>Nuova Tipologia Lavoratore</p>
+    <form class="form" [formGroup]="form4" (ngSubmit)="salvaTipologiaLavoratore()">
+
+        <mat-form-field class="full-width" appearance="fill">
+          <mat-label>Nuova Tipologia Lavoratore</mat-label>
+          <input matInput placeholder="Es. Tipologia Lavoratore 1" value="" formControlName="inputTipologiaLavoratore">
+        </mat-form-field>
+
+        <mat-dialog-actions class="btn-box" align="center">
+          <button mat-button mat-dialog-close class="btn btn-back"><mat-icon>arrow_back</mat-icon>Chiudi</button>
+          <button type="submit" mat-button class="btn btn-mod" [disabled]="!form4.valid"><mat-icon>add</mat-icon>Aggiungi</button>
+        </mat-dialog-actions>
+      </form>
+    </div>
+
+      <!--/case3-->
+  <!-- case4: SETTORE/MATERIA -->
+  <div *ngSwitchCase="4">
+    <p><mat-icon class="main-ico">build</mat-icon>Nuovo Settore/Materia</p>
+    <form class="form" [formGroup]="form5" (ngSubmit)="salvaSettore()">
+      <!-- Nuovo Settore/Materia -->
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Nuovo Settore/Materia</mat-label>
+        <input
+          matInput
+          placeholder="Es. Pensioni"
+          formControlName="inputSettore"
+          maxlength="50"
+          (focus)="isInputSettoreFocused = true"
+          (blur)="isInputSettoreFocused = false"
+          (paste)="onPaste($event, 50)"
+        >
+        <mat-hint align="end" *ngIf="isInputSettoreFocused">
+          {{ form5.get('inputSettore')?.value?.length || 0 }}/50
+        </mat-hint>
+        <mat-error *ngIf="form5.get('inputSettore')?.hasError('maxlength')">
+          Il nome del Settore/Materia non può superare 50 caratteri.
+        </mat-error>
+      </mat-form-field>
+
+      <!-- Messaggio di errore generale -->
+      <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+
+      <!-- Azioni del dialog -->
+      <mat-dialog-actions class="btn-box" align="center">
+        <button mat-button mat-dialog-close class="btn btn-back">
+          <mat-icon>arrow_back</mat-icon>Chiudi
+        </button>
+        <button
+          type="submit"
+          mat-button
+          class="btn btn-mod"
+          [disabled]="!form5.valid"
+        >
+          <mat-icon>add</mat-icon>Aggiungi
+        </button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+  <!-- /case4 -->
+
+
+</container-element>

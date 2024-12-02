@@ -1,0 +1,31 @@
+  <mat-dialog-content align="center">
+    <h2>Comunicazione agli utenti</h2>
+    <div class="display-title">
+      <div>
+        <h3><span class="top-title">Oggetto</span>
+          <span class="sub-title">{{this.comunicazione.oggetto}}</span></h3>
+      </div>
+      <div>
+        <h3><span class="top-title">Tipo Comunicazione</span>
+          <span class="sub-title">{{this.tipoComunicazioni?.nome}}</span></h3>
+      </div>
+    </div>
+    <hr>
+
+    <div class="displa-title">
+      <div>
+        <span class="top-title">Messaggio</span>
+      </div>
+    </div>
+    <h4>{{this.comunicazione.messaggio}}</h4>
+
+    <mat-checkbox name="chkLetta" labelPosition="before" [(ngModel)]="checked" >Seleziona per presa visione</mat-checkbox>
+    <br><br><br>
+  </mat-dialog-content>
+
+  <mat-dialog-actions class="btn-box" align="center">
+    <button mat-button *ngIf="altriMessaggi" class="btn-mod" (click)="prossimoMessaggio()"><mat-icon>arrow_forward</mat-icon>Avanti</button>
+    <button mat-button *ngIf="altriMessaggi" mat-dialog-close class="btn-back"><mat-icon>close</mat-icon>Chiudi</button>
+    <!-- <button mat-button mat-dialog-close class="btn-mod" *ngIf="!altriMessaggi" ><mat-icon>arrow_forward</mat-icon>Chiudi</button> -->
+    <button mat-button *ngIf="!altriMessaggi" class="btn-mod"  (click)="ultimoMessaggio()"><mat-icon>arrow_forward</mat-icon>Chiudi</button>
+  </mat-dialog-actions>

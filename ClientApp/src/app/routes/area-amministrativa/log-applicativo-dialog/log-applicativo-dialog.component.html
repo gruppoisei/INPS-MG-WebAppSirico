@@ -1,0 +1,55 @@
+<div *ngIf="result; else nessunRisultato">
+  <mat-dialog-content align="center">
+    <h3>Informazioni di dettaglio</h3>
+
+    <hr>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td>
+            <p class="title"><mat-icon>account_circle</mat-icon>&nbsp;Account</p>
+            <p class="content">{{result.account}}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="title"><mat-icon>person_pin_circle</mat-icon>&nbsp;Matricola</p>
+            <p class="content">{{result.matricola}}</p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="title"><mat-icon>warning</mat-icon>&nbsp;Messaggio di
+              Eccezione</p>
+            <p class="content">{{result.messaggio}} </p>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <p class="title"><mat-icon>date_range</mat-icon>&nbsp; Data Eccezione</p>
+            <p class="content">{{ result.creato | date: 'dd/MM/yyyy HH:mm:ss'}}</p>
+          </td>
+        </tr>
+        <tr>
+        <td>
+          <p class="title"><mat-icon> not_listed_location</mat-icon>&nbsp;Stack dell' Eccezione</p>
+          <button id="bottoneDrop" type="btn" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false" (click)="vediStack()"><mat-icon>swap_vert</mat-icon></button>
+          <div id="stack" class="dropdown-content" [hidden]="IsHidden" align="center">
+            <p class="content">{{result.stacktrace}}</p>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+      <mat-dialog-actions align="end">
+        <button mat-button mat-dialog-close class="btn-back">
+          <mat-icon>arrow_back</mat-icon>Chiudi
+        </button>
+      </mat-dialog-actions>
+    </table>
+  </mat-dialog-content>
+</div>
+<ng-template #nessunRisultato>
+  <ng-template #nessunRisultato>
+    <h1 class="nessuna-corr"><mat-icon class="rotation">cached</mat-icon></h1>
+   </ng-template>

@@ -1,0 +1,105 @@
+.matero-header {
+  position: relative;
+  z-index: 200;
+  display: block;
+
+  .matero-toolbar {
+    padding: 0 8px;
+  }
+}
+
+.notification-text {
+  margin-left: 5px;
+  margin-right: 5px;
+  font-size: medium;
+}
+.clickable{
+  cursor: pointer;
+}
+
+
+.matero-toolbar-button .mat-badge-content {
+  background-color: #2f6dd5 !important; /* Cambia 'red' al colore desiderato */
+  color: white !important; /* Cambia 'white' al colore desiderato */
+}
+
+.matero-toolbar {
+  border-bottom: 1px solid rgba(0, 0, 0, .12);
+
+  .badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border-radius: 50rem;
+  }
+}
+
+// Customize toolbar button
+.matero-toolbar-button {
+
+  &.mat-button,
+  &.mat-icon-button {
+    margin: 0 4px;
+  }
+
+  &.mat-button {
+    min-width: unset;
+    line-height: 40px;
+    border-radius: 50rem;
+  }
+
+  &.matero-avatar-button {
+    display: block;
+    padding: 0 4px;
+    font-size: 0;
+
+    .matero-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50rem;
+    }
+
+    .matero-username {
+      margin: 0 8px;
+      font-size: 14px;
+    }
+  }
+}
+
+.matero-branding {
+  display: inline-block;
+  color: inherit;
+  font-size: 20px;
+  white-space: nowrap;
+}
+
+.matero-branding-logo-expanded {
+  width: 160px;
+  margin-top: 100px;
+  // width: 40px;
+  //height: 30px;
+  vertical-align: middle;
+  margin-right: 30px;
+  margin-left: 30px;
+
+  [dir='rtl'] & {
+    margin-right: auto;
+    margin-left: 10px;
+  }
+}
+
+.matero-branding-name {
+  color: white;
+  font-weight: bold;
+  vertical-align: middle;
+}
+
+.matero-branding-payoff {
+  color: white;
+  font-size: 12px;
+}
+
+#vesione-software {
+  padding-top: 4.5px;
+  padding-right: 10px;
+}

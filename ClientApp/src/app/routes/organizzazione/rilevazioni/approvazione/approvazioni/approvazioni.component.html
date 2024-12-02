@@ -1,0 +1,114 @@
+<page-header></page-header>
+
+<p class="section-title">Ricerca Segnalazioni da approvare | {{segnalazioni.length }} risultati su {{elemNum}}</p>
+
+<div *ngIf="segnalazioni.length > 0; else nessunRisultato" class="table">
+  <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="segnalazioni" class="mat-elevation-z8">
+    <tr mat-header-row *matHeaderRowDef="displayedColumnsProdotto"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumnsProdotto;" (click)="handleRowClick(row)"
+        [ngClass]="{
+          'integrazione-background': row.statoId === 4,
+          'integrazione-con-nuovo-aspetto': row.nuovoAspetto === true}">
+    </tr>
+
+    <ng-container matColumnDef="data1">
+      <th mat-header-cell mat-sort-header="data1" *matHeaderCellDef>Data Invio</th>
+      <td mat-cell *matCellDef="let element"> {{element.data1}} </td>
+    </ng-container>
+
+<!--     <ng-container matColumnDef="data2">
+      <th mat-header-cell mat-sort-header="data2" *matHeaderCellDef>Data Risoluzione</th>
+      <td mat-cell *matCellDef="let element"> {{element.data2}} </td>
+    </ng-container> -->
+
+<!--     <ng-container matColumnDef="scadenza">
+      <th mat-header-cell mat-sort-header="scadenza" *matHeaderCellDef>Data Scadenza</th>
+      <td mat-cell *matCellDef="let element"> {{element.scadenza}} </td>
+    </ng-container> -->
+
+    <ng-container matColumnDef="settoreMateria">
+      <th mat-header-cell mat-sort-header="settoreMateria" *matHeaderCellDef>Settore/Materia</th>
+      <td mat-cell *matCellDef="let element"> {{element.settoreMateria}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="areaProdotto">
+      <th mat-header-cell mat-sort-header="areaProdotto" *matHeaderCellDef>Area/Prodotto</th>
+      <td mat-cell *matCellDef="let element"> {{element.areaProdotto}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="tipoContenzioso">
+      <th mat-header-cell mat-sort-header="tipoContenzioso" *matHeaderCellDef>Tipo Contenzioso</th>
+      <td mat-cell *matCellDef="let element"> {{element.contenziosoDesc}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="matIns">
+      <th mat-header-cell mat-sort-header="matIns" *matHeaderCellDef>Matricola Incarico</th>
+      <td mat-cell *matCellDef="let element"> {{element.matIns}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="sede">
+      <th mat-header-cell mat-sort-header="sede" *matHeaderCellDef>Sede</th>
+      <td mat-cell *matCellDef="let element"> {{showFieldSede(element.sedeId, element.sede)}} </td>
+    </ng-container>
+
+<!--     <ng-container matColumnDef="stato">
+      <th mat-header-cell mat-sort-header="stato" *matHeaderCellDef>Stato</th>
+      <td mat-cell *matCellDef="let element" class="align-elements"> {{showFieldStato(element.statoId)}} </td>
+    </ng-container> -->
+
+    <ng-container matColumnDef="tutte">
+      <th mat-header-cell *matHeaderCellDef>
+        <div class="header-checkbox-container">
+          <mat-checkbox (change)="toggleAllSelection($event)" [checked]="isAllSelected()" [indeterminate]="isIndeterminate()"></mat-checkbox>
+          <span>Tutte</span>
+        </div>
+      </th>
+      <td mat-cell *matCellDef="let element" >
+        <mat-checkbox
+        (click)="$event.stopPropagation()"
+        (change)="toggleSelection(element.id, element.contenziosoId)"
+        [checked]="selectedKeys.has(element.id + '-' + element.contenziosoId)"  class="checkbox"></mat-checkbox>
+      </td>
+    </ng-container>
+
+  </table>
+
+  <div class="mat-paginator-mod">
+    <div class="pagination">
+      <a *ngIf="pageCurr > 1" (click)="pageFirst()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+      <a (click)="pagePrev()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+      <a *ngFor="let ln of layoutNumbers" [ngClass]="ln === pageCurr ? 'active' : ''"
+         (click)="setPageCurr(ln)">{{ln}}</a>
+      <a (click)="pageNext()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+      <a *ngIf="pageCurr < pageNum" (click)="pageLast()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+    </div>
+    <div class="paginator-numelem">
+      <mat-select class="paginator-numelem-select" name="numElem" [(ngModel)]="pageDim">
+        <mat-option *ngFor="let num of numPages" [value]="num" (click)="modificaPaginazione()">{{num}}</mat-option>
+      </mat-select>
+    </div>
+    <div class="paginator-info">Pagina {{pageCurr}} di {{pageNum}}</div>
+  </div>
+</div>
+
+<ng-template #nessunRisultato>
+  <br>
+  <br>
+  <mat-card>
+    <div class="rotation-div">
+      <h1 class="nessuna-corr">
+        <mat-icon class="rotation">cached</mat-icon>
+      </h1>
+    </div>
+  </mat-card>
+</ng-template>
+
+<div *ngIf="segnalazioni.length > 0">
+  <!-- Container per il pulsante Conferma Segnalazioni -->
+  <mat-card-actions align="end" class="container-cards-buttons" style="padding: 16px;">
+    <button mat-raised-button type="button" (click)="confermaSegnalazioni()" class="child-buttons-conferma">
+    <!-- <button mat-raised-button type="button" color="primary" (click)="confermaSegnalazioni()" class="child-cards-buttons-green"> -->
+      <mat-icon>check</mat-icon>&nbsp;{{selectedKeys.size > 1 ? 'Chiudi Segnalazioni' : 'Chiudi Segnalazione'}}
+    </button>
+  </mat-card-actions>
+</div>

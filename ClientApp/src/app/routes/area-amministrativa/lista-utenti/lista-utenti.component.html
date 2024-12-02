@@ -1,0 +1,215 @@
+<page-header></page-header>
+
+<mat-tab-group [(selectedIndex)]="selectedTab">
+
+  <!-- Tab per Gestione Utenti -->
+  <mat-tab label="Gestione Utenti"> <br>
+    <form>
+
+      <div class="container-data">
+        <!-- Settore/Materia -->
+        <mat-form-field class="child-data">
+          <input matInput placeholder="Matricola" [formControl]="matricolaCtrl" maxlength="10">
+          <button mat-icon-button matSuffix *ngIf="matricolaCtrl.value" (click)="clearMatricola()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field class="child-data">
+          <input matInput placeholder="Ruolo" [formControl]="ruoloCtrl" [matAutocomplete]="autoRuolo" (focus)="onFocus(ruoloCtrl)">
+          <mat-autocomplete #autoRuolo="matAutocomplete" (optionSelected)="ruoloSelected($event.option.value)">
+            <mat-option *ngFor="let option of filteredRuolo | async" [value]="option.ruolo1">
+              {{option.descrizione}}
+            </mat-option>
+          </mat-autocomplete>
+          <button mat-icon-button matSuffix *ngIf="ruoloCtrl.value" (click)="clearRuolo()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+      </div>
+
+      <div class="container-data">
+
+        <mat-form-field class="child-data">
+          <input matInput placeholder="Regione" [formControl]="regioneCtrl" [matAutocomplete]="autoRegione" (focus)="onFocus(regioneCtrl)">
+          <mat-autocomplete #autoRegione="matAutocomplete" (optionSelected)="regioneSelected($event.option.value)">
+            <mat-option *ngFor="let option of filteredRegione | async" [value]="option.id">
+              {{showFieldSede(option.id!, option.nome)}}
+            </mat-option>
+          </mat-autocomplete>
+          <button mat-icon-button matSuffix *ngIf="regioneCtrl.value" (click)="clearRegione()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+
+        <mat-form-field class="child-data">
+
+          <input matInput placeholder="Province" [formControl]="sedeCtrl" [matAutocomplete]="autoSede" (focus)="onFocus(sedeCtrl)">
+
+          <mat-autocomplete #autoSede="matAutocomplete" (optionSelected)="sedeSelected($event.option.value)">
+            <mat-option *ngFor="let option of filteredSede | async " [value]="option.id!">
+              {{showFieldSede(option.id!, option.nome)}}
+            </mat-option>
+          </mat-autocomplete>
+
+          <button mat-icon-button matSuffix *ngIf="sedeCtrl.value" (click)="clearSede()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </mat-form-field>
+      </div>
+
+      <div class="container-buttons">
+        <div class="container">
+          <input type="file" class="custom-file-input" accept=".xls, .xlsx" (change)="onFileSelected($event)" #fileUploader style="display:none">
+
+          <button mat-button class="btn-scarica" (click)="selectedFile ? onUpload() : fileUploader.click()">
+            <mat-icon>cloud_upload</mat-icon>
+            Censimento Utenti
+          </button>
+        </div>
+
+        <button (click)="ricercaFiltrata()" mat-button class="child-buttons child-buttons-conferma">
+          Cerca
+        </button>
+
+        <button (click)="resetRicerca()" mat-button class="child-buttons child-buttons-chiudi">
+          Annulla
+        </button>
+      </div>
+      <br>
+      <p class="section-title">Ricerca Lista Utenti | {{dataSourceFiltered.length }} risultati su {{elemNum}}</p>
+      <div *ngIf="dataSourceFiltered.length > 0; else nessunRisultato">
+        <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSourceFiltered" class="mat-elevation-z8">
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="handleRowClick(row)"></tr>
+
+          <ng-container matColumnDef="matricola">
+            <th mat-header-cell mat-sort-header="matricola" *matHeaderCellDef> Matricola </th>
+            <td mat-cell *matCellDef="let element"> {{showField(element.matricola)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="cognome">
+            <th mat-header-cell mat-sort-header="cognome" *matHeaderCellDef> Cognome </th>
+            <td mat-cell *matCellDef="let element"> {{showField(element.cognome)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell mat-sort-header="nome" *matHeaderCellDef> Nome </th>
+            <td mat-cell *matCellDef="let element"> {{showField(element.nome)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="email">
+            <th mat-header-cell mat-sort-header="email" *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let element"> {{showField(element.email)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="accountWindows">
+            <th mat-header-cell mat-sort-header="account" *matHeaderCellDef> Account </th>
+            <td mat-cell *matCellDef="let element"> {{showField(element.username)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="codiceSede">
+            <th mat-header-cell mat-sort-header="sede" *matHeaderCellDef> Sede </th>
+            <td mat-cell *matCellDef="let element">
+              <span
+                    (click)="showAllFieldSedi(element.sedeDTO)">{{displayFieldSede(element.sedeDTO)}}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ruoli">
+            <th mat-header-cell mat-sort-header="ruolo" *matHeaderCellDef> Ruolo </th>
+            <td mat-cell *matCellDef="let element">
+              <span (click)="showAllFieldRuoli(element.ruoloDTO)">{{displayFieldRuolo(element.ruoloDTO)}}</span>
+            </td>
+          </ng-container>
+        </table>
+      </div>
+
+      <div *ngIf="dataSourceFiltered.length > 0" class="mat-paginator-mod">
+        <div class="pagination">
+          <a *ngIf="pageCurr > 1" (click)="pageFirst()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+          <a (click)="pagePrev()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+          <a *ngFor="let ln of layoutNumbers" [ngClass]="ln === pageCurr ? 'active' : ''" (click)="setPageCurr(ln)">{{ln}}</a>
+          <a (click)="pageNext()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+          <a *ngIf="pageCurr < pageNum" (click)="pageLast()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+        </div>
+        <div class="paginator-numelem">
+          <mat-select class="paginator-numelem-select" name="numElem" [(ngModel)]="pageDim">
+            <mat-option *ngFor="let num of numPages" value="{{num}}"
+                        (click)="inizializzaPaginazione()">{{num}}</mat-option>
+          </mat-select>
+        </div>
+        <div class="paginator-info">Pagina {{pageCurr}} di {{pageNum}}</div>
+      </div>
+
+      <ng-template #nessunRisultato>
+        <br>
+        <br>
+        <mat-card>
+          <div class="rotation-div">
+            <h1 class="nessuna-corr">
+              <mat-icon class="rotation">cached</mat-icon>
+            </h1>
+          </div>
+        </mat-card>
+      </ng-template>
+    </form>
+  </mat-tab>
+
+  <!-- Tab per Lista Scarti -->
+  <mat-tab label="Lista Scarti"> <br>
+    <p class="section-title">Lista Utenti Scartati | {{dataSourceScarti.length }} risultati su {{elemNumScarti}}</p>
+    <div *ngIf="dataSourceScarti.length > 0; else nessunScarto">
+      <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSourceScarti" class="mat-elevation-z8">
+        <!-- Definizione colonne per lista scarti -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumnsScarti"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsScarti;" (click)="handleRowClick(row)"></tr>
+
+        <ng-container matColumnDef="dataScarto">
+          <th mat-header-cell mat-sort-header="dataScarto" *matHeaderCellDef> Data Scarto </th>
+          <td mat-cell *matCellDef="let element"> {{displayFieldData(element.dataScarto)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="matricola">
+          <th mat-header-cell mat-sort-header="matricola" *matHeaderCellDef> Matricola </th>
+          <td mat-cell *matCellDef="let element"> {{showField(element.matricola)}} </td>
+        </ng-container>
+        <ng-container matColumnDef="motivazioneScarto">
+          <th mat-header-cell mat-sort-header="motivazioneScarto" *matHeaderCellDef> Motivazione Scarto </th>
+          <td mat-cell *matCellDef="let element"> {{showField(element.motivazioneScarto)}} </td>
+        </ng-container>
+      </table>
+    </div>
+
+    <div *ngIf="dataSourceScarti.length > 0" class="mat-paginator-mod">
+      <div class="pagination">
+        <a *ngIf="pageCurrScarti > 1" (click)="pageFirstScarti()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+        <a (click)="pagePrevScarti()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+        <a *ngFor="let ln of layoutNumbersScarti" [ngClass]="ln === pageCurrScarti ? 'active' : ''" (click)="setPageCurrScarti(ln)">{{ln}}</a>
+        <a (click)="pageNextScarti()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+        <a *ngIf="pageCurrScarti < pageNumScarti" (click)="pageLastScarti()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+      </div>
+      <div class="paginator-numelem">
+        <mat-select class="paginator-numelem-select" name="numElemScarti" [(ngModel)]="pageDimScarti">
+          <mat-option *ngFor="let numScarti of numPagesScarti" value="{{numScarti}}"
+                      (click)="inizializzaPaginazioneScarti()">{{numScarti}}</mat-option>
+        </mat-select>
+      </div>
+      <div class="paginator-info">Pagina {{pageCurrScarti}} di {{pageNumScarti}}</div>
+    </div>
+
+    <ng-template #nessunScarto>
+      <br>
+      <br>
+      <mat-card>
+        <div class="rotation-div">
+          <h1 class="nessuna-corr">
+            <mat-icon class="rotation">cached</mat-icon>
+          </h1>
+        </div>
+      </mat-card>
+    </ng-template>
+  </mat-tab>
+
+</mat-tab-group>

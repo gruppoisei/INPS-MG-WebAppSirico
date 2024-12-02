@@ -1,0 +1,77 @@
+<page-header></page-header>
+<mat-card-actions align="end" class="container-cards-buttons">
+  <button mat-raised-button type="button" class="child-buttons-conferma" (click)="nuovaDialog()">
+    <mat-icon class="new-ico">add</mat-icon>&nbsp;Nuova
+  </button>
+</mat-card-actions>
+<br>
+<br>
+<br>
+<p class="section-title">Comunicazioni | {{elemNum}} risultati</p>
+<div class="section-filtro-att" *ngIf="filtroStringa">&nbsp;per il filtro: <div class="box-filtro">{{filtroStringa}}
+    <mat-icon class="clear-filter-ico" (click)="azzeraFiltro()">clear</mat-icon>
+  </div>
+</div>
+<div class="section-filtro-att" *ngIf="!filtroStringa">&nbsp;su {{elemNum}}</div>
+<!-- <input type="text" align="end" class="ricerca" [(ngModel)]="filtroStringa" (keyup)="chiamaFiltro()"> -->
+<input type="text" align="end" class="ricerca" [(ngModel)]="filtroStringa" (input)="onInputChange($event)" placeholder="Cerca...">
+<mat-icon class="filter-ico">filter_list</mat-icon>
+<div *ngIf="dataSource.length>0; else nessunRisultato">
+  <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <ng-container matColumnDef="oggetto">
+      <th mat-header-cell mat-sort-header="oggetto" *matHeaderCellDef> Oggetto </th>
+      <td mat-cell *matCellDef="let element" (click)="modificaDialog(element.id)"> {{element.oggetto}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell mat-sort-header="nome" *matHeaderCellDef> Tipo </th>
+      <td mat-cell *matCellDef="let element" (click)="modificaDialog(element.id)"> {{element.nome}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="messaggio">
+      <th mat-header-cell mat-sort-header="messaggio" *matHeaderCellDef> Messaggio </th>
+      <td mat-cell *matCellDef="let element" (click)="modificaDialog(element.id)" [matTooltip]="element.messaggio"> {{ element.messaggio ? element.messaggio.substring(0,50) + '...' : '' }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataInizio">
+      <th mat-header-cell mat-sort-header="dataInizio" *matHeaderCellDef> Valido dal </th>
+      <td mat-cell *matCellDef="let element" (click)="modificaDialog(element.id)"> {{element.dataInizio | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataFine">
+      <th mat-header-cell mat-sort-header="dataFine" *matHeaderCellDef> Valido al </th>
+      <td mat-cell *matCellDef="let element" (click)="modificaDialog(element.id)"> {{element.dataFine | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+  </table>
+
+  <div class="mat-paginator-mod">
+    <div class="pagination">
+      <a *ngIf="pageCurr > 1" (click)="pageFirst()"><mat-icon [ngClass]="{'first-last-page-icon': true}">first_page</mat-icon></a>
+      <a (click)="pagePrev()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_left</mat-icon></a>
+      <a *ngFor="let ln of layoutNumbers" [ngClass]="ln === pageCurr ? 'active' : ''" (click)="setPageCurr(ln)">{{ln}}</a>
+      <a (click)="pageNext()"><mat-icon [ngClass]="{'first-last-page-icon': true}">keyboard_arrow_right</mat-icon></a>
+      <a *ngIf="pageCurr < pageNum" (click)="pageLast()"><mat-icon [ngClass]="{'first-last-page-icon': true}">last_page</mat-icon></a>
+    </div>
+    <div class="paginator-numelem">
+      <mat-select class="paginator-numelem-select" [(ngModel)]="pageDim">
+        <mat-option *ngFor="let num of numPages" value="{{num}}" (click)="inizializzaPaginazione()">{{num}}</mat-option>
+      </mat-select>
+    </div>
+    <div class="paginator-info">Pagina {{pageCurr}} di {{pageNum}}</div>
+  </div>
+</div>
+
+<ng-template #nessunRisultato>
+  <br>
+  <br>
+  <div class="rotation-div">
+    <h1 class="nessuna-corr">
+      <mat-icon class="rotation">cached</mat-icon>
+    </h1>
+  </div>
+</ng-template>
+

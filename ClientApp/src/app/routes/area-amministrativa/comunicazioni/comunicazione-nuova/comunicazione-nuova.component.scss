@@ -1,0 +1,92 @@
+// ::ng-deep .mat-form-field-label {
+//   color: #2f6dd5 !important; /* Cambia il colore del testo del campo */
+// }
+
+// ::ng-deep .mat-form-field-underline {
+//   background-color: #2f6dd5 !important; /* Cambia il colore della linea orizzontale */
+// }
+
+// ::ng-deep .mat-form-field-ripple {
+//   background-color: #2f6dd5 !important; /* Cambia il colore dell'animazione della linea orizzontale */
+// }
+
+p {
+  font-size: 20px;
+  // font-family: Arial, Helvetica, sans-serif;
+  color: #2f6dd5;
+  // color: #4c99ff;
+}
+
+.btn-back {
+  background: #ff4c4c !important;
+  color: white;
+}
+
+.btn-mod {
+  background: #2f6dd5;
+  // background: #4c99ff;
+  color: white;
+}
+
+.btn-mod:disabled {
+  background: #2f6dd574;
+  // background: #5a6984;
+  // background: #4c9aff74;
+  color: rgb(255, 255, 255);
+}
+
+.rotation {
+  animation-duration: 1s;
+  animation-name: rotate-s-loader;
+  animation-timing-function: linear;
+  zoom: 1.2;
+}
+
+.ult-mod {
+  color: #00000073;
+  position: relative;
+  font-size: 15px;
+  left: -10px;
+}
+
+.full-width {
+  min-width: 550px;
+}
+
+.btn {
+  width: 49%;
+}
+
+hr {
+  border: none;
+  border-top: 1px solid #0000001a;
+}
+
+.btn-box {
+  position: relative;
+  top: -28px;
+}
+
+.main-ico {
+  position: relative;
+  top: 2px;
+  left: -4px;
+  zoom: 0.8;
+}
+
+.scrollable-list {
+  max-height: 110px;
+  overflow-y: auto;
+  border: 1px solid #ccc;
+  margin-bottom: 8px;
+}
+
+.toggleAll
+{
+  display: flex;
+  align-items: flex-start;
+  padding: 8px;
+  margin: 8px;
+}
+
+

@@ -1,0 +1,105 @@
+<div class="modal-container">
+
+    <div class="modal-content">
+
+        <div class="title">Dettaglio Utente:&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="title-name">{{data.nome}} {{data.cognome}}</span>
+            <!-- (Matricola: {{data.matricola}})  -->
+        </div> <br>
+
+        <div class="container-data">
+            <div class="table">
+                <div class="display-title">
+                    <div>
+                        <h3><span class="top-title">Matricola</span>
+                            <span class="sub-title">{{data.matricola}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3><span class="top-title">Cognome</span>
+                            <span class="sub-title">{{data.cognome}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3><span class="top-title">Nome</span>
+                            <span class="sub-title">{{data.nome}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3><span class="top-title">Username</span>
+                            <span class="sub-title">{{data.username}}</span>
+                        </h3>
+                    </div>
+                    <!-- <div *ngIf="this.idTab == 1">
+                      <h3><span class="top-title">Email</span>
+                          <span class="sub-title">{{showField(data.email)}}</span>
+                      </h3>
+                    </div> -->
+                    <div>
+                        <h3><span class="top-title">Email</span>
+                            <span class="sub-title">{{showField(data.email)}}</span>
+                        </h3>
+                    </div>
+                </div>
+                <br><br>
+                <div class="display-title">
+                    <div>
+                        <h3><span class="top-title">Sedi</span>
+                            <span *ngFor="let sede of data.sedeDTO"
+                                  class="sub-title">{{sede.sedeCodSede}} - {{sede.sedeDesc}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3><span class="top-title">Ruoli</span>
+                            <span *ngFor="let ruolo of data.ruoloDTO"
+                                  class="sub-title">{{ruolo.ruoloDesc}}</span>
+                        </h3>
+                    </div>
+                    <div>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        
+        <!--
+        <div *ngIf="this.idTab === 0">
+            <form  class="form" [formGroup]="form" (ngSubmit)="modifica()">
+                <div>
+                    <h3>
+                        <mat-form-field class="input-form">
+                            <mat-label>Aggiorna indirizzo email</mat-label>
+                            <input class="sub-title" matInput placeholder="nome.cognome@qualcosa.it" value="" formControlName="emailField">
+                        </mat-form-field>
+                    </h3>
+
+                    <div class="container-buttons">
+                            <button *ngIf="this.idTab === 0" [disabled]="!form.value.emailField || form.value.emailField.trim() == ''"
+                                type="submit" class="child-buttons child-buttons-conferma">
+                                Modifica
+                            </button>
+
+                            <button type="button" (click)="closeDialog()" class="child-buttons child-buttons-chiudi">
+                                Chiudi
+                            </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+      -->
+
+
+      <!--   <div *ngIf="this.idTab === 1" class="container-buttons">
+            <br><br>
+            <button type="button" (click)="closeDialog()" class="child-buttons child-buttons-chiudi">
+                Chiudi
+            </button>
+        </div> -->
+        <div class="container-buttons">
+          <br><br>
+          <button type="button" (click)="closeDialog()" class="child-buttons child-buttons-chiudi">
+              Chiudi
+          </button>
+      </div>
+    </div>
+</div>

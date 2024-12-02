@@ -1,0 +1,328 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'app/theme/style';
+@use 'styles/themes';
+@use 'styles/custom';
+@use 'styles/grid';
+@use 'styles/helpers';
+@use 'styles/plugins';
+
+@import '~@fontsource/titillium-web/index.css';
+@import '~@fontsource/lora/index.css';
+
+/* Applica i font e una default size a tutti gli elementi */
+* {
+  font-family: 'Titillium Web', 'Lora', sans-serif;
+  font-size: 16px;
+}
+
+/*tables*/
+table {
+  width: 100%;
+}
+
+button{
+  cursor: pointer;
+}
+
+th {
+  background-color: #2f6dd5 !important;
+  color: #fff !important;
+  // font-size: 16px; non lo prende
+}
+
+.mat-row {
+  cursor: pointer;
+  // font-size: 16px; //non lo prende
+}
+
+.mat-row:hover {
+  background-color: #eaeaea !important;
+  // background-color: rgb(231, 231, 231) !important;
+}
+
+.mat-row:nth-child(even) {
+  background-color: #f2f2f2;
+  // font-size: 16px; //non lo prende
+  // background-color: rgb(255, 255, 255);
+}
+
+.mat-row:nth-child(odd) {
+  background-color: rgb(245, 245, 245);
+}
+
+.mtx-grid-img {
+  margin: auto;
+}
+
+.mtx-grid .mat-row .mat-cell {
+  text-align: center;
+}
+
+.mtx-grid .mat-table:not(.mat-column-resize-table) .mat-cell:not(.mtx-grid-checkbox-cell) {
+  min-width: 50px;
+  border: 1px solid white;
+  cursor: pointer;
+  // font-size: 16px; //non lo prende
+
+}
+
+.mtx-grid .mat-cell.selected {
+  box-shadow: none;
+}
+
+.mat-sort-header-stem{
+  background-color: #f5f5f5 !important;
+}
+.mat-sort-header-indicator {
+  color: #f5f5f5 !important;
+}
+
+
+.right-float{
+  float: right;
+}
+.mat-card-actions{
+  margin-right: 4px !important;
+}
+
+
+app-sidebar .mat-slide-toggle-label{
+  display: none !important;
+}
+
+/* forms */
+.container-data {
+  display: flex;
+  position: relative;
+  // align-items: center;
+  justify-content: center;
+  margin-top: 20px;
+  // border: 3px solid red;
+  // background-color: lightblue;
+}
+
+.child-data {
+  margin-left: 50px;
+  margin-right: 50px;
+  width: 50%;
+  // border: 2px solid red;
+}
+
+.child-data-date-picker {
+  margin-top: -40px;
+}
+
+// .child-data-placeholder {
+//   display: none;
+// }
+
+/* mat cards */
+.container-cards-buttons {
+  display:flex;
+  justify-content: end;
+  padding-right: 10px;
+}
+
+.child-cards-buttons {
+  margin-left: 10px;
+}
+
+/* buttons */
+
+.container-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 50px;
+  justify-content: center;
+  // border: 3px solid red;
+  // background-color: lightblue;
+}
+
+// .slide-toggle {
+//   display: flex;
+//   justify-content: end;
+//   margin-right: 4%;
+//   margin-top: -3%;
+// }
+
+// buttons
+
+.child-buttons {
+  text-align: center;
+  border-radius: 5px;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding-left: 15px;
+  padding-top: 5px;
+  padding-right: 15px;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// primary-blue: #1687bf;
+
+.child-buttons-conferma {
+  background-color: #2f6dd5;
+  // background-color: #1687bf;
+  color: #fff;
+
+  &:hover {
+    background-color: #1f4b9d;
+    // background-color: #0f73a5;
+  }
+
+  &:active {
+    background-color: #1a2d50;
+    // background-color: #0b5478;
+  }
+}
+
+.child-buttons-chiudi {
+  background-color: #606470;
+  color: #fff;
+
+  &:hover {
+    background-color: #484b53;
+  }
+
+  &:active {
+    background-color: #2d2d2d;
+  }
+}
+
+.child-buttons-elimina {
+  background-color: #fd5959;
+  color: #fff;
+
+  &:hover {
+    background-color: #d53d3d;
+  }
+
+  &:active {
+    background-color: #a52e2e;
+  }
+}
+
+.child-buttons-excel {
+  background-color: #008c45;
+  // background-color: #50982c;
+  color: #fff;
+
+  &:hover {
+    background-color: #006230;
+    // background-color: #3e7e22;
+  }
+
+  // &:active {
+  //   background-color: #004915;
+  //   background-color: #214811;
+  // }
+}
+
+/* paginazione */
+//container
+.mat-paginator-mod {
+  background-color: rgb(255, 255, 255);
+  height: 50px;
+  padding: 5px;
+  text-align: center;
+}
+
+.pagination {
+  display: inline-block;
+}
+
+.pagination a {
+  color: black;
+  float: left;
+  border-radius: 5px;
+  padding: 8px 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.pagination a.active {
+  transition: all 0.3s;
+  background-color: #2f6dd5;
+  border-radius: 5px;
+  color: white;
+}
+
+.pagination a:hover:not(.active) {
+  transition: all 0.5s;
+  background-color: #ddd;
+}
+
+.paginator-info {
+  position: relative;
+  top: 12px;
+  left: -26px;
+  color: grey;
+  font-size: 16px;
+  float: right;
+}
+
+.paginator-numelem {
+  float: left;
+  position: relative;
+  top: 5px;
+  left: 10px;
+  padding: 5px;
+  border: 1px solid #ddd;
+  font-size: 16px;
+
+}
+
+.paginator-numelem-select {
+  width: 80px !important;
+  color: grey;
+}
+
+.rotation {
+  animation-duration: 1s;
+  animation-name: rotate-s-loader;
+  animation-timing-function: linear;
+  zoom: 1.2;
+  position: relative;
+  top: 28px;
+}
+
+.rotation-div {
+  background-color: rgb(255, 255, 255);
+  text-align: center;
+  height: 100px;
+}
+
+/* allineamento e centratura contenuti */
+.align-content-center {
+  text-align: center;
+}
+
+.align-elements {
+  // padding-left: 10px;
+  padding-left: 0.9%;
+}
+
+// .pagination-firstorlast {
+//   font-size: 90%;
+//   padding-top: 3%;
+//   padding-bottom: 2%;
+//   color: black;
+// }
+
+// .pagination-firstorlast {
+//   font-size: 70%;
+//   margin-left: -3%;
+//   margin-right: -3%;
+//   color: black;
+
+// }
+
+.first-last-page-icon {
+  width: 1px;
+  height: 1px;
+  font-size: 16px;
+  padding-top: 4px;
+}

@@ -1,0 +1,298 @@
+/*table*/
+table {
+  width: 50%;
+}
+
+th {
+  // background-color: #2196f3 !important;
+  // color: white !important;
+  font-size: 16px;
+}
+
+::ng-deep .mat-step-header .mat-step-icon {
+  background-color: #2f6dd5;
+  color: #fff;
+}
+
+.datiincompleti {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// .tooltip {
+//   position: relative;
+//   display: inline-block;
+// }
+
+// .tooltip .tooltiptext {
+
+//   width: 180px;
+//   background-color: rgba(0, 0, 0, 0.701);
+//   color: #fff;
+//   text-align: center;
+//   border-radius: 6px;
+//   padding: 5px 0;
+//   position: absolute;
+//   z-index: 1;
+//   // bottom: 150%; //top
+//   //left: 50%;  //top
+//   // margin-left: -60px; //top
+//   top: 5px;
+//   right: 120%;
+
+//   opacity: 0;
+//   transition: opacity 0.5s;
+
+// }
+
+// .tooltip .tooltiptext::after {
+//   content: "";
+//   position: absolute;
+//   //top: 100%; //top
+//   //left: 50%; //top
+//   //margin-left: -5px; //top
+//   top: 50%;
+//   left: 100%;
+//   margin-top: -5px;
+//   border-width: 5px;
+//   border-style: solid;
+//   //border-color: black transparent transparent transparent;
+//   border-color: transparent transparent transparent black;
+// }
+
+// .tooltip:hover .tooltiptext {
+//   visibility: visible;
+//   opacity: 1;
+// }
+
+// .example-container {
+//   min-width: 400px;
+//   max-width: 100%;
+//   margin: 0 25px 25px 0;
+//   display: inline-block;
+//   vertical-align: top;
+// }
+
+// .example-list {
+//   border: solid 1px #ccc;
+//   min-height: 60px;
+//   background: white;
+//   border-radius: 4px;
+//   overflow: hidden;
+//   display: block;
+//   height: 400px;
+//   overflow-y: scroll;
+//   overflow-x: visible;
+// }
+
+// .example-box {
+//   padding: 20px 10px;
+//   border-bottom: solid 1px #ccc;
+//   color: rgba(0, 0, 0, 0.87);
+//   display: flex;
+//   flex-direction: row;
+//   align-items: center;
+//   justify-content: space-between;
+//   box-sizing: border-box;
+//   cursor: move;
+//   background: white;
+//   font-size: 14px;
+//   width: 300px;
+// }
+
+// .cdk-drag-preview {
+//   box-sizing: border-box;
+//   border-radius: 4px;
+//   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+//     0 8px 10px 1px rgba(0, 0, 0, 0.14),
+//     0 3px 14px 2px rgba(0, 0, 0, 0.12);
+// }
+
+
+// .cdk-drag-placeholder {
+//   opacity: 0;
+// }
+
+// .cdk-drag-animating {
+//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// .example-box:last-child {
+//   border: none;
+// }
+
+// .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+//   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+// }
+
+// NUOVO
+.mat-stepper-horizontal {
+  margin-top: 8px;
+}
+
+.mat-mdc-form-field {
+  margin-top: 16px;
+}
+
+.nota-cell {
+  max-width: 225px;
+  /* Imposta la larghezza massima desiderata */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  /* Cambia il cursore quando si passa sopra per indicare che il testo è interattivo */
+}
+
+td{
+  padding: 5px!important;
+}
+
+th{
+  padding: 5px !important;
+}
+
+.truncate {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-weight: normal;
+}
+
+.textarea {
+  resize: none;
+}
+
+.child-buttons-salvainbozza {
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+}
+
+.child-buttons-salvainbozza:disabled {
+  background-color: #d3d3d3;
+  color: #a9a9a9;
+  cursor: not-allowed;
+  border: 0px;
+  border-right: 1px solid #979797;
+  border-bottom: 1px solid #979797;
+}
+
+.child-buttons-salvainbozza:hover {
+  background-color: #d2d0d0;
+}
+
+.title {
+  color: black;
+  font-size: larger;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+.center-icon {
+  padding-left: 2%;
+}
+
+button.child-buttons-conferma:disabled {
+  background-color: #d3d3d3; /* Grigio chiaro */
+  color: #a9a9a9; /* Colore del testo grigio scuro */
+  cursor: not-allowed;
+}
+
+.btn-dlt-container {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltiptext {
+  visibility: visible;
+  width: 200px;
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 10px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 150%;
+  left: 50%;
+  margin-left: -100px;
+  opacity: 1;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.2);
+}
+
+.btn-def {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-def-yes {
+  background-color: #ff0000; /* Rosso per il pulsante Sì */
+  color: #fff;
+}
+
+.btn-def-no {
+  background-color: #007bff; /* Blu per il pulsante No */
+  color: #fff;
+}
+
+.display-title {
+  display: flex;
+  flex-direction: row;
+  margin: 20px;
+  margin-top: 0;
+  margin-bottom: 0;
+  align-items: center; /* Allinea verticalmente gli elementi al centro */
+  justify-content: center; /* Allinea orizzontalmente gli elementi al centro */
+}
+
+.display-title div {
+  margin: 0 20px;
+}
+
+.top-title {
+  color: #878787;
+  font-size: medium;
+  display: block;
+  text-align: center;
+}
+
+.sub-title {
+  font-size: larger;
+  line-height: 1.5;
+  display: block;
+  text-align: center;
+}
+
+
+.nessuna-corr {
+  color: #898989;
+  font-style: oblique;
+  text-align: center;
+}
+
+.rotation {
+  animation-duration: 1s;
+  animation-name: rotate-s-loader;
+  animation-timing-function: linear;
+  zoom: 1.2;
+}
+
+.file-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.file-name {
+  margin-right: 10px; /* Spazio tra il testo e il bottone */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 115px;
+}

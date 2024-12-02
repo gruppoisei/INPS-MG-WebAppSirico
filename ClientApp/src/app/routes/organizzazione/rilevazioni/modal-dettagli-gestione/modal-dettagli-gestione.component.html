@@ -1,0 +1,100 @@
+<div class="display-title">
+  <div>
+    <h3><span class="top-title">Data Invio</span>
+    <span class="sub-title">{{dataInvio}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Settore/Materia</span>
+    <span class="sub-title">{{nomeSettoreMateria}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Area/Prodotto</span>
+    <span class="sub-title">{{nomeAreaProdotto}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Sede</span>
+    <span class="sub-title">{{nomeSede}}</span></h3>
+  </div>
+  <div *ngIf="isAllegatoSegnalazione">
+    <h3><span class="top-title">Allegato</span>
+    <button class="sub-title" mat-button (click)="downloadFileSegnalazione()"><mat-icon>attachment</mat-icon></button></h3>
+  </div>
+</div>
+
+<div class="container-data">
+  <button mat-button (click)="toggleAllegati()" [disabled]="isFile ||  idStatoSalvataggioSegnalazione == 5">
+    <mat-icon>attach_file</mat-icon> Inserisci Allegato
+  </button>
+</div>
+
+<div class="container-data" *ngIf="showGestioneFile ">
+  <app-gestione-file
+    [idAspetto]="0"
+    (fileEvent)="onFilesAdded($event)"
+    (fileRemovedEvent)="removeFileSegnalazione($event)">
+  </app-gestione-file>
+  <button mat-button (click)="allegaFile()" [disabled]="!fileSegnalazione" class="btn-conferma"><mat-icon>cloud_upload</mat-icon>
+    Allega
+  </button>
+</div>
+<br>
+<div class="progress-container" *ngIf="isUploading">
+  <mat-progress-bar mode="determinate" [value]="uploadProgress"></mat-progress-bar>
+  <p>File inviato con successo!</p>
+</div>
+
+<br>
+<br>
+
+    <table mat-table [dataSource]="datiAspetto">
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+      (click)="handleRowClick(row.idAspettoSegnalazione)"
+      [ngClass]="{'background-nuovAsp': row.nuovoAspetto === true}"></tr>
+
+      <ng-container matColumnDef="nomeAspetto">
+        <th mat-header-cell *matHeaderCellDef>Nome Aspetto</th>
+        <td mat-cell *matCellDef="let element" [matTooltip]="element.descrizioneAspetto">{{element.nomeAspetto}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="criticita">
+        <th mat-header-cell *matHeaderCellDef>Criticitá</th>
+        <td mat-cell *matCellDef="let element">{{truncateText(element.criticita, 15)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="suggerimento">
+        <th mat-header-cell *matHeaderCellDef>Suggerimento</th>
+        <td mat-cell *matCellDef="let element">{{truncateText(element.suggerimento, 15)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="integrazioneDR">
+        <th mat-header-cell *matHeaderCellDef>Integrazione DR</th>
+        <td mat-cell *matCellDef="let element">{{truncateText(element.integrazioneDR, 15)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="integrazioneDC">
+        <th mat-header-cell *matHeaderCellDef>Integrazione DC</th>
+        <td mat-cell *matCellDef="let element">{{truncateText(element.integrazioneDC, 15)}}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="allegato">
+        <th mat-header-cell *matHeaderCellDef>Allegato</th>
+        <td mat-cell *matCellDef="let element">
+          <button mat-button *ngIf="element.hasAllegato" (click)="downloadFileAspetto(element.idAspetto); $event.stopPropagation()" ><mat-icon>attachment</mat-icon></button>
+        </td>
+      </ng-container>
+
+    </table>
+<mat-dialog-actions align="center">
+  <button mat-button mat-dialog-close class="btn-back"><mat-icon>arrow_back</mat-icon>Chiudi</button>
+  <div class="divButton" matTooltip="Non tutti gli aspetti hanno delle integrazioni o la segnalazione è già stata chiusa"
+  [matTooltipDisabled]="!(idStatoSalvataggioSegnalazione !== 5 && !canClose)">
+    <button *ngIf="ruolo.includes('P12690') || ruolo.includes('P12689')"
+       mat-button
+       (click)="risolviSegnalazione(5)"
+       [disabled]="idStatoSalvataggioSegnalazione === 5 || !canClose"
+       class="btn-conferma">
+      <mat-icon>done</mat-icon>Risolvi
+    </button>
+  </div>
+</mat-dialog-actions>

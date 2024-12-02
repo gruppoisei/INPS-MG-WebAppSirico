@@ -1,0 +1,13 @@
+<div class="container">
+  <div class="matero-page-header-left">
+    <h1 class="matero-page-title">{{title | translate}} <small>{{subtitle}}</small></h1>
+    <breadcrumb *ngIf="!hideBreadcrumb" [nav]="nav"></breadcrumb>
+  </div>
+  <div class="matero-page-header-right">
+    <mat-icon class="user-icon">account_circle</mat-icon>
+        <div class="user-info">
+          <div [innerHTML]="showFieldRole(roleDesc)"></div>
+          <div>{{matricolaUtente}}</div>
+        </div>
+  </div>
+</div>

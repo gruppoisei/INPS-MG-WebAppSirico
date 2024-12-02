@@ -1,0 +1,109 @@
+<div class = "display-title" *ngIf="titolo === 'Prodotto'">
+  <div>
+    <h3><span class="top-title">Data Invio</span>
+    <span class="sub-title">{{dataInvio}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Settore/Materia</span>
+    <span class="sub-title">{{nomeSettoreMateria}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Area/Prodotto</span>
+    <span class="sub-title">{{nomeAreaProdotto}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Sede</span>
+    <span class="sub-title">{{nomeSede}}</span></h3>
+  </div>
+</div>
+
+<div class = "display-title" *ngIf="titolo === 'Contenzioso'">
+  <div>
+    <h3><span class="top-title">Data Invio</span>
+    <span class="sub-title">{{dataInvio}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Tipologia Contezioso</span>
+    <span class="sub-title">{{nomeContenzioso}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Settore/Materia</span>
+    <span class="sub-title">{{nomeSettoreMateria}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Area/Prodotto</span>
+    <span class="sub-title">{{nomeAreaProdotto}}</span></h3>
+  </div>
+  <div>
+    <h3><span class="top-title">Sede</span>
+    <span class="sub-title">{{nomeSede}}</span></h3>
+  </div>
+</div>
+<p><mat-icon class="main-ico">build</mat-icon>{{aspetto[0]?.nomeAspetto}}</p>
+
+<form [formGroup]="form1">
+  <table mat-table [dataSource]="aspetto">
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+    <ng-container matColumnDef="criticita">
+      <th mat-header-cell *matHeaderCellDef>Criticitá</th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container>
+          <textarea matInput
+          [style.width.%]="99"
+          [style.height.px]="150"
+          [rows]="10"
+          [cols]="40"
+          formControlName="criticita" readonly></textarea>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="suggerimento">
+      <th mat-header-cell *matHeaderCellDef>Suggerimento</th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container>
+          <textarea matInput
+          [style.width.%]="99"
+          [style.height.px]="150"
+          [rows]="10"
+          [cols]="40"
+          formControlName="suggerimento" readonly></textarea>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="integrazioneDR">
+      <th mat-header-cell *matHeaderCellDef>Integrazione DR</th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container>
+          <textarea matInput
+          [style.width.%]="99"
+          [style.height.px]="150"
+          [rows]="10"
+          [cols]="40"
+          formControlName="readOnlyNoteDR" readonly></textarea>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="integrazioneDC">
+      <th mat-header-cell *matHeaderCellDef>Integrazione DC</th>
+      <td mat-cell *matCellDef="let element">
+        <ng-container>
+          <textarea matInput
+          [style.width.%]="99"
+          [style.height.px]="150"
+          [rows]="10"
+          [cols]="40"
+          formControlName="readOnlyNoteDC" readonly></textarea>
+        </ng-container>
+        </td>
+      </ng-container>
+  </table>
+
+  <mat-dialog-actions align="center">
+    <button mat-button mat-dialog-close class="btn-back"><mat-icon>arrow_back</mat-icon>Torna indietro</button>
+  </mat-dialog-actions>
+</form>

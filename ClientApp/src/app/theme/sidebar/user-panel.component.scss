@@ -1,0 +1,80 @@
+@use '../style/transitions';
+
+.matero-user-panel {
+  //padding: 16px 0;
+  padding: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.30);
+}
+
+.mat-select-value {
+  color: white;
+}
+
+// Set default width and height can avoid flashing before avatar image loaded.
+.matero-user-panel-avatar {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 8px;
+  border-radius: 50rem;
+  transition: transitions.swift-ease-out(transform);
+}
+
+.matero-user-panel-name,
+.matero-user-panel-email {
+  margin-top: 0;
+  margin-bottom: 8px;
+  font-weight: normal;
+  background-color: transparent;
+  border-radius: 4px;
+  padding: 8px 15px;
+  margin: 8px 0;
+  border: 1px solid white;
+  color: white;
+
+}
+
+.matero-user-panel-name {
+  &:hover {
+    background-color: white;
+    color: #2196f3;
+  }
+}
+
+.matero-user-panel-name,
+.matero-user-panel-email,
+.matero-user-panel-icons {
+  opacity: 1;
+  transition: transitions.swift-ease-out(opacity);
+}
+
+.matero-user-panel-icons {
+  white-space: nowrap;
+
+  .mat-icon-button {
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+  }
+
+  #sceltaSezione {
+    border: 1px solid white;
+  }
+
+  .mat-select-arrow {
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid;
+    margin: 0 4px;
+    color: white;
+  }
+
+  .row-container-select-ruolo {
+    height: 15vh;
+  }
+
+  option:hover {
+    color: black;
+  }
+}

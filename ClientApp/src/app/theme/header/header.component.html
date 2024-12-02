@@ -1,0 +1,61 @@
+<mat-toolbar class="matero-toolbar">
+  <button mat-icon-button class="matero-toolbar-button" *ngIf="showToggle"
+          (click)="toggleSidenav.emit()">
+    <mat-icon>menu</mat-icon>
+  </button>
+
+  <app-branding *ngIf="showBranding"></app-branding>
+  <span fxFlex></span>
+
+  <!--   <button mat-icon-button class="matero-toolbar-button">
+    <mat-icon>search</mat-icon>
+  </button> -->
+
+  <div class="container-data">
+  <!-- <div class="row justify-content-center"> -->
+
+<!--     <div class="child-data-icons"> -->
+    <!-- <div class="col-3 d-flex justify-content-center align-items-center"> -->
+<!--       <h6 id="vesione-software">v{{versioneSoftware}}</h6> -->
+      <!-- DA RENDERE DINAMICO - FIX-Q -->
+<!--     </div> -->
+
+    <div class="child-data-icons">
+    <!-- <div class="col-3  d-flex justify-content-center align-items-center"> -->
+      <button mat-icon-button class="matero-toolbar-button" fxHide.lt-sm
+              (click)="toggleFullscreen()">
+        <mat-icon>fullscreen</mat-icon>
+      </button>
+    </div>
+
+    <div *ngIf="hasRoleforNotification()" class="child-data-icons">
+      <!-- <div class="col-3  d-flex justify-content-center align-items-center"> -->
+        <button mat-icon-button matBadge="{{notificationsCount}}" class="matero-toolbar-button" fxHide.lt-sm [matMenuTriggerFor]="menu">
+          <mat-icon>notifications</mat-icon>
+        </button>
+    </div>
+      <mat-menu #menu="matMenu">
+        <p class="notification-text" *ngIf="notificationsCount == 0">Non ci sono segnalazioni con nuovi aspetti</p>
+        <p class="notification-text clickable" [routerLink]="['/segnalazione/gestione']" *ngIf="notificationsCount > 0">
+          Sono state rilevate segnalazioni con nuovi aspetti. Clicca per andare alla pagina di Gestione.</p>
+      </mat-menu>
+
+    <div class="child-data-icons">
+    <!-- <div class="col-3  d-flex justify-content-center align-items-center"> -->
+      <button mat-icon-button class="matero-toolbar-button" fxHide.lt-sm
+              (click)="toggleSidenavNotice.emit()">
+        <mat-icon>list</mat-icon>
+      </button>
+    </div>
+
+    <div class="child-data-icons-manual">
+    <!-- <div class="child-data-icons-version"> -->
+    <!-- <div class="col-3  d-flex justify-content-center align-items-center"> -->
+      <button mat-icon-button class="matero-toolbar-button" fxHide.lt-sm
+              (click)="scaricaManualeUtente()">
+              <img src='assets/images/manuale-utente.png' >
+        <!-- <mat-icon>list</mat-icon> class="status-img" -->
+      </button>
+    </div>
+  </div>
+</mat-toolbar>
