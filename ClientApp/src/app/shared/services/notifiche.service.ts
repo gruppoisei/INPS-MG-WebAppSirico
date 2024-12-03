@@ -58,7 +58,7 @@ export class NotificheService {
     this.hubConnection
       .start()
       .then(() => this.requestCounts())
-      //.catch(() => setTimeout(() => this.startConnection(), 5000));
+      .catch(() => setTimeout(() => this.startConnection(), 5000));
 
     this.hubConnection.onclose(() => this.startConnection());
   }
