@@ -44,17 +44,17 @@ public class ApiGatewayController : ControllerBase
         };
     }
 
-    // Endpoint per POST, PUT, DELETE, PATCH
     [HttpPost]
     [HttpPut]
     [HttpDelete]
     [HttpPatch]
     public async Task<IActionResult> HandleOtherRequests(string path)
     {
-        var backendUrl = $"http://192.0.2.147:5000/api/{path}";
+        var backendUrl = $"http://localhost:5250/api/{path}";
 
         var client = _httpClientFactory.CreateClient();
 
+        // Creazione della richiesta da inoltrare
         var requestMessage = new HttpRequestMessage
         {
             Method = new HttpMethod(Request.Method),
@@ -64,49 +64,47 @@ public class ApiGatewayController : ControllerBase
         // Copia degli header dalla richiesta originale
         foreach (var header in Request.Headers)
         {
-            requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+            if (!header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase))
+            {
+                requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+            }
         }
 
         // Se la richiesta contiene un body, lo copiamo
         if (Request.ContentLength > 0)
         {
-            using var memoryStream = new MemoryStream();
-            await Request.Body.CopyToAsync(memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            // Determina se il Content-Type è FormBody
-            if (Request.ContentType == "application/x-www-form-urlencoded")
+            try
             {
-                var formBody = Encoding.UTF8.GetString(memoryStream.ToArray());
-                requestMessage.Content = new StringContent(formBody, Encoding.UTF8, "application/x-www-form-urlencoded");
+                // Rileggi il corpo della richiesta in modo sicuro
+                var body = await new StreamReader(Request.Body).ReadToEndAsync();
+
+                // Usa il contenuto letto per impostare il body della nuova richiesta
+                requestMessage.Content = new StringContent(body, Encoding.UTF8, Request.ContentType ?? "application/json");
+
             }
-            else
+            catch (Exception ex)
             {
-                // Per altri tipi di contenuto, usa lo StreamContent
-                var streamContent = new StreamContent(memoryStream);
-
-                foreach (var header in Request.Headers)
-                {
-                    if (header.Key.StartsWith("Content-", StringComparison.OrdinalIgnoreCase))
-                    {
-                        streamContent.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
-                    }
-                }
-
-                requestMessage.Content = streamContent;
+                return StatusCode(500, $"Error reading or copying request body: {ex.Message}");
             }
         }
 
-        // Invio della richiesta al backend
-        var response = await client.SendAsync(requestMessage);
-
-        // Costruzione della risposta da ritornare al client
-        var content = await response.Content.ReadAsStringAsync();
-        return new ContentResult
+        try
         {
-            StatusCode = (int)response.StatusCode,
-            Content = content,
-            ContentType = response.Content.Headers.ContentType?.ToString()
-        };
+            // Invio della richiesta al backend
+            var response = await client.SendAsync(requestMessage);
+
+            // Costruzione della risposta da ritornare al client
+            var content = await response.Content.ReadAsStringAsync();
+            return new ContentResult
+            {
+                StatusCode = (int)response.StatusCode,
+                Content = content,
+                ContentType = response.Content.Headers.ContentType?.ToString()
+            };
+        }
+        catch (HttpRequestException ex)
+        {
+            return StatusCode(500, $"Error sending request: {ex.Message}");
+        }
     }
 }
