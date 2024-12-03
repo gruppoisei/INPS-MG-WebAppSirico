@@ -42,20 +42,24 @@ export class MessaggiService {
     return this.http.get<BachecaDTO[]>(URL);
   }
 
-  updateMessaggio(idMessaggio: number, oggettoMessaggio: string, contenutoMessaggio: string): Observable<boolean>  {
+  updateMessaggio(idMessaggio: number, oggettoMessaggio: string, contenutoMessaggio: string): Observable<boolean> {
+    const body = { idMessaggio, oggettoMessaggio, contenutoMessaggio };
+    console.log('Request body:', body);
 
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}updateMessaggioAttivo?idMessaggio=${idMessaggio}&oggetto=${oggettoMessaggio}&messaggio=${contenutoMessaggio}`;
+    const url = `${this.apiUrl}updateMessaggioAttivo`;
 
-    return this.http.put<any>(url, {}, {headers});
+    return this.http.put<any>(url, body, { headers });
   }
+
 
   insertMessaggio(oggettoMessaggio: string, contenutoMessaggio: string, matricolaUtente: string): Observable<boolean>  {
 
+    const body = {oggettoMessaggio, contenutoMessaggio, matricolaUtente}
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}insertMessaggio?oggetto=${oggettoMessaggio}&messaggio=${contenutoMessaggio}&utente=${matricolaUtente}`;
+    const url = `${this.apiUrl}insertMessaggio`;
 
-    return this.http.post<any>(url, {}, {headers});
+    return this.http.post<any>(url, body, {headers});
   }
 
   disattivaMessaggioAttivo(idMessaggio: number): Observable<boolean>  {
@@ -63,7 +67,7 @@ export class MessaggiService {
     const headers = { 'content-type': 'application/json' };
     const url = `${this.apiUrl}disattivaMessaggio?idMessaggio=${idMessaggio}`;
 
-    return this.http.put<any>(url, {}, {headers});
+    return this.http.get<any>(url, {headers});
   }
 
   riattivaMessaggioDisattivato(idMessaggio: number): Observable<boolean>  {
@@ -71,7 +75,7 @@ export class MessaggiService {
     const headers = { 'content-type': 'application/json' };
     const url = `${this.apiUrl}riattivaMessaggio?idMessaggio=${idMessaggio}`;
 
-    return this.http.put<any>(url, {}, {headers});
+    return this.http.get<any>(url, {headers});
   }
 
 }
