@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 [ApiController]
@@ -13,50 +14,93 @@ public class ApiGatewayController : ControllerBase
         _httpClientFactory = httpClientFactory;
     }
 
+    // Endpoint per richieste GET
     [HttpGet]
+    public async Task<IActionResult> HandleGetRequest(string path)
+    {
+        var backendUrl = $"http://localhost:5250/api/{path}{Request.QueryString}";
+
+        var client = _httpClientFactory.CreateClient();
+
+        var requestMessage = new HttpRequestMessage
+        {
+            Method = HttpMethod.Get,
+            RequestUri = new Uri(backendUrl)
+        };
+
+        foreach (var header in Request.Headers)
+        {
+            requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+        }
+
+        var response = await client.SendAsync(requestMessage);
+        var content = await response.Content.ReadAsStringAsync();
+
+        return new ContentResult
+        {
+            StatusCode = (int)response.StatusCode,
+            Content = content,
+            ContentType = response.Content.Headers.ContentType?.ToString()
+        };
+    }
+
+    // Endpoint per POST, PUT, DELETE, PATCH
     [HttpPost]
     [HttpPut]
     [HttpDelete]
     [HttpPatch]
-    public async Task<IActionResult> HandleRequest(string path)
+    public async Task<IActionResult> HandleOtherRequests(string path)
     {
-        // Costruisci l'URL del backend
-        var backendUrl = $"http://192.0.2.147:5000/api/{path}{Request.QueryString}";
+        var backendUrl = $"http://192.0.2.147:5000/api/{path}";
 
-        // Crea un client HTTP
         var client = _httpClientFactory.CreateClient();
 
-        // Crea una richiesta HTTP basata sulla richiesta originale
         var requestMessage = new HttpRequestMessage
         {
             Method = new HttpMethod(Request.Method),
             RequestUri = new Uri(backendUrl)
         };
 
-        // Copia gli header dalla richiesta originale
+        // Copia degli header dalla richiesta originale
         foreach (var header in Request.Headers)
         {
             requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
         }
 
-        // Copia il contenuto se presente
-        if (Request.ContentLength > 0 && (Request.Method == HttpMethod.Post.Method || Request.Method == HttpMethod.Put.Method || Request.Method == HttpMethod.Patch.Method))
+        // Se la richiesta contiene un body, lo copiamo
+        if (Request.ContentLength > 0)
         {
-            using var stream = new MemoryStream();
-            await Request.Body.CopyToAsync(stream);
-            stream.Seek(0, SeekOrigin.Begin);
-            requestMessage.Content = new StreamContent(stream);
-            foreach (var header in Request.Headers)
+            using var memoryStream = new MemoryStream();
+            await Request.Body.CopyToAsync(memoryStream);
+            memoryStream.Seek(0, SeekOrigin.Begin);
+
+            // Determina se il Content-Type è FormBody
+            if (Request.ContentType == "application/x-www-form-urlencoded")
             {
-                if (!header.Key.StartsWith("Content-", StringComparison.OrdinalIgnoreCase)) continue;
-                requestMessage.Content.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                var formBody = Encoding.UTF8.GetString(memoryStream.ToArray());
+                requestMessage.Content = new StringContent(formBody, Encoding.UTF8, "application/x-www-form-urlencoded");
+            }
+            else
+            {
+                // Per altri tipi di contenuto, usa lo StreamContent
+                var streamContent = new StreamContent(memoryStream);
+
+                foreach (var header in Request.Headers)
+                {
+                    if (header.Key.StartsWith("Content-", StringComparison.OrdinalIgnoreCase))
+                    {
+                        streamContent.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                    }
+                }
+
+                requestMessage.Content = streamContent;
             }
         }
 
-        // Invia la richiesta al backend
+        // Invio della richiesta al backend
         var response = await client.SendAsync(requestMessage);
 
-        // Costruisci la risposta per il client
+        // Costruzione della risposta da ritornare al client
         var content = await response.Content.ReadAsStringAsync();
         return new ContentResult
         {
