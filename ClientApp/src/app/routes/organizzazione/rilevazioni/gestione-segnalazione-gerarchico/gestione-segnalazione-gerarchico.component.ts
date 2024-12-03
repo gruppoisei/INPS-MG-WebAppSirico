@@ -510,8 +510,8 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
         this.filtroperSede == null ? true : false
       )
       .subscribe((response: any) => {
-        this.pageCurrProdotto = this.elemNumProdotto != response.count ? 1 : this.pageCurrProdotto;
-        this.elemNumProdotto = response.count;
+        this.pageCurrProdotto = (this.elemNumProdotto != response.totale) ? 1 : this.pageCurrProdotto;
+        this.elemNumProdotto = response.totale != null ? response.totale : response.count;
 
         this.pageNumProdotto = Math.floor(this.elemNumProdotto / Number(this.pageDimProdotto));
         if (this.elemNumProdotto % Number(this.pageDimProdotto) > 0) {
@@ -548,9 +548,8 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
         this.filtroperSede == null ? true : false
       )
       .subscribe((response: any) => {
-        this.pageCurrContenzioso =
-          this.elemNumContenzioso != response.count ? 1 : this.pageCurrContenzioso;
-        this.elemNumContenzioso = response.count;
+        this.pageCurrContenzioso = (this.elemNumContenzioso != response.totale) ? 1 : this.pageCurrContenzioso;
+        this.elemNumContenzioso = response.totale != null ? response.totale : response.count;
 
         this.pageNumContenzioso = Math.floor(
           this.elemNumContenzioso / Number(this.pageDimContenzioso)
