@@ -31,3 +31,83 @@
 //   transform: translate(0, 0);
 // }
 
+
+// ::ng-deep .mat-form-field-label {
+//   color: #2f6dd5 !important; /* Cambia il colore del testo del campo */
+// }
+
+// ::ng-deep .mat-form-field-underline {
+//   background-color: #2f6dd5 !important; /* Cambia il colore della linea orizzontale */
+// }
+
+// ::ng-deep .mat-form-field-ripple {
+//   background-color: #2f6dd5 !important; /* Cambia il colore dell'animazione della linea orizzontale */
+// }
+
+
+
+////////////////////    LOGIN COMPONENT     ////////////////////
+::ng-deep .mat-option.mat-selected {  
+  color: #2f6dd5 !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Altezza dell'intera pagina */
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  max-width: 100%; /* Larghezza massima del contenitore principale */
+  border: 1px solid #ccc; /* Opzionale: bordo per il contenitore principale */
+  padding: 20px;
+  border-radius: 2px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Opzionale: ombra per effetto di profondità */
+}
+
+.icon {
+  margin-right: 120px; /* Spazio tra l'icona e il contenuto */
+  font-size: 120px;
+  color: #2f6dd5;
+  // color: #4c99ff;
+}
+
+.form {
+  width: 100%; /* Occupa tutto lo spazio disponibile nel contenitore */
+}
+p {
+  font-size: 20px;
+  // font-family: Arial, Helvetica, sans-serif;
+  color: #2f6dd5;
+  // color: #4c99ff;
+}
+
+.btn-mod {
+  background: #2f6dd5;
+  // background: #4c99ff;
+  color: white;
+}
+.user-info {
+  font-size: 16px;
+  color: #2f6dd5;
+  // color: #4c99ff;
+  font-weight: bold;
+}
+
+.emptyPage {
+  display: flex; 
+  flex-direction: column; 
+  justify-content: center; 
+  align-items: center; 
+  height: 100vh;
+}
+
+.connectionFailed {
+  text-align: center;
+  font-size: 25px;
+  color: black;
+}

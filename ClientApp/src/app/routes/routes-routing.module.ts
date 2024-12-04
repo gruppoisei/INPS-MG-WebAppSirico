@@ -7,7 +7,8 @@ import { Error403Component } from './sessions/403.component';
 import { Error404Component } from './sessions/404.component';
 import { Error500Component } from './sessions/500.component';
 import { AuthGuard } from '@core';
-import { LocalUserLoginComponent } from './local-user-login/local-user-login/local-user-login.component';
+// import { LocalUserLoginComponent } from './local-user-login/local-user-login/local-user-login.component';
+import { AppComponent } from 'app/app.component';
 
 const routes: Routes = [
   {
@@ -15,9 +16,11 @@ const routes: Routes = [
     component: AdminLayoutComponent,
     children: [
 
-      { path: '', redirectTo: 'local-login', pathMatch: 'full' },
+      // {path: '', component: AppComponent},
 
-      {path: 'local-login', component: LocalUserLoginComponent},
+      // { path: '', redirectTo: 'local-login', pathMatch: 'full' },
+
+      // {path: 'local-login', component: LocalUserLoginComponent},
 
       { path: 'dashboard',
         canActivate: [AuthGuard],
