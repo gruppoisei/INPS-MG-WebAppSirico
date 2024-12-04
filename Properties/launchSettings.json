@@ -16,9 +16,10 @@
       "applicationUrl": "http://localhost:5157",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "MS_SIRICOAPI": "http://192.0.2.147:5000/api/",
-        //"WEB_SOCKET": "ws://192.0.2.147:5000/api/notification",
+        "MS_SIRICOAPI": "http://localhost:5250/api/",
+        //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
         "WEB_SOCKET": "ws://localhost:5250/api/notification"
+        //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
       }
     },
     "https": {
@@ -29,8 +30,9 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MS_SIRICOAPI": "http://localhost:5250/api/",
-        //"WEB_SOCKET": "ws://192.0.2.147:5000/api/notification",
+        //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
         "WEB_SOCKET": "ws://localhost:5250/api/notification"
+        //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
 
       }
     },

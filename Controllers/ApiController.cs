@@ -70,35 +70,45 @@ public class ApiGatewayController : ControllerBase
             }
         }
 
-        // Se la richiesta contiene un body, lo copiamo
-        if (Request.ContentLength > 0)
+        // Copia del body della richiesta originale
+        if (Request.ContentLength > 0 && Request.HasFormContentType)
         {
-            try
-            {
-                // Rileggi il corpo della richiesta in modo sicuro
-                var body = await new StreamReader(Request.Body).ReadToEndAsync();
+            var form = await Request.ReadFormAsync();
+            var multipartContent = new MultipartFormDataContent();
 
-                // Usa il contenuto letto per impostare il body della nuova richiesta
-                requestMessage.Content = new StringContent(body, Encoding.UTF8, Request.ContentType ?? "application/json");
-
-            }
-            catch (Exception ex)
+            foreach (var file in form.Files)
             {
-                return StatusCode(500, $"Error reading or copying request body: {ex.Message}");
+                var streamContent = new StreamContent(file.OpenReadStream());
+                streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                multipartContent.Add(streamContent, file.Name, file.FileName);
             }
+
+            foreach (var key in form.Keys)
+            {
+                multipartContent.Add(new StringContent(form[key]), key);
+            }
+
+            requestMessage.Content = multipartContent;
         }
+        else if (Request.ContentLength > 0)
+        {
+            // Altri tipi di contenuto (JSON, text/plain, etc.)
+            var body = await new StreamReader(Request.Body).ReadToEndAsync();
+            requestMessage.Content = new StringContent(body, Encoding.UTF8, Request.ContentType ?? "application/json");
+        }
+
 
         try
         {
             // Invio della richiesta al backend
             var response = await client.SendAsync(requestMessage);
 
-            // Costruzione della risposta da ritornare al client
-            var content = await response.Content.ReadAsStringAsync();
+            // Creazione della risposta per il client
+            var responseContent = await response.Content.ReadAsStringAsync();
             return new ContentResult
             {
                 StatusCode = (int)response.StatusCode,
-                Content = content,
+                Content = responseContent,
                 ContentType = response.Content.Headers.ContentType?.ToString()
             };
         }
