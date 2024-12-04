@@ -51,7 +51,8 @@ namespace INPS_MVC_WebAppSirico.Controllers
                     account = "Username";
                     matricula = "E000-123";
                     fiscalCode = "DefaultFiscalCode";
-                    inpsRuoli = "cn=A8006:P10145,dc=inps,dc=it|cn=A8006:P10146,dc=inps,dc=it|";
+                    inpsRuoli = "cn=A8006:P12689,dc=inps,dc=it|cn=A8006:P12801:050000,dc=inps,dc=it|cn=A8006:P12801:500000,dc=inps,dc=it|cn=A8006:P12801:040000,dc=inps,dc=it|cn=A8006:P12801:700000,dc=inps,dc=it|cn=A8006:P12799:818000,dc=inps,dc=it|cn=A8006:P12800,dc=inps,dc=it|";
+
                 }
 
                 // Validazione header
