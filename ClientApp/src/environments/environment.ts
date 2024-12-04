@@ -10,7 +10,7 @@ export const environment = {
   //MG_URL: 'https://localhost:7299/microgateaway/',
   //MG_URL: 'http://localhost:5157/microgateaway/',
   API_URI: 'http://localhost:5157/api/',
-  MG_URL: 'http://localhost:5157/microgateaway/',
+  MG_URL: 'http://localhost:5157/microgateway/',
   useHash: false,
   loginIDM: false,
 };

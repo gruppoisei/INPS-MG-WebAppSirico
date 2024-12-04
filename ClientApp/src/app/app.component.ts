@@ -83,22 +83,15 @@ export class AppComponent implements OnInit {
           this.isLogged = sessionStorage.getItem("isLogged");
 
           this.getAccountIdmLoggato();
-
         }
-
       }
     })
-    // this.storageService.setItem('listaSedi', "");
-    // this.storageService.setItem('matricola', "");
-    // this.storageService.setItem('allroles', "");
-    // this.storageService.setItem('roleDesc', "");
-    // this.storageService.setItem('username', "");
     this.tipoLogin = environment.loginIDM;
 
     console.log('this.isLogged: ', this.isLogged);
     this.isLogged = sessionStorage.getItem("isLogged");
     console.log('this.isLogged: ', this.isLogged);
-    
+
     // metodo per recuperare i dati in ambiente inps (primo accesso all'applicativo)
     if (this.isLogged != "true") {
       this.getAccountIdmLoggato();
@@ -118,16 +111,9 @@ export class AppComponent implements OnInit {
     this.preloader.hide();
   }
 
-  // onSubmit() {
-  //   // QUESTO METODO FORNISCE I DATI UTENTI IDM DALL'AMBIENTE INPS
-  //   this.getAccountIdmLoggato();
-  //   // QUESTO METODO SIMULA UN LOGIN DELL'APPLICATIVO
-  //   // this.getAccountLoggato();
-  // }
-
   //////////////////////////////    INIZIO LOGIN    //////////////////////////////
   getAccountIdmLoggato() {
-    this.infoUtentiService.newInfoUtente().subscribe({
+    this.infoUtentiService.WhoAmI().subscribe({
       next: (user) => {
         // console.log('user:',user);
         this.idmUser = user;
@@ -160,7 +146,6 @@ export class AppComponent implements OnInit {
         return null;
         }).filter(sede => sede !== null) as { sedeCode: string, descSede: string, role: string }[];
 
-
         this.codeRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.roleCode);
         this.descRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.desc);
 
@@ -171,7 +156,7 @@ export class AppComponent implements OnInit {
         this.storageService.setItem('isLogged', true);
 
         if (this.listaSedi.length > 0) {
-          sessionStorage.setItem('listaSedi',JSON.stringify(this.listaSedi))
+          this.storageService.setItem('listaSedi',JSON.stringify(this.listaSedi))
         }
         else {
           this.storageService.remove('listaSedi');
@@ -187,10 +172,9 @@ export class AppComponent implements OnInit {
         }
       }
     });
-
   }
 
-  getAccountLoggato() {
+   getAccountLoggato() {
     this.infoUtentiService.getStringaIDMConUsername(this.form1.value.loginUsername).subscribe({
       next: (user: any) => {
         console.log('user:',user);

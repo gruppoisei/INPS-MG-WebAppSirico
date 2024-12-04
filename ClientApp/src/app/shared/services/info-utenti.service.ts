@@ -12,7 +12,7 @@ export class InfoUtentiService {
   constructor(private http : HttpClient) { }
 
   private apiUrl = environment.API_URI + 'Account/'
-  private mgUrl = environment.MG_URL + 'Headers/'
+  private mgUrl = environment.MG_URL + 'Login/'
 
 /*   infoUtente() : Observable<InfoUtente>{
     return this.http.get<InfoUtente>(environment.API_URI+'account');
@@ -32,6 +32,10 @@ export class InfoUtentiService {
 
   checkDatiLocaleIDM(stringaUtenteIDM: string, username: string) {
     return this.http.get<any>((`${this.apiUrl}ControlloLoginIDM?stringaUtenteIDM=${stringaUtenteIDM}&username=${username}`))
+  }
+
+  WhoAmI() : Observable<IdmUser>{
+    return this.http.get<IdmUser>((`${this.mgUrl}WhoAmI`))
   }
 
   // getInfoUtente(loginUsername: string) : Observable<IdmUser>{
