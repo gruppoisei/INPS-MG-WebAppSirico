@@ -27,7 +27,7 @@ namespace INPS_MVC_WebAppSirico.Controllers
             {
                 var http = httpContextAccessor.HttpContext;
 
-                // Recupero i dati dagli header HTTP
+                // Recupero gli header HTTP
                 var headers = http.Request.Headers;
 
                 string firstName, lastName, account, matricula, fiscalCode, inpsRuoli;
@@ -52,7 +52,6 @@ namespace INPS_MVC_WebAppSirico.Controllers
                     matricula = "E000-123";
                     fiscalCode = "DefaultFiscalCode";
                     inpsRuoli = "cn=A8006:P12689,dc=inps,dc=it|cn=A8006:P12801:050000,dc=inps,dc=it|cn=A8006:P12801:500000,dc=inps,dc=it|cn=A8006:P12801:040000,dc=inps,dc=it|cn=A8006:P12801:700000,dc=inps,dc=it|cn=A8006:P12799:818000,dc=inps,dc=it|cn=A8006:P12800,dc=inps,dc=it|";
-
                 }
 
                 // Validazione header
@@ -65,6 +64,16 @@ namespace INPS_MVC_WebAppSirico.Controllers
                 {
                     return BadRequest(new { Message = "Nessun ruolo trovato nei dati dell'utente." });
                 }
+
+                // Dizionario per descrizioni dei ruoli
+                var roleDescriptions = new Dictionary<string, string>
+                {
+                    { "P12689", "Amministratore" },
+                    { "P12690", "Operatore Centrale Amministrativo" },
+                    { "P12800", "Operatore Centrale Informatico" },
+                    { "P12801", "Operatore Territoriale di Provincia" },
+                    { "P12799", "Operatore Territoriale Regionale" }
+                };
 
                 // Costruisco l'oggetto utente
                 var user = new IdmId
@@ -90,22 +99,21 @@ namespace INPS_MVC_WebAppSirico.Controllers
                         if (match.Success)
                         {
                             string role = match.Groups["role"].Value;
-                            string sede = match.Groups["sede"].Value;
+                            string description = roleDescriptions.ContainsKey(role) ? roleDescriptions[role] : "";
 
                             if (!string.IsNullOrEmpty(role))
                             {
-                                if (!user.appRoles.Contains(role))
+                                string roleWithDescription = $"{role} : {description}";
+                                if (!user.appRoles.Contains(roleWithDescription))
                                 {
-                                    user.appRoles.Add(role);
+                                    user.appRoles.Add(roleWithDescription);
                                 }
                             }
 
-                            if (!string.IsNullOrEmpty(sede))
+                            string sede = match.Groups["sede"].Value;
+                            if (!string.IsNullOrEmpty(sede) && !user.CodiceSede.Contains(sede))
                             {
-                                if (!user.CodiceSede.Contains(sede))
-                                {
-                                    user.CodiceSede.Add(sede);
-                                }
+                                user.CodiceSede.Add(sede);
                             }
                         }
                     }
@@ -123,20 +131,20 @@ namespace INPS_MVC_WebAppSirico.Controllers
                 return StatusCode(500, "Errore interno del server: " + ex.Message);
             }
         }
-    }
 
-    /// <summary>
-    /// Modello per l'oggetto IdmId.
-    /// </summary>
-    public class IdmId
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string WindowsAccount { get; set; }
-        public string Matricula { get; set; }
-        public string FiscalCode { get; set; }
-        public List<string> appRoles { get; set; }
-        public List<string> CodiceSede { get; set; }
-        public string OfficeSapCode { get; set; }
+        /// <summary>
+        /// Modello per l'oggetto IdmId.
+        /// </summary>
+        public class IdmId
+        {
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string WindowsAccount { get; set; }
+            public string Matricula { get; set; }
+            public string FiscalCode { get; set; }
+            public List<string> appRoles { get; set; }
+            public List<string> CodiceSede { get; set; }
+            public string OfficeSapCode { get; set; }
+        }
     }
 }
