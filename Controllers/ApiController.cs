@@ -3,98 +3,41 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 
-[ApiController]
-[Route("api/{*path}")]
-public class ApiGatewayController : ControllerBase
+namespace INPS_MVC_WebAppSirico.Controllers
 {
-    private readonly IHttpClientFactory _httpClientFactory;
-
-    public ApiGatewayController(IHttpClientFactory httpClientFactory)
+    [ApiController]
+    [Route("api/{*path}")]
+    public class ApiGatewayController : ControllerBase
     {
-        _httpClientFactory = httpClientFactory;
-    }
+        private readonly IHttpClientFactory _httpClientFactory;
 
-    // Endpoint per richieste GET
-    [HttpGet]
-    public async Task<IActionResult> HandleGetRequest(string path)
-    {
-        var backendUrl = $"http://localhost:5250/api/{path}{Request.QueryString}";
-
-        var client = _httpClientFactory.CreateClient();
-
-        var requestMessage = new HttpRequestMessage
+        public ApiGatewayController(IHttpClientFactory httpClientFactory)
         {
-            Method = HttpMethod.Get,
-            RequestUri = new Uri(backendUrl)
-        };
-
-        foreach (var header in Request.Headers)
-        {
-            requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+            _httpClientFactory = httpClientFactory;
         }
 
-        var response = await client.SendAsync(requestMessage);
-        var content = await response.Content.ReadAsStringAsync();
-
-        return new ContentResult
+        // Endpoint per richieste GET
+        [HttpGet]
+        public async Task<IActionResult> HandleGetRequest(string path)
         {
-            StatusCode = (int)response.StatusCode,
-            Content = content,
-            ContentType = response.Content.Headers.ContentType?.ToString()
-        };
-    }
+            var backendUrl = $"http://localhost:5250/api/{path}{Request.QueryString}";
 
-    [HttpPost]
-    [HttpPut]
-    [HttpDelete]
-    [HttpPatch]
-    public async Task<IActionResult> HandleOtherRequests(string path)
-    {
-        var backendUrl = $"http://localhost:5250/api/{path}";
+            var client = _httpClientFactory.CreateClient();
 
-        var client = _httpClientFactory.CreateClient();
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = HttpMethod.Get,
+                RequestUri = new Uri(backendUrl)
+            };
 
-        // Creazione della richiesta da inoltrare
-        var requestMessage = new HttpRequestMessage
-        {
-            Method = new HttpMethod(Request.Method),
-            RequestUri = new Uri(backendUrl)
-        };
-
-        // Copia degli header dalla richiesta originale
-        foreach (var header in Request.Headers)
-        {
-            if (!header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase))
+            foreach (var header in Request.Headers)
             {
                 requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
             }
-        }
 
-        // Se la richiesta contiene un body, lo copiamo
-        if (Request.ContentLength > 0)
-        {
-            try
-            {
-                // Rileggi il corpo della richiesta in modo sicuro
-                var body = await new StreamReader(Request.Body).ReadToEndAsync();
-
-                // Usa il contenuto letto per impostare il body della nuova richiesta
-                requestMessage.Content = new StringContent(body, Encoding.UTF8, Request.ContentType ?? "application/json");
-
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Error reading or copying request body: {ex.Message}");
-            }
-        }
-
-        try
-        {
-            // Invio della richiesta al backend
             var response = await client.SendAsync(requestMessage);
-
-            // Costruzione della risposta da ritornare al client
             var content = await response.Content.ReadAsStringAsync();
+
             return new ContentResult
             {
                 StatusCode = (int)response.StatusCode,
@@ -102,9 +45,79 @@ public class ApiGatewayController : ControllerBase
                 ContentType = response.Content.Headers.ContentType?.ToString()
             };
         }
-        catch (HttpRequestException ex)
+
+        [HttpPost]
+        [HttpPut]
+        [HttpDelete]
+        [HttpPatch]
+        public async Task<IActionResult> HandleOtherRequests(string path)
         {
-            return StatusCode(500, $"Error sending request: {ex.Message}");
+            var backendUrl = $"http://localhost:5250/api/{path}";
+
+            var client = _httpClientFactory.CreateClient();
+
+            // Creazione della richiesta da inoltrare
+            var requestMessage = new HttpRequestMessage
+            {
+                Method = new HttpMethod(Request.Method),
+                RequestUri = new Uri(backendUrl)
+            };
+
+            // Copia degli header dalla richiesta originale
+            foreach (var header in Request.Headers)
+            {
+                if (!header.Key.Equals("Host", StringComparison.OrdinalIgnoreCase))
+                {
+                    requestMessage.Headers.TryAddWithoutValidation(header.Key, header.Value.ToArray());
+                }
+            }
+
+            // Copia del body della richiesta originale
+            if (Request.ContentLength > 0 && Request.HasFormContentType)
+            {
+                var form = await Request.ReadFormAsync();
+                var multipartContent = new MultipartFormDataContent();
+
+                foreach (var file in form.Files)
+                {
+                    var streamContent = new StreamContent(file.OpenReadStream());
+                    streamContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(file.ContentType);
+                    multipartContent.Add(streamContent, file.Name, file.FileName);
+                }
+
+                foreach (var key in form.Keys)
+                {
+                    multipartContent.Add(new StringContent(form[key]), key);
+                }
+
+                requestMessage.Content = multipartContent;
+            }
+            else if (Request.ContentLength > 0)
+            {
+                // Altri tipi di contenuto (JSON, text/plain, etc.)
+                var body = await new StreamReader(Request.Body).ReadToEndAsync();
+                requestMessage.Content = new StringContent(body, Encoding.UTF8, Request.ContentType ?? "application/json");
+            }
+
+
+            try
+            {
+                // Invio della richiesta al backend
+                var response = await client.SendAsync(requestMessage);
+
+                // Creazione della risposta per il client
+                var responseContent = await response.Content.ReadAsStringAsync();
+                return new ContentResult
+                {
+                    StatusCode = (int)response.StatusCode,
+                    Content = responseContent,
+                    ContentType = response.Content.Headers.ContentType?.ToString()
+                };
+            }
+            catch (HttpRequestException ex)
+            {
+                return StatusCode(500, $"Error sending request: {ex.Message}");
+            }
         }
     }
 }
