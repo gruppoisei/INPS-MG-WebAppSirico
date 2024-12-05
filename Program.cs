@@ -3,6 +3,8 @@ using System.Net.WebSockets;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
 // Add services to the container
 builder.Services.AddControllersWithViews();
 builder.Services.AddSpaStaticFiles(configuration =>

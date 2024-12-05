@@ -40,11 +40,11 @@ export class PageHeaderComponent implements OnInit {
     const username = sessionStorage.getItem('username');
     if (username) {
       const trimmedUsername = username.substring(1, username.length - 1);
-      this.infoUtentiService.getInfoUtenteByUsername(trimmedUsername).subscribe((info: IdmUser) => {
+      this.infoUtentiService.WhoAmI().subscribe((info: IdmUser) => {
         this.nomeUtente = info.firstName;
         this.cognomeUtente = info.lastName;
         this.matricolaUtente = info.matricula;
-  
+
         const allRoleDesc = sessionStorage.getItem('roleDesc');
         if (allRoleDesc) {
           this.roleDesc = JSON.parse(allRoleDesc)[0];
@@ -54,16 +54,16 @@ export class PageHeaderComponent implements OnInit {
       this.errorMessage = 'Username non trovato in sessionStorage';
       // console.warn('Username non trovato in sessionStorage');
     }
-  
+
     this.nav = Array.isArray(this.nav) ? this.nav : [];
-  
+
     if (this.nav.length === 0) {
       this.genBreadcrumb();
     }
   
     this.title = this.title || this.nav[this.nav.length - 1] || 'Dashboard';
   }
-  
+
 
   showFieldRole(roleDesc: string): string | null {
 
