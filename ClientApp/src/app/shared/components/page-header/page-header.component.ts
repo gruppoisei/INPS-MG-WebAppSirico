@@ -61,7 +61,7 @@ export class PageHeaderComponent implements OnInit {
       this.genBreadcrumb();
     }
   
-    this.title = this.title || this.nav[this.nav.length - 1];
+    this.title = this.title || this.nav[this.nav.length - 1] || 'Dashboard';
   }
   
 
@@ -89,12 +89,11 @@ export class PageHeaderComponent implements OnInit {
     return null;
   }
 
-  genBreadcrumb() {
-    const cleanUrl = this.router.url.split('?')[0];
-    const routes = cleanUrl.slice(1).split('/');
-    this.nav = this.menu.getLevel(routes);
-    this.nav.unshift('Home');
-  }
+genBreadcrumb() {
+  const cleanUrl = this.router.url.split('?')[0];
+  const routes = cleanUrl.slice(1).split('/');
+  this.nav = this.menu.getLevel(routes).filter(route => route !== 'menu.dashboard');
+}
 
   static ngAcceptInputType_hideBreadcrumb: BooleanInput;
 }
