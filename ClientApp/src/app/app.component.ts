@@ -114,63 +114,86 @@ export class AppComponent implements OnInit {
   //////////////////////////////    INIZIO LOGIN    //////////////////////////////
   getAccountIdmLoggato() {
     this.infoUtentiService.WhoAmI().subscribe({
-      next: (user) => {
-        // console.log('user:',user);
-        this.idmUser = user;
-        this.nomeUtente = user.firstName;
-        this.cognomeUtente = user.lastName;
-        this.windowsAccount = user.windowsAccount;
+      next: async (user) => {
+        try {
+          // Salva le informazioni principali dell'utente
+          this.idmUser = user;
+          this.nomeUtente = user.firstName;
+          this.cognomeUtente = user.lastName;
+          this.windowsAccount = user.windowsAccount;
 
-        // console.log('user.appRoles:',user.appRoles);
-        // SE user.appRoles è null se un utente provinciale o regionale senza sedi associate prova ad accedere
-        if (user.appRoles == null) {
-          this.showErrorMessage("L'username inserito non ha ruoli associati.");
-          return
-        }
-
-        // Parse roles
-        this.listaRuoli = user.appRoles.map(role => {
-          const roleMatch = role.match(/(P\d+)\s:\s(.+)/);
-          if (roleMatch) {
-            return { roleCode: roleMatch[1], desc: roleMatch[2] };
+          // Gestione in caso di appRoles null
+          if (user.appRoles == null) {
+            this.showErrorMessage("L'username inserito non ha ruoli associati.");
+            return;
           }
-          return null;
-        }).filter(role => role !== null) as { desc: string, roleCode: string }[];
 
-        // Parse sedi
-        this.listaSedi = user.codiceSede.map(sede => {
-        const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
-        if (sedeMatch) {
-          return { sedeCode: sedeMatch[1], descSede: sedeMatch[2], role: sedeMatch[3] };
+          // Parsing dei ruoli
+          this.listaRuoli.sort();
+          console.log("lista ruoli sorted: " + this.listaRuoli);
+          this.listaRuoli = user.appRoles.map((role) => {
+            const roleMatch = role.match(/(P\d+)\s:\s(.+)/);
+            if (roleMatch) {
+              return { roleCode: roleMatch[1], desc: roleMatch[2] };
+            }
+            return null;
+          }).filter((role) => role !== null) as { desc: string; roleCode: string }[];
+
+          // Estrai i codici sede dall'oggetto utente
+          const codiceSedeList = user.codiceSede.map((sede: string) => {
+            const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
+            return sedeMatch ? sedeMatch[1] : null;
+          }).filter((sede: string | null) => sede !== null) as string[];
+
+          if (codiceSedeList.length === 0) {
+            console.warn("Nessun codice sede trovato.");
+          } else {
+            // Chiamata all'endpoint per ottenere le descrizioni delle sedi
+            const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(codiceSedeList).toPromise();
+
+            if (sedeDescriptions) {
+              // Aggiorna la lista delle sedi con le descrizioni ricevute dall'endpoint
+              this.listaSedi = sedeDescriptions.map((sedeDesc: string) => {
+                const match = sedeDesc.match(/(\d+)\s:\s(.+)/);
+                return match
+                  ? { sedeCode: match[1], descSede: match[2], role: "" } // Role impostato come stringa vuota
+                  : null;
+              }).filter((sede) => sede !== null) as { sedeCode: string; descSede: string; role: string }[];
+
+              console.log("Sedi aggiornate con descrizioni:", this.listaSedi);
+            }
+          }
+
+          // Prepara dati aggiuntivi per il salvataggio
+          this.codeRuoliAccesso = this.listaRuoli.map((ruolo) => ruolo.roleCode);
+          this.descRuoliAccesso = this.listaRuoli.map((ruolo) => ruolo.desc);
+
+          // Salva i dati nel servizio di storage
+          this.storageService.setItem('username', this.windowsAccount);
+          this.storageService.setItem('matricola', user.matricula);
+          this.storageService.setItem('allroles', this.codeRuoliAccesso.join('; '));
+          this.storageService.setItem('roleDesc', this.descRuoliAccesso);
+          this.storageService.setItem('isLogged', true);
+
+          if (this.listaSedi.length > 0) {
+            this.storageService.setItem('listaSedi', JSON.stringify(this.listaSedi));
+          } else {
+            this.storageService.setItem('listaSedi', "");
+          }
+
+          // Reindirizzamento alla dashboard
+          window.location.href = '/dashboard';
+        } catch (error) {
+          console.error("Errore durante la fetch delle descrizioni delle sedi:", error);
+          this.showErrorMessage("Errore durante il caricamento delle descrizioni delle sedi.");
         }
-        return null;
-        }).filter(sede => sede !== null) as { sedeCode: string, descSede: string, role: string }[];
-
-        this.codeRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.roleCode);
-        this.descRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.desc);
-
-        this.storageService.setItem('username', this.windowsAccount);
-        this.storageService.setItem('matricola', user.matricula);
-        this.storageService.setItem('allroles', this.codeRuoliAccesso.join('; '));
-        this.storageService.setItem('roleDesc', this.descRuoliAccesso);
-        this.storageService.setItem('isLogged', true);
-
-        if (this.listaSedi.length > 0) {
-          this.storageService.setItem('listaSedi',JSON.stringify(this.listaSedi))
-        }
-        else {
-          this.storageService.remove('listaSedi');
-        }
-
-        //this.router.navigate(['/dashboard']);
-        window.location.href = '/dashboard';
       },
       error: (err) => {
         if (err.error.message) {
           this.showErrorMessage(err.error.message);
           this.emptyPage = true;
         }
-      }
+      },
     });
   }
 

@@ -20,7 +20,8 @@ namespace INPS_MVC_WebAppSirico.Controllers
         [HttpGet]
         public async Task<IActionResult> HandleGetRequest(string path)
         {
-            var backendUrl = $"http://localhost:5250/api/{path}{Request.QueryString}";
+            var msurl = Environment.GetEnvironmentVariable("MS_SIRICOAPI");
+            var backendUrl = $"{msurl}{path}{Request.QueryString}";
 
             var client = _httpClientFactory.CreateClient();
 
@@ -52,7 +53,9 @@ namespace INPS_MVC_WebAppSirico.Controllers
         [HttpPatch]
         public async Task<IActionResult> HandleOtherRequests(string path)
         {
-            var backendUrl = $"http://localhost:5250/api/{path}";
+
+            var msurl = Environment.GetEnvironmentVariable("MS_SIRICOAPI");
+            var backendUrl = $"{msurl}{path}";
 
             var client = _httpClientFactory.CreateClient();
 

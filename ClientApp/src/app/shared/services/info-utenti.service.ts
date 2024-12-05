@@ -38,6 +38,12 @@ export class InfoUtentiService {
     return this.http.get<IdmUser>((`${this.mgUrl}WhoAmI`))
   }
 
+  fetchSedeDescriptions(codiciSede: string[]): Observable<string[]> {
+    const url = `${environment.API_URI}/api/Territorio/GetSedeDescriptions`;
+    return this.http.post<string[]>(url, codiciSede);
+  }
+
+
   // getInfoUtente(loginUsername: string) : Observable<IdmUser>{
   //   return this.http.get<IdmUser>((`${this.apiUrl}GetInfoUtente/${loginUsername}`))
   // }
