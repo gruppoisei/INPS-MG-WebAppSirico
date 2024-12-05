@@ -51,7 +51,7 @@ namespace INPS_MVC_WebAppSirico.Controllers
                     account = "Username";
                     matricula = "E000-123";
                     fiscalCode = "DefaultFiscalCode";
-                    inpsRuoli = "cn=A8006:P12689,dc=inps,dc=it|";//cn=A8006:P12801:050000,dc=inps,dc=it|cn=A8006:P12801:500000,dc=inps,dc=it|cn=A8006:P12801:040000,dc=inps,dc=it|cn=A8006:P12801:700000,dc=inps,dc=it|cn=A8006:P12799:818000,dc=inps,dc=it|cn=A8006:P12800,dc=inps,dc=it|";
+                    inpsRuoli = "cn=A8006:P12689,dc=inps,dc=it|cn=A8006:P12801:050000,dc=inps,dc=it|cn=A8006:P12801:500000,dc=inps,dc=it|cn=A8006:P12801:040000,dc=inps,dc=it|cn=A8006:P12801:700000,dc=inps,dc=it|cn=A8006:P12799:818000,dc=inps,dc=it|cn=A8006:P12800,dc=inps,dc=it|";
                 }
 
                 // Validazione header
@@ -67,13 +67,13 @@ namespace INPS_MVC_WebAppSirico.Controllers
 
                 // Dizionario per descrizioni dei ruoli
                 var roleDescriptions = new Dictionary<string, string>
-                {
-                    { "P12689", "Amministratore" },
-                    { "P12690", "Operatore Centrale Amministrativo" },
-                    { "P12800", "Operatore Centrale Informatico" },
-                    { "P12801", "Operatore Territoriale di Provincia" },
-                    { "P12799", "Operatore Territoriale Regionale" }
-                };
+        {
+            { "P12689", "Amministratore" },
+            { "P12690", "Operatore Centrale Amministrativo" },
+            { "P12800", "Operatore Centrale Informatico" },
+            { "P12801", "Operatore Territoriale di Provincia" },
+            { "P12799", "Operatore Territoriale Regionale" }
+        };
 
                 // Costruisco l'oggetto utente
                 var user = new IdmId
@@ -111,9 +111,14 @@ namespace INPS_MVC_WebAppSirico.Controllers
                             }
 
                             string sede = match.Groups["sede"].Value;
-                            if (!string.IsNullOrEmpty(sede) && !user.CodiceSede.Contains(sede))
+                            if (!string.IsNullOrEmpty(sede))
                             {
-                                user.CodiceSede.Add(sede);
+                                // Formatta la sede come "sedecodice : ruoloAssociato"
+                                string sedeFormatted = $"{sede} : {role}";
+                                if (!user.CodiceSede.Contains(sedeFormatted))
+                                {
+                                    user.CodiceSede.Add(sedeFormatted);
+                                }
                             }
                         }
                     }

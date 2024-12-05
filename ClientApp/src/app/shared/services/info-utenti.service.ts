@@ -39,7 +39,7 @@ export class InfoUtentiService {
   }
 
   fetchSedeDescriptions(codiciSede: string[]): Observable<string[]> {
-    const url = `${environment.API_URI}/api/Territorio/GetSedeDescriptions`;
+    const url = `${environment.API_URI}Territorio/GetSedeDescriptions`;
     return this.http.post<string[]>(url, codiciSede);
   }
 

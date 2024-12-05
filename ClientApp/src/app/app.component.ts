@@ -26,12 +26,12 @@ export class AppComponent implements OnInit {
   scadute: any[] = [];
 
   formRicerca = this.formBuilder.group({
-    scadenza:''
+    scadenza: ''
   });
 
   emptyPage: boolean = false;
   listaRuoli: { desc: string, roleCode: string }[] = [];
-  listaSedi: { sedeCode: string, descSede: string, role: string }[] = [];
+  listaSedi: { sedeCode: string, descSede: string }[] = [];
   listaCodeSedi: string[] = [];
   nomeUtente: string = '';
   cognomeUtente: string = '';
@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   tipoLogin: boolean = false;
 
   form1 = this.formBuilder.group({
-    loginUsername: ['',Validators.required]
+    loginUsername: ['', Validators.required]
   });
 
   isLogged: string | null = sessionStorage.getItem("isLogged");
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
     public dialog: MatDialog,
     private formBuilder: FormBuilder,
     private infoUtentiService: InfoUtentiService,
-    private router: Router) {}
+    private router: Router) { }
 
   ngOnInit() {
     this.router.events.subscribe(event => {
@@ -129,8 +129,7 @@ export class AppComponent implements OnInit {
           }
 
           // Parsing dei ruoli
-          this.listaRuoli.sort();
-          console.log("lista ruoli sorted: " + this.listaRuoli);
+          user.appRoles.sort((a, b) => a.localeCompare(b));
           this.listaRuoli = user.appRoles.map((role) => {
             const roleMatch = role.match(/(P\d+)\s:\s(.+)/);
             if (roleMatch) {
@@ -140,29 +139,16 @@ export class AppComponent implements OnInit {
           }).filter((role) => role !== null) as { desc: string; roleCode: string }[];
 
           // Estrai i codici sede dall'oggetto utente
-          const codiceSedeList = user.codiceSede.map((sede: string) => {
+          debugger;
+          const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(user.codiceSede).toPromise();
+          // Parse sedi
+          this.listaSedi = sedeDescriptions!.map(sede => {
             const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
-            return sedeMatch ? sedeMatch[1] : null;
-          }).filter((sede: string | null) => sede !== null) as string[];
-
-          if (codiceSedeList.length === 0) {
-            console.warn("Nessun codice sede trovato.");
-          } else {
-            // Chiamata all'endpoint per ottenere le descrizioni delle sedi
-            const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(codiceSedeList).toPromise();
-
-            if (sedeDescriptions) {
-              // Aggiorna la lista delle sedi con le descrizioni ricevute dall'endpoint
-              this.listaSedi = sedeDescriptions.map((sedeDesc: string) => {
-                const match = sedeDesc.match(/(\d+)\s:\s(.+)/);
-                return match
-                  ? { sedeCode: match[1], descSede: match[2], role: "" } // Role impostato come stringa vuota
-                  : null;
-              }).filter((sede) => sede !== null) as { sedeCode: string; descSede: string; role: string }[];
-
-              console.log("Sedi aggiornate con descrizioni:", this.listaSedi);
+            if (sedeMatch) {
+              return { sedeCode: sedeMatch[1], descSede: sedeMatch[2], role: sedeMatch[3] };
             }
-          }
+            return null;
+          }).filter(sede => sede !== null) as { sedeCode: string, descSede: string, role: string }[];
 
           // Prepara dati aggiuntivi per il salvataggio
           this.codeRuoliAccesso = this.listaRuoli.map((ruolo) => ruolo.roleCode);
@@ -176,7 +162,7 @@ export class AppComponent implements OnInit {
           this.storageService.setItem('isLogged', true);
 
           if (this.listaSedi.length > 0) {
-            this.storageService.setItem('listaSedi', JSON.stringify(this.listaSedi));
+            this.storageService.setItem('listaSedi', (this.listaSedi));
           } else {
             this.storageService.setItem('listaSedi', "");
           }
@@ -197,13 +183,13 @@ export class AppComponent implements OnInit {
     });
   }
 
-   getAccountLoggato() {
+  getAccountLoggato() {
     this.infoUtentiService.getStringaIDMConUsername(this.form1.value.loginUsername).subscribe({
       next: (user: any) => {
-        console.log('user:',user);
+        console.log('user:', user);
 
         if (user == null) {
-          this.openErrorDialog('Errore:',"L'utente inserito non è censito in IDM.")
+          this.openErrorDialog('Errore:', "L'utente inserito non è censito in IDM.")
           return
         }
 
@@ -223,53 +209,53 @@ export class AppComponent implements OnInit {
                 this.cognomeUtente = user.lastName;
                 this.windowsAccount = user.windowsAccount;
 
-            // console.log('user.appRoles:',user.appRoles);
+                // console.log('user.appRoles:',user.appRoles);
 
-            // SE user.appRoles è null se un utente provinciale o regionale senza sedi associate prova ad accedere
-            if (user.appRoles == null) {
-              this.showErrorMessage("L'username inserito non ha sedi associate.");
-              return
-            }
+                // SE user.appRoles è null se un utente provinciale o regionale senza sedi associate prova ad accedere
+                if (user.appRoles == null) {
+                  this.showErrorMessage("L'username inserito non ha sedi associate.");
+                  return
+                }
 
-            // Parse roles
-            this.listaRuoli = user.appRoles.map(role => {
-              const roleMatch = role.match(/(P\d+)\s:\s(.+)/);
-              if (roleMatch) {
-                return { roleCode: roleMatch[1], desc: roleMatch[2] };
-              }
-              return null;
-            }).filter(role => role !== null) as { desc: string, roleCode: string }[];
+                // Parse roles
+                this.listaRuoli = user.appRoles.map(role => {
+                  const roleMatch = role.match(/(P\d+)\s:\s(.+)/);
+                  if (roleMatch) {
+                    return { roleCode: roleMatch[1], desc: roleMatch[2] };
+                  }
+                  return null;
+                }).filter(role => role !== null) as { desc: string, roleCode: string }[];
 
-            // Parse sedi
-            this.listaSedi = user.codiceSede.map(sede => {
-              const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
-              if (sedeMatch) {
-                return { sedeCode: sedeMatch[1], descSede: sedeMatch[2], role: sedeMatch[3] };
-              }
-              return null;
-            }).filter(sede => sede !== null) as { sedeCode: string, descSede: string, role: string }[];
-            // console.log('listaSedi',this.listaSedi)
+                // Parse sedi
+                this.listaSedi = user.codiceSede.map(sede => {
+                  const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
+                  if (sedeMatch) {
+                    return { sedeCode: sedeMatch[1], descSede: sedeMatch[2] };
+                  }
+                  return null;
+                }).filter(sede => sede !== null) as { sedeCode: string, descSede: string }[];
+                // console.log('listaSedi',this.listaSedi)
 
-            this.codeRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.roleCode);
-            this.descRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.desc);
+                this.codeRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.roleCode);
+                this.descRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.desc);
 
-            // console.log('this.descRuoliAccesso:',this.descRuoliAccesso);
-            this.storageService.setItem('username',this.form1.value.loginUsername)
-            this.storageService.setItem('matricola', this.idmUser.matricula);
-            this.storageService.setItem('allroles', this.codeRuoliAccesso.join('; '));
-            this.storageService.setItem('roleDesc', this.descRuoliAccesso);
-            this.storageService.setItem('isLogged', true);
+                // console.log('this.descRuoliAccesso:',this.descRuoliAccesso);
+                this.storageService.setItem('username', this.form1.value.loginUsername)
+                this.storageService.setItem('matricola', this.idmUser.matricula);
+                this.storageService.setItem('allroles', this.codeRuoliAccesso.join('; '));
+                this.storageService.setItem('roleDesc', this.descRuoliAccesso);
+                this.storageService.setItem('isLogged', true);
 
-            if (this.listaSedi.length > 0) {
-              sessionStorage.setItem('listaSedi',JSON.stringify(this.listaSedi))
-            }
+                if (this.listaSedi.length > 0) {
+                  sessionStorage.setItem('listaSedi', JSON.stringify(this.listaSedi))
+                }
 
-            else {
-              this.storageService.remove('listaSedi');
-            }
+                else {
+                  this.storageService.remove('listaSedi');
+                }
 
-              // this.router.navigate(['/dashboard']);
-              window.location.href = '/dashboard';
+                // this.router.navigate(['/dashboard']);
+                window.location.href = '/dashboard';
               },
               error: (err) => {
                 if (err.error.message) {
@@ -280,11 +266,11 @@ export class AppComponent implements OnInit {
 
           }
           else {
-              this.dialog.open(PopupErroreInserimentoComponent, {
-                data: { titolo: 'Errore:', message: 'I dati forniti da IDM non corrispondono ai dati della tabella Utente.' },
+            this.dialog.open(PopupErroreInserimentoComponent, {
+              data: { titolo: 'Errore:', message: 'I dati forniti da IDM non corrispondono ai dati della tabella Utente.' },
             });
-              this.emptyPage = true;
-              // console.log('emptypage: ', this.emptyPage);
+            this.emptyPage = true;
+            // console.log('emptypage: ', this.emptyPage);
           }
         });
       }
@@ -298,15 +284,15 @@ export class AppComponent implements OnInit {
     this.role = this.storageService.getItem('allroles');
     this.matricola = this.storageService.getItem('matricola');
 
-      if(this.role && this.matricola){
-            //leggo le comunicazioni legate al ruolo e matricola non ancora lette
-            this.roleComService.newGetComunicazioniFilterByRuoloAndMatricola(this.role, this.matricola)
-            .subscribe((data: RuoliComunicazioni[]) => {
-              this.comunicazioni = data || [];
-              if (this.comunicazioni.length > 0) {
-                this.apriPopupComunicazioni();
-              }
-            });
+    if (this.role && this.matricola) {
+      //leggo le comunicazioni legate al ruolo e matricola non ancora lette
+      this.roleComService.newGetComunicazioniFilterByRuoloAndMatricola(this.role, this.matricola)
+        .subscribe((data: RuoliComunicazioni[]) => {
+          this.comunicazioni = data || [];
+          if (this.comunicazioni.length > 0) {
+            this.apriPopupComunicazioni();
+          }
+        });
     }
   }
 
@@ -317,13 +303,13 @@ export class AppComponent implements OnInit {
     dialogConfig.height = 'auto';
     dialogConfig.disableClose = true;
     const dialogRef = this.dialog.open(PopupComunicazioniComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(() => {});
+    dialogRef.afterClosed().subscribe(() => { });
   }
   //////////////////////////////    FINE COMUNICAZIONI    //////////////////////////////
 
   showErrorMessage(messaggio: string) {
     this.router.navigate(['/local-login']);
-    this.openErrorDialog('Errore:',messaggio);
+    this.openErrorDialog('Errore:', messaggio);
     return
   }
 
