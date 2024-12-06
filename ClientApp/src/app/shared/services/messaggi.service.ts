@@ -86,7 +86,7 @@ export interface BachecaDTO {
   oggetto: string;
   messaggio: string;
   utente: string;
-  nome: string;
-  cognome: string;
+  //nome: string;
+  //cognome: string;
   visibile: boolean;
 }
