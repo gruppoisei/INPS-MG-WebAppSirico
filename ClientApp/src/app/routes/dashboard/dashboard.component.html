@@ -50,9 +50,9 @@
       {{truncateText(element.messaggio, 50)}}</td>
     </ng-container>
 
-    <ng-container matColumnDef="nomeCognome">
-      <th mat-header-cell mat-sort-header="nomeCognome" *matHeaderCellDef  style="padding-left: 2%; text-align: left;">Utente</th>
-      <td mat-cell *matCellDef="let element" style="padding-left: 2%; text-align: left;"> {{element.cognome}} {{element.nome}} </td>
+    <ng-container matColumnDef="matricola">
+      <th mat-header-cell mat-sort-header="matricola" *matHeaderCellDef  style="padding-left: 2%; text-align: left;">Utente</th>
+      <td mat-cell *matCellDef="let element" style="padding-left: 2%; text-align: left;"> <!--{{element.cognome}} {{element.nome}}--> {{element.utente}} </td>
     </ng-container>
 
   </table>

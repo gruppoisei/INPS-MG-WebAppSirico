@@ -23,7 +23,7 @@ export class DashboardComponent implements OnInit {
     'dataInserimento',
     'oggetto',
     'messaggio',
-    'nomeCognome'
+    'matricola'
   ];
 
   readonly ruoloAmministratore = 'P12689';
