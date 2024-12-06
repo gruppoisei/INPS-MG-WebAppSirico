@@ -322,26 +322,26 @@ export class LogApplicativoComponent implements OnInit {
       });
   }
 
-    async resetRicerca() {
-      // Resetta il form ai valori iniziali
-      this.formRicerca.reset({
-        dataInizio: null,
-        dataFine: null,
-        idAccount: '',
-        idMatricola: '',
-      });
+  async resetRicerca() {
+    // Resetta il form ai valori iniziali
+    this.formRicerca.reset({
+      dataInizio: null,
+      dataFine: null,
+      idAccount: '',
+      idMatricola: '',
+    });
 
-      await this.updateDates1(null, null);
+    await this.updateDates1(null, null);
 
-      // Reimposta la lista e la ricerca attiva
-      this.list = [];
-      this.isLoading = true;
-      this.ricercaAtt = false;
+    // Reimposta la lista e la ricerca attiva
+    this.list = [];
+    this.isLoading = true;
+    this.ricercaAtt = false;
 
-      // Reimposta la paginazione
-      this.pageCurr = 1; // Torna alla prima pagina
-      this.inizializzaPaginazione(); // Ripopola la tabella con i dati completi
-    }
+    // Reimposta la paginazione
+    this.pageCurr = 1; // Torna alla prima pagina
+    this.inizializzaPaginazione(); // Ripopola la tabella con i dati completi
+  }
 
   filtroRicerca() {
     this.listFiltered = this.list.filter(x =>
