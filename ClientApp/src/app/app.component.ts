@@ -139,7 +139,6 @@ export class AppComponent implements OnInit {
           }).filter((role) => role !== null) as { desc: string; roleCode: string }[];
 
           // Estrai i codici sede dall'oggetto utente
-          debugger;
           const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(user.codiceSede).toPromise();
           // Parse sedi
           this.listaSedi = sedeDescriptions!.map(sede => {
