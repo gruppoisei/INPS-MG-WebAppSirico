@@ -10,8 +10,8 @@ namespace unit_test
     [TestClass]
     public class LoginControllerTests
     {
-        private Mock<IHttpContextAccessor> _httpContextAccessorMock;
-        private LoginController _controller;
+        private Mock<IHttpContextAccessor>? _httpContextAccessorMock;
+        private LoginController? _controller;
 
         [TestInitialize]
         public void Setup()
