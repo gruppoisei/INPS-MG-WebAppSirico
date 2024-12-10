@@ -37,14 +37,23 @@ namespace INPS_MVC_WebAppSirico.Controllers
             }
 
             var response = await client.SendAsync(requestMessage);
-            var content = await response.Content.ReadAsStringAsync();
-
-            return new ContentResult
+            if(response.Content.Headers.ContentType?.MediaType == "application/octet-stream" || response.Content.Headers.ContentDisposition != null)
             {
-                StatusCode = (int)response.StatusCode,
-                Content = content,
-                ContentType = response.Content.Headers.ContentType?.ToString()
-            };
+                var fileBytes = await response.Content.ReadAsByteArrayAsync();
+                var fileName = response.Content.Headers.ContentDisposition?.FileName?.Trim('"') ?? "file.bin";
+                return File(fileBytes, response.Content.Headers.ContentType?.ToString() ?? "application/octet-stream", fileName);
+            }
+            else
+            {
+                var content = await response.Content.ReadAsStringAsync();
+
+                return new ContentResult
+                {
+                    StatusCode = (int)response.StatusCode,
+                    Content = content,
+                    ContentType = response.Content.Headers.ContentType?.ToString()
+                };
+            }
         }
 
         [HttpPost]

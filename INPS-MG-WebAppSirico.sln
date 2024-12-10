@@ -5,6 +5,8 @@ VisualStudioVersion = 17.12.35514.174 d17.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "INPS-MG-WebAppSirico", "INPS-MG-WebAppSirico.csproj", "{EC3A15D5-1D22-4E93-BD27-17941BA898C2}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "unit_test", "unit_test\unit_test.csproj", "{9197CB7E-A5F6-4555-BC42-1C0B800ED3AD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{EC3A15D5-1D22-4E93-BD27-17941BA898C2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EC3A15D5-1D22-4E93-BD27-17941BA898C2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC3A15D5-1D22-4E93-BD27-17941BA898C2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9197CB7E-A5F6-4555-BC42-1C0B800ED3AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9197CB7E-A5F6-4555-BC42-1C0B800ED3AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9197CB7E-A5F6-4555-BC42-1C0B800ED3AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9197CB7E-A5F6-4555-BC42-1C0B800ED3AD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
