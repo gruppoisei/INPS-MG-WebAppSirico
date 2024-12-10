@@ -179,7 +179,8 @@ export class AdminLayoutComponent implements OnDestroy, OnInit {
       this.isUserLoaded = true;
     }
     else{
-      this.router.navigate(['/local-login'])
+      this.router.navigate(['/'])
+      // this.router.navigate(['/local-login'])
     }
   }
 }

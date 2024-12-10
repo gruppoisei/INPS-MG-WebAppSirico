@@ -9,7 +9,7 @@ export class PreloaderService {
 
   constructor(@Inject(DOCUMENT) private document: Document) {}
 
-  private getElement() {
+  /*private*/ public getElement() {
     return this.document.getElementById(this.selector);
   }
 
