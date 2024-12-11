@@ -47,7 +47,7 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
         'WhoAmI',
         'fetchSedeDescriptions'
       ]);
-      
+
       // MOCK: storageService
       storageService.getItem.and.callFake((key: string) => {
         if (key === 'matricola') {
@@ -242,26 +242,26 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
     //     // tick(); // Avanzare il timer per gestire la chiamata asincrona
     
     //     // // Verifica che i dati siano stati salvati nello storage
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('username', 'Username');
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('matricola', 'E000-123');
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
-    //     //   'Amministratore',
-    //     //   'Operatore Territoriale di Provincia',
-    //     //   'Operatore Territoriale Regionale',
-    //     //   'Utente'
-    //     // ]);
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
+    //     expect(storageService.setItem).toHaveBeenCalledWith('username', 'Username');
+    //     expect(storageService.setItem).toHaveBeenCalledWith('matricola', 'E000-123');
+    //     expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
+    //     expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
+    //       'Amministratore',
+    //       'Operatore Territoriale di Provincia',
+    //       'Operatore Territoriale Regionale',
+    //       'Utente'
+    //     ]);
+    //     expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
     
-    //     // // Verifica che la listaSedi sia correttamente formattata
-    //     // expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
-    //     //   { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
-    //     //   { sedeCode: '500000', descSede: 'P12801', role: 'Operatore Territoriale di Provincia' },
-    //     //   { sedeCode: '040000', descSede: 'P12801', role: 'Operatore Territoriale Regionale' }
-    //     // ]);
+    //     // Verifica che la listaSedi sia correttamente formattata
+    //     expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
+    //       { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
+    //       { sedeCode: '500000', descSede: 'P12801', role: 'Operatore Territoriale di Provincia' },
+    //       { sedeCode: '040000', descSede: 'P12801', role: 'Operatore Territoriale Regionale' }
+    //     ]);
     
-    //     // // Verifica che il router abbia effettuato il reindirizzamento
-    //     // expect(window.location.href).toBe('/dashboard');
+    //     // Verifica che il router abbia effettuato il reindirizzamento
+    //     expect(window.location.href).toBe('/dashboard');
     //   }));
     // });
   
