@@ -1920,10 +1920,11 @@ describe('RilevazioniComponent', () => {
       expect(component.contenziosi).toEqual(mockDatiSegnalazioneContenzioso);
     });
 
-    it('should display alert if data.length from subsribe is equal to 0', () => {
+    it('should display alert if data.length from subsribe is equal to 0 and tabProdotto is equal to  1', () => {
       expect(component.isLoading).toBeTrue();
 
       rilevazioniSrv.getRicercaContenzioso.and.returnValue(of([]));
+      component.tabProdotto = 1;
 
       component.ricercaContenzioso();
 

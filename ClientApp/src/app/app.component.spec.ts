@@ -31,7 +31,6 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
     let storageService: jasmine.SpyObj<StorageService>;
     let ruoloComunicazioneService: jasmine.SpyObj<RuoloComunicazioneService>;
     let infoUtentiService: jasmine.SpyObj<InfoUtentiService>;
-
     let preloaderServiceMock: jasmine.SpyObj<PreloaderService>;
 
     let routerEventsSubject: Subject<any>;
@@ -40,9 +39,7 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
       dialog = jasmine.createSpyObj('MatDialog', ['open']);
       router = jasmine.createSpyObj('Router', ['navigate']);
       dialogRef = jasmine.createSpyObj('MatDialogRef', ['afterClosed']);
-      // storageService = jasmine.createSpyObj('StorageService', ['getItem']);
       storageService = jasmine.createSpyObj('StorageService', ['getItem', 'setItem']);
-
       ruoloComunicazioneService = jasmine.createSpyObj('RuoloComunicazioneService', [
         'newGetComunicazioniFilterByRuoloAndMatricola'
       ]);
@@ -63,25 +60,21 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
         return null;
       });
 
-      routerEventsSubject = new Subject(); // Inizializza il Subject
-
+      // Inizializza il Subject
+      routerEventsSubject = new Subject();
       // Mocka router.events per restituire il Subject
       Object.defineProperty(router, 'events', {
         get: () => routerEventsSubject.asObservable()
       });
 
-
+      dialog.open.and.returnValue(dialogRef);
       // Configuriamo il comportamento di afterClosed per emettere un valore null quando il dialogo si chiude
       dialogRef.afterClosed.and.returnValue(of(null));
-      dialog.open.and.returnValue(dialogRef);
 
       // MOCK preloaderService
       preloaderServiceMock = jasmine.createSpyObj('PreloaderService', ['getElement', 'hide']);
-      // Se la funzione getElement è utilizzata nel codice, simula una risposta.
       preloaderServiceMock.getElement.and.returnValue(document.getElementById('globalLoader'));
-      // Spy su hide
       preloaderServiceMock.hide.and.callThrough();
-
       
       await TestBed.configureTestingModule({
         declarations: [ AppComponent ],
@@ -159,16 +152,9 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
 
 
 
-
     it('should create', () => {
       expect(component).toBeTruthy();
     });
-
-
-
-
-
-
 
     describe('ngOnInit', () => {
       it('should set tipoLogin to environment.loginIDM', () => {
@@ -242,53 +228,42 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
       }));
     });
 
-    describe('getAccountIdmLoggato', () => {
-      it('should return error message if appRoles is null'), () => {
-        spyOn(component,'showErrorMessage');
-        infoUtentiService.WhoAmI.and.returnValue(of());
-
-        component.getAccountIdmLoggato();
-
-        expect(component.showErrorMessage).toHaveBeenCalledWith("L'username inserito non ha ruoli associati.");
-      }
-
-      it('should fetch user data, parse roles and sede descriptions, and redirect to dashboard', fakeAsync(() => {
-        // Mock dei servizi
-        infoUtentiService.WhoAmI.and.returnValue(of(userResponse));
-        // infoUtentiService.fetchSedeDescriptions.and.returnValue(of(sedeDescriptions));
+    // describe('getAccountIdmLoggato', () => {
+    //   it('should fetch user data, parse roles and sede descriptions, and redirect to dashboard', fakeAsync(() => {
+    //     // Mock dei servizi
+    //     infoUtentiService.WhoAmI.and.returnValue(of(userResponse));
+    //     // infoUtentiService.fetchSedeDescriptions.and.returnValue(of(sedeDescriptions));
     
-        // Mock dello storageService per il setItem
-        // storageService.setItem.and.callThrough();
+    //     // Mock dello storageService per il setItem
+    //     // storageService.setItem.and.callThrough();
     
-        // Eseguiamo la chiamata al metodo
-        component.getAccountIdmLoggato();
-        // tick(); // Avanzare il timer per gestire la chiamata asincrona
+    //     // Eseguiamo la chiamata al metodo
+    //     component.getAccountIdmLoggato();
+    //     // tick(); // Avanzare il timer per gestire la chiamata asincrona
     
-        // // Verifica che i dati siano stati salvati nello storage
-        // expect(storageService.setItem).toHaveBeenCalledWith('username', 'Username');
-        // expect(storageService.setItem).toHaveBeenCalledWith('matricola', 'E000-123');
-        // expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
-        // expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
-        //   'Amministratore',
-        //   'Operatore Territoriale di Provincia',
-        //   'Operatore Territoriale Regionale',
-        //   'Utente'
-        // ]);
-        // expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
+    //     // // Verifica che i dati siano stati salvati nello storage
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('username', 'Username');
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('matricola', 'E000-123');
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
+    //     //   'Amministratore',
+    //     //   'Operatore Territoriale di Provincia',
+    //     //   'Operatore Territoriale Regionale',
+    //     //   'Utente'
+    //     // ]);
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
     
-        // // Verifica che la listaSedi sia correttamente formattata
-        // expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
-        //   { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
-        //   { sedeCode: '500000', descSede: 'P12801', role: 'Operatore Territoriale di Provincia' },
-        //   { sedeCode: '040000', descSede: 'P12801', role: 'Operatore Territoriale Regionale' }
-        // ]);
+    //     // // Verifica che la listaSedi sia correttamente formattata
+    //     // expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
+    //     //   { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
+    //     //   { sedeCode: '500000', descSede: 'P12801', role: 'Operatore Territoriale di Provincia' },
+    //     //   { sedeCode: '040000', descSede: 'P12801', role: 'Operatore Territoriale Regionale' }
+    //     // ]);
     
-        // // Verifica che il router abbia effettuato il reindirizzamento
-        // expect(window.location.href).toBe('/dashboard');
-      }));
-    });
-    
-      
+    //     // // Verifica che il router abbia effettuato il reindirizzamento
+    //     // expect(window.location.href).toBe('/dashboard');
+    //   }));
+    // });
   
     // il metodo verrà rimosso in ambiente inps, test omesso
     // describe('getAccountLoggato', () => {

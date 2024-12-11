@@ -112,7 +112,7 @@ export class AppComponent implements OnInit {
 
   //////////////////////////////    INIZIO LOGIN    //////////////////////////////
   getAccountIdmLoggato() {
-    console.log('0')
+    // console.log('0')
     this.infoUtentiService.WhoAmI().subscribe({
       next: async (user) => {
         console.log('1')
