@@ -1296,7 +1296,8 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
         (data: any[]) => {
           this.contenziosi = data;
           this.isLoading = false;
-          if (!(this.contenziosi.length > 0) /*&& this.ricercaAtt*/) {
+          console.log('tabProdotto: ', this.tabProdotto)
+          if (!(this.contenziosi.length > 0) && (this.tabProdotto == 1) /*&& this.ricercaAtt*/) {
             this.dialog.alert('Nessun risultato per il filtro selezionato!');
             /*this.ricercaAtt = false;*/
           }

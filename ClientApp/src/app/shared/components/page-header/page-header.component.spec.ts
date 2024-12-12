@@ -7,6 +7,7 @@ import { CUSTOM_ELEMENTS_SCHEMA, Pipe, PipeTransform } from '@angular/core';
 import { of } from 'rxjs';
 import { MatIconModule } from '@angular/material/icon';
 import { BreadcrumbComponent } from '../breadcrumb/breadcrumb.component';
+import { IdmUser } from '@shared/interfaces/Idm-user';
 
 @Pipe({ name: 'translate' })
 class MockTranslatePipe implements PipeTransform {
@@ -35,6 +36,7 @@ describe('PageHeaderComponent', () => {
           matricula: '12345',
         })
       ),
+      WhoAmI: jasmine.createSpy('WhoAmI').and.returnValue(of(userResponse))
     };
 
     routerMock = {
@@ -56,6 +58,27 @@ describe('PageHeaderComponent', () => {
     fixture.detectChanges();
   });
 
+  const userResponse: IdmUser = {
+    emailAddress: 'user@example.com',
+    firstName: 'DefaultNome',
+    fiscalCode: 'DefaultFiscalCode',
+    lastName: 'DefaultCognome',
+    matricula: 'E000-123',
+    officeCode: '001',
+    codiceSede: ['050000', '500000', '040000'],
+    sedeAppartenenza: 'Sede Centrale',
+    descrizioneSede: 'Descrizione Sede Centrale',
+    appRoles: [
+      'P12689 : Amministratore',
+      'P12801 : Operatore Territoriale di Provincia',
+      'P12799 : Operatore Territoriale Regionale',
+      'P13000 : Utente'
+    ],
+    indirizzoIp: '192.168.1.1',
+    officeSapCode: 'SAP12345',
+    windowsAccount: 'Username'
+  };
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -66,12 +89,13 @@ describe('PageHeaderComponent', () => {
 
     component.ngOnInit();
 
-    expect(infoUtentiServiceMock.getInfoUtenteByUsername).toHaveBeenCalledWith('testUser');
-    expect(component.nomeUtente).toBe('Mario');
-    expect(component.cognomeUtente).toBe('Rossi');
-    expect(component.matricolaUtente).toBe('12345');
+    expect(infoUtentiServiceMock.WhoAmI).toHaveBeenCalled();
+    // expect(infoUtentiServiceMock.getInfoUtenteByUsername).toHaveBeenCalledWith('testUser');
+    expect(component.nomeUtente).toBe('DefaultNome');
+    expect(component.cognomeUtente).toBe('DefaultCognome');
+    expect(component.matricolaUtente).toBe('E000-123');
     expect(component.roleDesc).toBe('Amministratore');
-    expect(component.nav).toEqual(['Home', 'Dashboard']);
+    expect(component.nav).toEqual(['Dashboard']);
   });
 
   it('should return correct role descriptions', () => {

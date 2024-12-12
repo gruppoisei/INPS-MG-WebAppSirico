@@ -88,9 +88,7 @@ export class AppComponent implements OnInit {
     })
     this.tipoLogin = environment.loginIDM;
 
-    console.log('this.isLogged: ', this.isLogged);
     this.isLogged = sessionStorage.getItem("isLogged");
-    console.log('this.isLogged: ', this.isLogged);
 
     // metodo per recuperare i dati in ambiente inps (primo accesso all'applicativo)
     if (this.isLogged != "true") {
@@ -102,6 +100,7 @@ export class AppComponent implements OnInit {
         this.getComunicazioni();
       }
     }, 0);
+  
   }
 
   codeRuoliAccesso: string[] = [];
@@ -113,14 +112,19 @@ export class AppComponent implements OnInit {
 
   //////////////////////////////    INIZIO LOGIN    //////////////////////////////
   getAccountIdmLoggato() {
+    // console.log('0')
     this.infoUtentiService.WhoAmI().subscribe({
       next: async (user) => {
+        console.log('1')
+        debugger
         try {
+          console.log('2')          
           // Salva le informazioni principali dell'utente
           this.idmUser = user;
           this.nomeUtente = user.firstName;
           this.cognomeUtente = user.lastName;
           this.windowsAccount = user.windowsAccount;
+
 
           // Gestione in caso di appRoles null
           if (user.appRoles == null) {
@@ -128,6 +132,7 @@ export class AppComponent implements OnInit {
             return;
           }
 
+          console.log('user: ', user)
           // Parsing dei ruoli
           user.appRoles.sort((a, b) => a.localeCompare(b));
           this.listaRuoli = user.appRoles.map((role) => {
@@ -137,9 +142,12 @@ export class AppComponent implements OnInit {
             }
             return null;
           }).filter((role) => role !== null) as { desc: string; roleCode: string }[];
+          console.log('3')          
 
           // Estrai i codici sede dall'oggetto utente
           const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(user.codiceSede).toPromise();
+          console.log(sedeDescriptions)
+
           // Parse sedi
           this.listaSedi = sedeDescriptions!.map(sede => {
             const sedeMatch = sede.match(/(\d+):\s([^,]+),\srole:\s(P\d+)/);
@@ -282,7 +290,6 @@ export class AppComponent implements OnInit {
   getComunicazioni() {
     this.role = this.storageService.getItem('allroles');
     this.matricola = this.storageService.getItem('matricola');
-
     if (this.role && this.matricola) {
       //leggo le comunicazioni legate al ruolo e matricola non ancora lette
       this.roleComService.newGetComunicazioniFilterByRuoloAndMatricola(this.role, this.matricola)
@@ -307,7 +314,8 @@ export class AppComponent implements OnInit {
   //////////////////////////////    FINE COMUNICAZIONI    //////////////////////////////
 
   showErrorMessage(messaggio: string) {
-    this.router.navigate(['/local-login']);
+    this.router.navigate(['/']);
+    // this.router.navigate(['/local-login']);
     this.openErrorDialog('Errore:', messaggio);
     return
   }

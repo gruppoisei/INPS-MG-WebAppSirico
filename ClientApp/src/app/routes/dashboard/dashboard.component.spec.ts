@@ -82,8 +82,8 @@ describe('DashboardComponent', () => {
         oggetto: 'Test Oggetto',
         messaggio: 'Questo è un messaggio di test',
         utente: 'UT12345',
-        nome: 'Mario',
-        cognome: 'Rossi',
+        // nome: 'Mario',
+        // cognome: 'Rossi',
         visibile: true,
       },
     ];
