@@ -1,6 +1,5 @@
-import { ComponentFixture, getTestBed, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ComunicazioneAggiornaComponent } from './comunicazione-aggiorna.component';
-import { BrowserDynamicTestingModule, platformBrowserDynamicTesting } from '@angular/platform-browser-dynamic/testing';
 import { PageHeaderComponent } from '@shared/components/page-header/page-header.component';
 import { BreadcrumbComponent } from '@shared/components/breadcrumb/breadcrumb.component';
 import { MatSnackBar, MatSnackBarModule, MatSnackBarRef } from '@angular/material/snack-bar';
@@ -14,7 +13,7 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { MatListModule, MatListOption, MatSelectionList } from '@angular/material/list';
+import { MatListModule, MatListOption } from '@angular/material/list';
 import { MatSelectModule } from '@angular/material/select';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
@@ -107,7 +106,7 @@ describe('ComunicazioneAggiornaComponent', () => {
     ];
     component.ruoliList = [
       { codice: 'P12689', nome: 'Amministratore' },
-      { codice: 'P12800', nome: 'Operatore Centrale Informatico' }
+      { codice: 'P12800', nome: 'Operatore Centrale'},
     ];
     component.form1 = new FormBuilder().group({
       inputOggetto: [''],
@@ -243,7 +242,7 @@ describe('ToggleAllRoles', () => {
         validitaAl: ['']
       });
 
-      
+
 
       mockTipiComunicazioneSrv.getTipiComunicazioni.and.returnValue(of(mockTipiComunicazione));
       mockComunicazioniSrv.newGetComunicazioneById.and.returnValue(of(mockComunicazione));

@@ -23,10 +23,10 @@ export class ComunicazioneNuovaComponent implements OnInit {
   listaTipiComunicazione: TipoComunicazione[] = [];
   ruoliList: Ruoli[] = [
     { codice: 'P12689', nome: 'Amministratore'},
-    { codice: 'P12800', nome: 'Operatore Centrale Informatico'},
-    { codice: 'P12690', nome: 'Operatore Centrale Amministrativo'},
-    { codice: 'P12801', nome: 'Operatore Territoriale Provinciale'},
-    { codice: 'P12799', nome: 'Operatore Territoriale Regionale'}
+    { codice: 'P12800', nome: 'Operatore Centrale'},
+    { codice: 'P12690', nome: 'Referente Centrale'},
+    { codice: 'P12801', nome: 'Referente Territoriale'},
+    { codice: 'P12799', nome: 'Referente Regionale'}
   ];
   comunicazione: Comunicazioni = new Comunicazioni();
   ruoloComunic = new RuoliComunicazioni();
