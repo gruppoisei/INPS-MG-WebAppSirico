@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { ProceduraRiferimento } from '@shared/models/procedura-riferimento.model';
 import { Observable } from 'rxjs';
 

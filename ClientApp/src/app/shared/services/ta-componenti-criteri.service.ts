@@ -2,7 +2,7 @@
 /* eslint-disable quote-props */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { TaComponentiCriteri } from '@shared/models/ta-componenti-criteri.model';
 import { Observable } from 'rxjs';
 

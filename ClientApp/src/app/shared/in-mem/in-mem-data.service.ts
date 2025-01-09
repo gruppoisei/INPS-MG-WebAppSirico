@@ -4,7 +4,7 @@ import { InMemoryDbService, RequestInfo, STATUS } from 'angular-in-memory-web-ap
 import { from, Observable } from 'rxjs';
 import { ajax } from 'rxjs/ajax';
 import { find, map, switchMap } from 'rxjs/operators';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { base64, currentTimestamp, filterObject, User } from '@core/authentication';
 
 class JWT {

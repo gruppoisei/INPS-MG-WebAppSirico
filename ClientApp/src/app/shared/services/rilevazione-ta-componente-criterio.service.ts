@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { Observable } from 'rxjs';
 import { RilevazioniTaComponentiCriteri } from '@shared/models/rilevazioni-ta-componenti-criteri.model';
 

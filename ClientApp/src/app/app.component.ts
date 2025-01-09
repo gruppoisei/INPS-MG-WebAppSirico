@@ -9,7 +9,7 @@ import { RuoloComunicazioneService } from '@shared/services/ruolo-comunicazione.
 import { IdmUser } from '@shared/interfaces/Idm-user';
 import { InfoUtentiService } from '@shared/services/info-utenti.service';
 import { NavigationStart, Router } from '@angular/router';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { PopupErroreInserimentoComponent } from './routes/popup-errore-inserimento/popup-errore-inserimento.component';
 
 

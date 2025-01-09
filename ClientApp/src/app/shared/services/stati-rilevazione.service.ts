@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { StatiRilevazione } from '@shared/models/stati-rilevazione.model';
 import { Observable } from 'rxjs';
 

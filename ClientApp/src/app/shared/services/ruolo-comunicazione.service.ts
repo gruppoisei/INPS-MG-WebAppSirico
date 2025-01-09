@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { RuoliComunicazioni } from '@shared/models/ruoli-comunicazioni.module';
 import { RuoloComunicazione } from '@shared/models/ruolo-comunicazione.model';
 import { Observable } from 'rxjs';

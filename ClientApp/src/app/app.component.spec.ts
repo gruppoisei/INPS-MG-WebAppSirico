@@ -16,7 +16,7 @@
   import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
   import { PopupErroreInserimentoComponent } from './routes/popup-errore-inserimento/popup-errore-inserimento.component';
   import { PopupComunicazioniComponent } from './routes/popup-comunicazioni/popup-comunicazioni.component';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { InfoUtentiService } from '@shared/services/info-utenti.service';
 import { IdmUser } from '@shared/interfaces/Idm-user';
 

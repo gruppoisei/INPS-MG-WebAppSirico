@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { ProdottiTipologieLavoratori } from '@shared/models/prodotti-tipologie-lavoratori.model';
 import { Observable } from 'rxjs';
 import {tap} from 'rxjs/operators';

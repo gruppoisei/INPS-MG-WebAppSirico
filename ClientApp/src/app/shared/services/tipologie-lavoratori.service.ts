@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { TipologiaLavoratore } from '@shared/models/tipologia-lavoratore.model';
 import { Observable } from 'rxjs';
 
