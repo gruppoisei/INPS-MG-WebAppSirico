@@ -12,6 +12,6 @@ export class TipologieAnalisiService {
   constructor(private http: HttpClient) { }
 
 /*   getTipologieAnalisi(): Observable<TipologiaAnalisi[]> {
-    return this.http.get<TipologiaAnalisi[]>(environment.API_URI+'tipologie-analisi');
+    return this.http.get<TipologiaAnalisi[]>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-analisi');
   } */
 }

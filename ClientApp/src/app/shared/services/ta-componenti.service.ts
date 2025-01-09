@@ -13,10 +13,10 @@ export class TaComponentiService {
   constructor(private http: HttpClient) {}
 
 /*   getTaComponenti(): Observable<TaComponente[]> {
-    return this.http.get<TaComponente[]>(environment.API_URI+'ta-componente');
+    return this.http.get<TaComponente[]>(environment.MS_SIRICOAPI + environment.API_URI+'ta-componente');
   }
   saveTaComponenti(id_componente:number, id_ta_analisi:number): void {
-    this.http.post<string>(environment.API_URI+'ta-componente', {
+    this.http.post<string>(environment.MS_SIRICOAPI + environment.API_URI+'ta-componente', {
 
       'componente': {
         'id': id_componente
@@ -33,7 +33,7 @@ export class TaComponentiService {
 
   // eslint-disable-next-line max-len
   nuovaAssociazione(taComponente:number,taComponentiCriteri:any): Observable<any> {
-    return this.http.post<any>(environment.API_URI+'ta-componente/'+taComponente+'/ta-componenti-criteri', taComponentiCriteri );
+    return this.http.post<any>(environment.MS_SIRICOAPI + environment.API_URI+'ta-componente/'+taComponente+'/ta-componenti-criteri', taComponentiCriteri );
   } */
 
 }

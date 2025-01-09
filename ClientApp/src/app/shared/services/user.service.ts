@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Utente } from '@shared/models/utente.model';
 
@@ -17,11 +17,11 @@ datiUtente$: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefi
 // datiUtenteScarti!: any;
 // datiUtenteScarti$: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefined>(this.datiUtenteScarti);
 
-private apiUrl = environment.API_URI + 'Utenti/';
-private apiUrlCensimento = environment.API_URI + 'CensimentoUtenti/';
+private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Utenti/';
+private apiUrlCensimento = environment.MS_SIRICOAPI + environment.API_URI + 'CensimentoUtenti/';
 
   // getUser(idMatricola: number, idNome: number, idCognome: number): Observable<UserService[]> {
-  //   let url = environment.API_URI+'account?';
+  //   let url = environment.MS_SIRICOAPI + environment.API_URI+'account?';
   //   if (idMatricola>0) {
   //     url += '&idMatricola='+idMatricola;
   //   }
@@ -36,7 +36,7 @@ private apiUrlCensimento = environment.API_URI + 'CensimentoUtenti/';
   // }
 
   // getUtente(): Observable<UserService[]> {
-  //   let url = environment.API_URI+'account?';
+  //   let url = environment.MS_SIRICOAPI + environment.API_URI+'account?';
   //   return this.http.get<UserService[]>(url);
   // }
   contaScarti() {
@@ -89,8 +89,8 @@ private apiUrlCensimento = environment.API_URI + 'CensimentoUtenti/';
 
   //  getUtenti(): Observable<Utente[]> {
   //   // console.log('getUtenti()');
-  //   let url = this.apiUrl + 'getAllUtentiDTO' //environment.API_URI+'utenti';
-  //   // let url = "http://localhost:5250/api/Account/getAllUtenti" //environment.API_URI+'utenti';
+  //   let url = this.apiUrl + 'getAllUtentiDTO' //environment.MS_SIRICOAPI + environment.API_URI+'utenti';
+  //   // let url = "http://localhost:5250/api/Account/getAllUtenti" //environment.MS_SIRICOAPI + environment.API_URI+'utenti';
   //   return this.http.get<Utente[]>(url);
   // }
 

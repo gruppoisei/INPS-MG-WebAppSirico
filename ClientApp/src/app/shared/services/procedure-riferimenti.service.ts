@@ -12,6 +12,6 @@ export class ProcedureRiferimentiService {
   constructor(private http: HttpClient) { }
 
 /*   getProcedureRiferimenti(): Observable<ProceduraRiferimento[]> {
-    return this.http.get<ProceduraRiferimento[]>(environment.API_URI+'procedure-riferimenti');
+    return this.http.get<ProceduraRiferimento[]>(environment.MS_SIRICOAPI + environment.API_URI+'procedure-riferimenti');
   } */
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 
 export interface SedeDto {
   sedeCodSede: string;
@@ -13,7 +13,7 @@ export interface SedeDto {
   providedIn: 'root',
 })
 export class TerritorioService {
-  private apiUrl = environment.API_URI + 'Territorio/';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Territorio/';
 
   constructor(private http: HttpClient) {}
 

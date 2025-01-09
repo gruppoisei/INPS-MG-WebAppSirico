@@ -12,32 +12,32 @@ export class TipologieLavoratoriService {
   constructor(private http: HttpClient) { }
 
   /* getTipologieLavoratoriAll(): Observable<TipologiaLavoratore[]> {
-    return this.http.get<TipologiaLavoratore[]>(environment.API_URI+'tipologie-lavoratori');
+    return this.http.get<TipologiaLavoratore[]>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori');
   }
 
   getTipologieLavoratoriConPaginazione(dimensione: number, ordine: string, pagina: number): Observable<TipologiaLavoratore[]> {
-    return this.http.get<TipologiaLavoratore[]>(environment.API_URI+'tipologie-lavoratori?dimensione='+dimensione as string+'&ordine='+ordine+'&pagina='+pagina as string);
+    return this.http.get<TipologiaLavoratore[]>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori?dimensione='+dimensione as string+'&ordine='+ordine+'&pagina='+pagina as string);
   }
 
   contaTipologieLavoratori(): Observable<number> {
-    return this.http.get<number>(environment.API_URI+'tipologie-lavoratori/conta');
+    return this.http.get<number>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori/conta');
   }
 
   getTipologiaLavoratore(id: number): Observable<TipologiaLavoratore> {
-    return this.http.get<TipologiaLavoratore>(environment.API_URI+'tipologie-lavoratori/'+id);
+    return this.http.get<TipologiaLavoratore>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori/'+id);
   }
 
   verificaTipologiaLavoratore(id: number): Observable<boolean> {
     const headers = {'content-type': 'application/json'};
     const body=JSON.stringify('');
-    return this.http.post<boolean>(environment.API_URI+ 'tipologie-lavoratori/'+id as string + '/verificaRimuovi', body, {headers});
+    return this.http.post<boolean>(environment.MS_SIRICOAPI + environment.API_URI+ 'tipologie-lavoratori/'+id as string + '/verificaRimuovi', body, {headers});
   }
 
   inserisciTipologiaLavoratore(tipLav: TipologiaLavoratore): Observable<TipologiaLavoratore> {
     //console.log(tipLav);
     const headers = {'content-type': 'application/json'};
     const body=JSON.stringify(tipLav);
-    return this.http.post<TipologiaLavoratore>(environment.API_URI+'tipologie-lavoratori', body, {headers});
+    return this.http.post<TipologiaLavoratore>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori', body, {headers});
   }
 
   aggiornaTipologiaLavoratore(tipLav: TipologiaLavoratore): Observable<TipologiaLavoratore> {
@@ -45,12 +45,12 @@ export class TipologieLavoratoriService {
     const headers = {'content-type': 'application/json'};
     const body=JSON.stringify(tipLav);
     console.log('body: ', body);
-    return this.http.post<TipologiaLavoratore>(environment.API_URI+'tipologie-lavoratori' + '/aggiorna', body, {headers});
+    return this.http.post<TipologiaLavoratore>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori' + '/aggiorna', body, {headers});
   }
 
   deleteTipologiaLavoratore(id: number): Observable<TipologiaLavoratore> {
     const headers = {'content-type': 'application/json'};
     const body=JSON.stringify('');
-    return this.http.post<TipologiaLavoratore>(environment.API_URI+'tipologie-lavoratori/'+id as string + '/rimuovi', body, {headers});
+    return this.http.post<TipologiaLavoratore>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-lavoratori/'+id as string + '/rimuovi', body, {headers});
   } */
 }

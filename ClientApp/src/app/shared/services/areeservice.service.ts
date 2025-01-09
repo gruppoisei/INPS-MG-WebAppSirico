@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { Area } from '@shared/models/area.model';
 import { AreeProdotti } from '@shared/models/areeprodotti';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class Aree {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = environment.API_URI + 'AreaProdotti/';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'AreaProdotti/';
 
   newDeleteAreeProdotti(id: number) : Observable<void>{
     return this.http.delete<void>(`${this.apiUrl}EliminaAreeProdotti/${id}`)

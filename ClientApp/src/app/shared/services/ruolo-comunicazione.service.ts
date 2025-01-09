@@ -11,7 +11,7 @@ import { RuoliComunicazione } from '@shared/interfaces/ruoli-comunicazioni';
 })
 export class RuoloComunicazioneService {
 
-  private apiUrl = environment.API_URI + 'RuoliComunicazioni/';
+  private apiUrl = environment.MS_SIRICOAPI +  environment.API_URI + 'RuoliComunicazioni/';
 
   constructor(private http: HttpClient) { }
 

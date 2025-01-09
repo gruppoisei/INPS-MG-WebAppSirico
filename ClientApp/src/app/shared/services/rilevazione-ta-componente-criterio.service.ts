@@ -16,7 +16,7 @@ export class RilevazioneTaComponenteCriterioService {
     console.log(JSON.stringify(rilTaCompCrit));
     const headers = { 'content-type': 'application/json'};
     const body=JSON.stringify(rilTaCompCrit);
-    return (this.http.post(environment.API_URI+'rilevazioni-ta-componenti-criteri', body, {headers}));
+    return (this.http.post(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri', body, {headers}));
   }
 
 
@@ -25,25 +25,25 @@ export class RilevazioneTaComponenteCriterioService {
     console.log(JSON.stringify(rilTaCompCrit));
     const headers = { 'content-type': 'application/json'};
     const body=JSON.stringify(rilTaCompCrit);
-    return (this.http.post(environment.API_URI+'rilevazioni-ta-componenti-criteri' + '/aggiorna', body, {headers}));
+    return (this.http.post(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri' + '/aggiorna', body, {headers}));
   }
 
   deleteRilevazioneTaComponenteCriterio(id: number): any {
     const headers = {'content-type': 'application/json'};
     const body=JSON.stringify('');
-    return (this.http.post(environment.API_URI+'rilevazioni-ta-componenti-criteri/'+id + '/rimuovi', body, {headers}));
+    return (this.http.post(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri/'+id + '/rimuovi', body, {headers}));
   }
 
   getRilevazioneTaComponenteCriterioById(id: number): Observable<RilevazioniTaComponentiCriteri[]> {
-    return this.http.get<RilevazioniTaComponentiCriteri[]>(environment.API_URI+'rilevazioni-ta-componenti-criteri?idRilevazione='+id);
+    return this.http.get<RilevazioniTaComponentiCriteri[]>(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri?idRilevazione='+id);
 
   }
 
   getRilTaCompCritByIdConPaginazione(id: number, dimensione: number, ordine: string, pagina: number): Observable<RilevazioniTaComponentiCriteri[]> {
-    return this.http.get<RilevazioniTaComponentiCriteri[]>(environment.API_URI+'rilevazioni-ta-componenti-criteri?idRilevazione='+id as string+'&dimensione='+dimensione as string+'&ordine='+ordine+'&pagina='+pagina as string);
+    return this.http.get<RilevazioniTaComponentiCriteri[]>(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri?idRilevazione='+id as string+'&dimensione='+dimensione as string+'&ordine='+ordine+'&pagina='+pagina as string);
   }
 
   contaRilevazioniTaComponentiCriteri(id: number): Observable<number> {
-    return this.http.get<number>(environment.API_URI+'rilevazioni-ta-componenti-criteri/conta?idRilevazione='+id);
+    return this.http.get<number>(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni-ta-componenti-criteri/conta?idRilevazione='+id);
   } */
 }

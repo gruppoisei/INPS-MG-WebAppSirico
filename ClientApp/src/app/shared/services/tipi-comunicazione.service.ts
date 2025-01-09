@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { TipoComunicazione } from '@shared/models/tipo-comunicazione.model';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class TipiComunicazioneService {
 
-  private apiUrl = environment.API_URI + 'TipiComunicazioni/';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'TipiComunicazioni/';
 
   constructor(private http: HttpClient) { }
 

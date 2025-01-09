@@ -9,7 +9,7 @@ import {
   AfterViewInit,
   OnInit
 } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import screenfull from 'screenfull';
 import { InfoUtentiService } from '@shared/services/info-utenti.service';
 import { InfoUtente } from '@shared/interfaces/info-utente';
@@ -54,7 +54,7 @@ export class HeaderComponent implements  AfterViewInit{
   }
 
    ngAfterViewInit(): void{
-/*       this.http.get<string>(environment.API_URI+'infoApplicativo/versione', {responseType:'text' as 'json'}).subscribe(
+/*       this.http.get<string>(environment.MS_SIRICOAPI + environment.API_URI+'infoApplicativo/versione', {responseType:'text' as 'json'}).subscribe(
             version => {
                 this.versioneSoftware = version;
       }) */

@@ -11,7 +11,7 @@ export class RuoloService {
   constructor(private http: HttpClient) { }
 
 /*   getRuoli(): Observable<Ruolo> {
-    return this.http.get<Ruolo>(environment.API_URI+'ruoli');
+    return this.http.get<Ruolo>(environment.MS_SIRICOAPI + environment.API_URI+'ruoli');
   } */
 
 }

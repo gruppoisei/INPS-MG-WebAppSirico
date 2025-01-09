@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
@@ -8,7 +8,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class MessaggiService {
 
-  private apiUrl = environment.API_URI + 'Bacheca/';
+  private apiUrl = environment.MS_SIRICOAPI +  environment.API_URI + 'Bacheca/';
 
   datiMessaggio!: any;
   datiMessaggio$: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefined>(this.datiMessaggio);

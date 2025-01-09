@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { IdmUser } from '@shared/interfaces/Idm-user';
 import { Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ export class InfoUtentiService {
 
   constructor(private http : HttpClient) { }
 
-  private apiUrl = environment.API_URI + 'Account/'
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Account/'
   private mgUrl = environment.MG_URL + 'Login/'
 
 /*   infoUtente() : Observable<InfoUtente>{
@@ -39,7 +39,11 @@ export class InfoUtentiService {
   }
 
   fetchSedeDescriptions(codiciSede: string[]): Observable<string[]> {
-    const url = `${environment.API_URI}Territorio/GetSedeDescriptions`;
+    console.log('codiciSede: ' + codiciSede);
+    //const url = `${environment.API_URI}Territorio/GetSedeDescriptions`;
+    //const url = `http://ms01098-siricoapi-af-bi.apps.ocps.sviluppo.inps.it/api/Territorio/GetSedeDescriptions`;
+    const url = `${environment.MS_SIRICOAPI}${environment.API_URI}Territorio/GetSedeDescriptions`;
+    console.log('url: ' + url);
     return this.http.post<string[]>(url, codiciSede);
   }
 

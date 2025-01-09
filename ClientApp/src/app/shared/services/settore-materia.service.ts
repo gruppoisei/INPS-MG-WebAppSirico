@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { Settore } from '@shared/models/settore-materia.model';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class SettoreMateriaService {
 
-  private apiUrl = environment.API_URI + 'SettoreMaterie';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'SettoreMaterie';
 
   constructor(private http: HttpClient) {}
 

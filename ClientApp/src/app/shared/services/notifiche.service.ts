@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import * as signalR from '@microsoft/signalr';
 import { BehaviorSubject } from 'rxjs';
 
@@ -21,7 +21,7 @@ export class NotificheService {
   private countSegnalazioni45To60DaysSubject = new BehaviorSubject<number>(0);
   count45To60Days$ = this.countSegnalazioni45To60DaysSubject.asObservable();
 
-  private baseUrl =  environment.API_URI + 'notification';
+  private baseUrl =  environment.MS_SIRICOAPI + environment.API_URI + 'notification';
 
   constructor() {
     this.hubConnection = new signalR.HubConnectionBuilder()

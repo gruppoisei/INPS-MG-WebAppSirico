@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { TipiLogApplicativi } from '@shared/models/tipiLogApplicativi.model';
 import { map, Observable } from 'rxjs';
 
@@ -11,7 +11,7 @@ export class LogsService {
   idAttivo = 0;
   json: any;
 
-  api_url = environment.API_URI + 'Log/';
+  api_url = environment.MS_SIRICOAPI + environment.API_URI + 'Log/';
 
   constructor(private http: HttpClient) {}
 

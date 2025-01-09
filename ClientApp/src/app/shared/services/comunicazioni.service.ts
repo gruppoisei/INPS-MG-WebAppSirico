@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { ComunicazioneLetta } from '@shared/models/comunicazione-letta.model';
 import { Comunicazioni } from '@shared/models/comunicazioni.model';
 import { Observable } from 'rxjs';
@@ -11,7 +11,7 @@ import { Observable } from 'rxjs';
 export class ComunicazioniService {
   constructor(private http: HttpClient) {}
 
-  private apiUrl = environment.API_URI + 'Comunicazioni/';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Comunicazioni/';
 
   newGetComunicazioneById(id: number): Observable<Comunicazioni>{
     return this.http.get<Comunicazioni>(`${this.apiUrl}GetComunicazioniById/${id}`)

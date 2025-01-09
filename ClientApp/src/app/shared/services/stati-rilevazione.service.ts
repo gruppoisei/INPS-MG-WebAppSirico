@@ -12,7 +12,7 @@ export class StatiRilevazioneService {
   constructor(private http: HttpClient) { }
 
 /*   getStatiRilevazione(): Observable<StatiRilevazione[]> {
-    return this.http.get<StatiRilevazione[]>(environment.API_URI+'stati-rilevazioni?ordine=livello-asc');
+    return this.http.get<StatiRilevazione[]>(environment.MS_SIRICOAPI + environment.API_URI+'stati-rilevazioni?ordine=livello-asc');
   } */
 }
 

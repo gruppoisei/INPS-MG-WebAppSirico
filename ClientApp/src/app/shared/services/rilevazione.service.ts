@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { salvaDettagliASDTO } from '@shared/interfaces/salvaDettagliASDTO';
 import { BehaviorSubject, map, Observable } from 'rxjs';
 
@@ -29,7 +29,7 @@ export class RilevazioneService {
   idMod = 0;
   constructor(private http: HttpClient) {}
 
-  private apiUrl = environment.API_URI;
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI;
 
   tabNomeSegnalazione!: string;
   tabNomeSegnalazione$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(this.tabNomeSegnalazione);
@@ -48,7 +48,7 @@ export class RilevazioneService {
     ordine: string,
     pagina: number
   ): Observable<Rilevazione[]> {
-    let url = environment.API_URI + 'rilevazioni?';
+    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni?';
     // let url = 'http://localhost:5250/api/Prodotto/contaRicerca';
     let parametriUrl = '';
     if (idProdotto > 0) {
@@ -82,11 +82,11 @@ export class RilevazioneService {
   }
 
   getRilevazioneId(id: number): Observable<Rilevazione> {
-    return this.http.get<Rilevazione>(environment.API_URI + 'rilevazioni/' + id);
+    return this.http.get<Rilevazione>(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/' + id);
   } */
 
   /*   getRilevazioni(idProdotto: number): Observable<Rilevazione> {
-    return this.http.get<Rilevazione>(environment.API_URI+'rilevazioni?idProdotto='+idProdotto);
+    return this.http.get<Rilevazione>(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni?idProdotto='+idProdotto);
   } */
 
 
@@ -349,7 +349,7 @@ export class RilevazioneService {
     console.log(JSON.stringify(rilevazione));
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(rilevazione);
-    return this.http.post(environment.API_URI + 'rilevazioni', body, { headers });
+    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni', body, { headers });
   }
 
   updateRilevazione(rilevazione: Rilevazione): Observable<any> {
@@ -357,7 +357,7 @@ export class RilevazioneService {
     //console.log(JSON.stringify(rilevazione));
     const headers = { 'content-type': 'application/json' };
     const body = JSON.stringify(rilevazione);
-    return this.http.post(environment.API_URI + 'rilevazioni' + '/aggiorna', body, { headers });
+    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni' + '/aggiorna', body, { headers });
   } */
   /*
   conta(
@@ -371,7 +371,7 @@ export class RilevazioneService {
     dataScadenza: boolean
   ): Observable<number> {
     // console.log('conta');
-    let url = environment.API_URI + 'rilevazioni/conta';
+    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/conta';
     let parametriUrl = '';
     if (idProdotto > 0) {
       parametriUrl += '&idProdotto=' + idProdotto;
@@ -416,7 +416,7 @@ export class RilevazioneService {
     account: string,
     matricola: string
   ): Observable<Rilevazione[]> {
-    let url = environment.API_URI + 'rilevazioni?';
+    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni?';
     let parametriUrl = '';
     if (idProdotto > 0) {
       parametriUrl += '&idProdotto=' + idProdotto;
@@ -455,7 +455,7 @@ export class RilevazioneService {
   prendiInCarico(id: number): Observable<any> {
     const headers = { 'content-type': 'application/json' };
     const body = '';
-    return this.http.post(environment.API_URI + 'rilevazioni/' + id + '/presaIncarico', body, {
+    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/' + id + '/presaIncarico', body, {
       headers,
     });
   }
@@ -465,7 +465,7 @@ export class RilevazioneService {
     account: string,
     matricola: string
   ): Observable<Rilevazione[]> {
-    let url = environment.API_URI + 'rilevazioni/scadenzaRilevazioni';
+    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/scadenzaRilevazioni';
     let parametriUrl = '';
     if (account) {
       parametriUrl += '&account=' + account;

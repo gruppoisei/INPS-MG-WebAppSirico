@@ -12,6 +12,6 @@ export class TipologiaRicorsoService {
   constructor(private http: HttpClient) { }
 
 /*   getTipologiaRicorso(): Observable<TipologiaRicorso[]> {
-    return this.http.get<TipologiaRicorso[]>(environment.API_URI+'tipologie-ricorsi');
+    return this.http.get<TipologiaRicorso[]>(environment.MS_SIRICOAPI + environment.API_URI+'tipologie-ricorsi');
   } */
 }

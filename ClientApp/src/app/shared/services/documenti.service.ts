@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, ObservedValueOf } from 'rxjs';
 import { HttpResponse } from '@microsoft/signalr';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DocumentiService {
-  private apiUrl = environment.API_URI + 'Documenti/';
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Documenti/';
 
   constructor(private http: HttpClient) {}
 

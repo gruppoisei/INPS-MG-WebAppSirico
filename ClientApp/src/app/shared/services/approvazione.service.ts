@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +11,7 @@ export class ApprovazioneService {
   checkRisolviSegnalazione!: boolean;
   checkRisolviSegnalazione$: BehaviorSubject<boolean | undefined> = new BehaviorSubject<boolean | undefined>(this.checkRisolviSegnalazione);
 
-  private baseUrl = environment.API_URI + 'approvazione';
+  private baseUrl = environment.MS_SIRICOAPI + environment.API_URI + 'approvazione';
 
   constructor(private http: HttpClient) { }
 

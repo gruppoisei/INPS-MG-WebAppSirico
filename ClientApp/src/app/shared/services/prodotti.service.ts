@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { Prodotto } from '@shared/models/prodotto.model';
 import { Observable } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ProdottiService {
 
-  private apiUrl = environment.API_URI;
+  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI;
   constructor(private http: HttpClient) { }
 
   // getProdotti(id: number): Observable<Prodotto[]> {

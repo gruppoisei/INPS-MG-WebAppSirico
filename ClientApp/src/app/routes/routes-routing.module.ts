@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { AdminLayoutComponent } from '../theme/admin-layout/admin-layout.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { Error403Component } from './sessions/403.component';

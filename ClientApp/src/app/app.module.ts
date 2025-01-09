@@ -16,7 +16,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import {MatFormFieldModule} from '@angular/material/form-field';
 
 
-import { environment } from '@env/environment';
+import { environment } from '@env/environment.prod';
 import { BASE_URL, httpInterceptorProviders, appInitializerProviders } from '@core';
 
 // Required for AOT compilation
