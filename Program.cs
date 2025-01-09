@@ -1,15 +1,18 @@
 using Microsoft.Extensions.FileProviders;
 using System.Net.WebSockets;
+using System.IO;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddHttpContextAccessor();
 
-// Add services to the container
+// Aggiungi i servizi al contenitore
 builder.Services.AddControllersWithViews();
+
+// Configura per servire i file statici dal percorso wwwroot/ClientApp/dist
 builder.Services.AddSpaStaticFiles(configuration =>
 {
-    configuration.RootPath = "ClientApp/dist";
+    configuration.RootPath = Path.Combine("wwwroot", "ClientApp");
 });
 
 // Abilitare HttpClientFactory
@@ -17,7 +20,7 @@ builder.Services.AddHttpClient();
 
 var app = builder.Build();
 
-// Use middleware
+// Usa i middleware
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -25,8 +28,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseStaticFiles();
-app.UseSpaStaticFiles();
+app.UseStaticFiles(); // Serve file statici da wwwroot
+app.UseSpaStaticFiles(); // Serve file statici per la SPA (ClientApp/dist)
 app.UseWebSockets();
 app.UseRouting();
 
@@ -35,14 +38,20 @@ app.UseAuthorization();
 // Configurazione SPA
 app.UseSpa(spa =>
 {
+    // Configura il percorso della SPA
     spa.Options.SourcePath = "ClientApp";
+    spa.Options.DefaultPage = "/ClientApp/index.html"; // La pagina predefinita da servire
+    
+    // Assicurati che i file statici vengano trattati correttamente
     spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
     {
         FileProvider = new PhysicalFileProvider(
-            Path.Combine(Directory.GetCurrentDirectory(), "ClientApp", "dist"))
+            Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "ClientApp")),
+        RequestPath = "/ClientApp" // Definisce il percorso di base per i file statici
     };
 });
 
+// Gestione WebSocket
 app.Use(async (context, next) =>
 {
     if (context.Request.Path.StartsWithSegments("/api/notification") && context.WebSockets.IsWebSocketRequest)
@@ -93,7 +102,6 @@ app.Use(async (context, next) =>
         await next();
     }
 });
-
 
 app.MapControllers();
 
