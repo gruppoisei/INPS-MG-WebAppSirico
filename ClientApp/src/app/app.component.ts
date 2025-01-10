@@ -112,13 +112,9 @@ export class AppComponent implements OnInit {
 
   //////////////////////////////    INIZIO LOGIN    //////////////////////////////
   getAccountIdmLoggato() {
-    // console.log('0')
     this.infoUtentiService.WhoAmI().subscribe({
       next: async (user) => {
-        console.log('1')
-        debugger
         try {
-          console.log('2')          
           // Salva le informazioni principali dell'utente
           this.idmUser = user;
           this.nomeUtente = user.firstName;
@@ -132,7 +128,6 @@ export class AppComponent implements OnInit {
             return;
           }
 
-          console.log('user: ', user)
           // Parsing dei ruoli
           user.appRoles.sort((a, b) => a.localeCompare(b));
           this.listaRuoli = user.appRoles.map((role) => {
@@ -142,11 +137,9 @@ export class AppComponent implements OnInit {
             }
             return null;
           }).filter((role) => role !== null) as { desc: string; roleCode: string }[];
-          console.log('3')          
 
           // Estrai i codici sede dall'oggetto utente
           const sedeDescriptions = await this.infoUtentiService.fetchSedeDescriptions(user.codiceSede).toPromise();
-          console.log(sedeDescriptions)
 
           // Parse sedi
           this.listaSedi = sedeDescriptions!.map(sede => {
@@ -193,7 +186,6 @@ export class AppComponent implements OnInit {
   getAccountLoggato() {
     this.infoUtentiService.getStringaIDMConUsername(this.form1.value.loginUsername).subscribe({
       next: (user: any) => {
-        console.log('user:', user);
 
         if (user == null) {
           this.openErrorDialog('Errore:', "L'utente inserito non è censito in IDM.")
@@ -210,13 +202,10 @@ export class AppComponent implements OnInit {
 
             this.infoUtentiService.getInfoUtenteByUsername(this.form1.value.loginUsername).subscribe({
               next: (user) => {
-                // console.log('user:',user);
                 this.idmUser = user;
                 this.nomeUtente = user.firstName;
                 this.cognomeUtente = user.lastName;
                 this.windowsAccount = user.windowsAccount;
-
-                // console.log('user.appRoles:',user.appRoles);
 
                 // SE user.appRoles è null se un utente provinciale o regionale senza sedi associate prova ad accedere
                 if (user.appRoles == null) {
@@ -241,12 +230,10 @@ export class AppComponent implements OnInit {
                   }
                   return null;
                 }).filter(sede => sede !== null) as { sedeCode: string, descSede: string }[];
-                // console.log('listaSedi',this.listaSedi)
 
                 this.codeRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.roleCode);
                 this.descRuoliAccesso = this.listaRuoli.map(ruolo => ruolo.desc);
 
-                // console.log('this.descRuoliAccesso:',this.descRuoliAccesso);
                 this.storageService.setItem('username', this.form1.value.loginUsername)
                 this.storageService.setItem('matricola', this.idmUser.matricula);
                 this.storageService.setItem('allroles', this.codeRuoliAccesso.join('; '));
@@ -277,7 +264,6 @@ export class AppComponent implements OnInit {
               data: { titolo: 'Errore:', message: 'I dati forniti da IDM non corrispondono ai dati della tabella Utente.' },
             });
             this.emptyPage = true;
-            // console.log('emptypage: ', this.emptyPage);
           }
         });
       }
