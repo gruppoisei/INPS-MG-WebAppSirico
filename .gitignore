@@ -361,3 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+
+# wwwroot - esclude nell'archiviazione la cartella ClientApp all'interno della cartella wwwwroot
+wwwroot/ClientApp
