@@ -69,10 +69,14 @@ namespace INPS_MVC_WebAppSirico.Controllers
                 var roleDescriptions = new Dictionary<string, string>
                 {
                     { "P12689", "Amministratore" },
-                    { "P12690", "Operatore Centrale Amministrativo" },
-                    { "P12800", "Operatore Centrale Informatico" },
-                    { "P12801", "Operatore Territoriale di Provincia" },
-                    { "P12799", "Operatore Territoriale Regionale" }
+                    { "P12690", "Referente Centrale" },
+                    // { "P12690", "Operatore Centrale Amministrativo" },
+                    { "P12800", "Operatore Centrale" },
+                    // { "P12800", "Operatore Centrale Informatico" },
+                    { "P12801", "Referente Territoriale" },
+                    // { "P12801", "Operatore Territoriale di Provincia" },
+                    { "P12799", "Referente Regionale" }
+                    // { "P12799", "Operatore Territoriale Regionale" }
                 };
 
                 // Costruisco l'oggetto utente

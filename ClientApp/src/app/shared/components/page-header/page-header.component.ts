@@ -72,17 +72,18 @@ export class PageHeaderComponent implements OnInit {
       case 'Amministratore': {
         return 'Amministratore';
       }
-      case 'Operatore Centrale Amministrativo': {
-        return 'Operatore Centrale<br>Amministrativo';
+      case 'Referente Centrale': {
+        return 'Referente Centrale';
+        // return 'Referente<br>Centrale';
       }
-      case 'Operatore Centrale Informatico': {
-        return 'Operatore Centrale<br>Informatico';
+      case 'Operatore Centrale': {
+        return 'Operatore Centrale';
       }
-      case 'Operatore Territoriale di Provincia': {
-        return 'Operatore Territoriale<br>di Provincia';
+      case 'Referente Territoriale': {
+        return 'Referente Territoriale';
       }
-      case 'Operatore Territoriale Regionale': {
-        return 'Operatore Territoriale<br>Regionale';
+      case 'Referente Regionale': {
+        return 'Referente Regionale';
       }
     }
 

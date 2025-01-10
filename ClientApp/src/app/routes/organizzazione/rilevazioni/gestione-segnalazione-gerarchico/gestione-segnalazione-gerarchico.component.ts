@@ -485,13 +485,15 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
 
   inizializzaPaginazione(tipoSegnalazione: string) {
     if (tipoSegnalazione === 'Prodotto') {
-      this.inizializzaPaginazioneProdotto();
+      this.inizializzaPaginazioneProdotto(false);
     } else if (tipoSegnalazione === 'Contenzioso') {
-      this.inizializzaPaginazioneContenzioso();
+      this.inizializzaPaginazioneContenzioso(false);
     }
   }
 
-  inizializzaPaginazioneProdotto() {
+  inizializzaPaginazioneProdotto(fromButton: boolean) {
+    this.ricercaAtt = fromButton;
+
     const toggle = this.formRicerca.get('slideToggleDaRisolvere')?.value
     this.layoutNumbersProdotto = [];
     this.idStatoSegnalazione = toggle ? 3 : null;
@@ -528,7 +530,9 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
       });
   }
 
-  inizializzaPaginazioneContenzioso() {
+  inizializzaPaginazioneContenzioso(fromButton: boolean) {
+    this.ricercaAtt = fromButton;
+    
     const toggle = this.formRicerca.get('slideToggleDaRisolvereContenzioso')?.value
     this.layoutNumbersContenzioso = [];
     this.idStatoSegnalazione = toggle ? 3 : null;
@@ -1131,7 +1135,7 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
         (data: any[]) => {
           this.prodotti = data;
           this.isLoading = false;
-          if (!(this.prodotti.length > 0) && this.ricercaAtt) {
+          if (!(this.prodotti.length > 0) && (this.ricercaAtt == true)) {
             this.dialog.alert('Nessun risultato per il filtro selezionato!');
             this.ricercaAtt = false;
           }
@@ -1170,7 +1174,7 @@ export class GestioneSegnalazioneGerarchicoComponent implements OnInit, OnDestro
           // ;
           this.contenziosi = data;
           this.isLoading = false;
-          if (!(this.prodotti.length > 0) && this.ricercaAtt) {
+          if (!(this.prodotti.length > 0) && (this.ricercaAtt == true)) {
             this.dialog.alert('Nessun risultato per il filtro selezionato!');
             this.ricercaAtt = false;
           }
