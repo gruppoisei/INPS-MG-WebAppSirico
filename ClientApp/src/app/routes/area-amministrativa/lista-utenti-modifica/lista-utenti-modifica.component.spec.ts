@@ -32,12 +32,12 @@ describe('ListaUtentiModificaComponent', () => {
       {
         id: 2,
         ruolo1: "P12690",
-        descrizione: "Operatore Centrale Amministrativo"
+        descrizione: "Referente Centrale"
       },
       {
         id: 3,
         ruolo1: "P12800",
-        descrizione: "Operatore Centrale Informatico"
+        descrizione: "Operatore Centrale"
       }
     ],
     sedeDTO: [

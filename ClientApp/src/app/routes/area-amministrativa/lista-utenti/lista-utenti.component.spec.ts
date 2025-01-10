@@ -91,22 +91,22 @@ describe('ListaUtentiComponent', () => {
   {
     id: 2,
     ruolo1: "P12690",
-    descrizione: "Operatore Centrale Amministrativo"
+    descrizione: "Referente Centrale"
   },
   {
     id: 3,
     ruolo1: "P12800",
-    descrizione: "Operatore Centrale Informatico"
+    descrizione: "Operatore Centrale"
   },
   {
     id: 4,
     ruolo1: "P12801",
-    descrizione: "Operatore Territoriale di Provincia"
+    descrizione: "Referente Territoriale"
   },
   {
     id: 5,
     ruolo1: "P12799",
-    descrizione: "Operatore Territoriale Regionale"
+    descrizione: "Referente Regionale"
   }];
 
   const mockSedi = [
@@ -313,7 +313,7 @@ describe('ListaUtentiComponent', () => {
 
     it('should be case insensitive when filtering', () => {
       spyOn(component, '_filterRuolo').and.callThrough();      
-      component.listaRuoli = component._filterRuolo("operAtore centRale amminisTrativO");
+      component.listaRuoli = component._filterRuolo("reFErente cEntraLe");
       expect(component.listaRuoli).toEqual([mockRuoli[1]]);
     });
   });

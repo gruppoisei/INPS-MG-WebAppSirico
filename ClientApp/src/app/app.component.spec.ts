@@ -135,8 +135,8 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
       descrizioneSede: 'Descrizione Sede Centrale',
       appRoles: [
         'P12689 : Amministratore',
-        'P12801 : Operatore Territoriale di Provincia',
-        'P12799 : Operatore Territoriale Regionale',
+        'P12801 : Referente Territoriale',
+        'P12799 : Referente Regionale',
         'P13000 : Utente'
       ],
       indirizzoIp: '192.168.1.1',
@@ -146,8 +146,8 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
 
     const sedeDescriptions = [
       '050000 : P12801, role: Amministratore',
-      '500000 : P12801, role: Operatore Territoriale di Provincia',
-      '040000 : P12801, role: Operatore Territoriale Regionale'
+      '500000 : P12801, role: Referente Territoriale',
+      '040000 : P12801, role: Referente Regionale'
     ];
 
 
@@ -247,8 +247,8 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
     //     expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
     //     expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
     //       'Amministratore',
-    //       'Operatore Territoriale di Provincia',
-    //       'Operatore Territoriale Regionale',
+    //       'Referente Territoriale',
+    //       'Referente Regionale',
     //       'Utente'
     //     ]);
     //     expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
@@ -256,8 +256,8 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
     //     // Verifica che la listaSedi sia correttamente formattata
     //     expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
     //       { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
-    //       { sedeCode: '500000', descSede: 'P12801', role: 'Operatore Territoriale di Provincia' },
-    //       { sedeCode: '040000', descSede: 'P12801', role: 'Operatore Territoriale Regionale' }
+    //       { sedeCode: '500000', descSede: 'P12801', role: 'Referente Territoriale' },
+    //       { sedeCode: '040000', descSede: 'P12801', role: 'Referente Regionale' }
     //     ]);
     
     //     // Verifica che il router abbia effettuato il reindirizzamento
