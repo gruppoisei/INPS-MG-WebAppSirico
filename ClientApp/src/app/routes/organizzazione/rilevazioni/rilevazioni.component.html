@@ -111,7 +111,8 @@
       <!-- Buttons -->
       <div class="container-buttons">
         <button type="submit" mat-button class="child-buttons child-buttons-conferma"
-                (click)="inizializzaPaginazione('Prodotto')">
+                (click)="inizializzaPaginazioneProdotto(true)">
+                <!-- (click)="inizializzaPaginazione('Prodotto')"> -->
           Cerca
         </button>
         <button type="button" mat-button class="child-buttons child-buttons-chiudi" (click)="resetRicerca()">
@@ -345,7 +346,8 @@
     <!-- Buttons -->
     <div class="container-buttons">
       <button type="submit" mat-button class="child-buttons child-buttons-conferma"
-              (click)="inizializzaPaginazione('Contenzioso')">
+              (click)="inizializzaPaginazioneContenzioso(true)">
+              <!-- (click)="inizializzaPaginazione('Contenzioso')"> -->
         <!-- <mat-icon class="child-buttons">search</mat-icon> -->
         Cerca
       </button>

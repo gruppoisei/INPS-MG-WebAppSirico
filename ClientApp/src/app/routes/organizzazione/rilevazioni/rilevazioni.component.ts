@@ -49,7 +49,7 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
   // list: any[] = [];
   dataSource: any[] = [];
   isLoading = true;
-  // ricercaAtt = false;
+  ricercaAtt = false;
   listaRilevazioni: Rilevazione[] = [];
   imageUrl: string[] = [];
   settoreMateria: SettoreMateria[] = [];
@@ -184,7 +184,7 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
       this.checkCurrentTab();
       this.resetPaginazioneProdotto();
       this.resetPaginazioneContenzioso();
-      // this.ricercaAtt = false;
+      this.ricercaAtt = false;
       this.isLoading = true;
       // this.loadStack();
       this.getSettoriMaterie();
@@ -543,13 +543,15 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
 
   inizializzaPaginazione(tipoSegnalazione: string) {
     if (tipoSegnalazione === 'Prodotto') {
-      this.inizializzaPaginazioneProdotto();
+      this.inizializzaPaginazioneProdotto(false);
     } else if (tipoSegnalazione === 'Contenzioso') {
-      this.inizializzaPaginazioneContenzioso();
+      this.inizializzaPaginazioneContenzioso(false);
     }
   }
 
-  inizializzaPaginazioneProdotto() {
+  inizializzaPaginazioneProdotto(fromButton: boolean) {
+    this.ricercaAtt = fromButton;
+
     this.layoutNumbersProdotto = [];
 
     this.rilevazioniSrv.contaRicercaProdotto(
@@ -575,7 +577,9 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
     });
   }
 
-  inizializzaPaginazioneContenzioso() {
+  inizializzaPaginazioneContenzioso(fromButton: boolean) {
+    this.ricercaAtt = fromButton;
+
     this.layoutNumbersContenzioso = [];
 
     this.rilevazioniSrv.contaRicercaContenzioso(
@@ -1257,9 +1261,9 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
         (data: any[]) => {
           this.isLoading = false;
           this.prodotti = data;
-          if (!(this.prodotti.length > 0) /*&& this.ricercaAtt*/) {
+          if (!(this.prodotti.length > 0) && (this.ricercaAtt == true)) {
             this.dialog.alert('Nessun risultato per il filtro selezionato!');
-            /*this.ricercaAtt = false;*/
+            this.ricercaAtt = false;
           }
         },
         error => {
@@ -1297,9 +1301,9 @@ export class RilevazioniComponent implements OnInit, OnDestroy {
           this.contenziosi = data;
           this.isLoading = false;
           console.log('tabProdotto: ', this.tabProdotto)
-          if (!(this.contenziosi.length > 0) && (this.tabProdotto == 1) /*&& this.ricercaAtt*/) {
+          if (!(this.contenziosi.length > 0) /*&& (this.tabProdotto == 1)*/ && (this.ricercaAtt == true)) {
             this.dialog.alert('Nessun risultato per il filtro selezionato!');
-            /*this.ricercaAtt = false;*/
+            this.ricercaAtt = false;
           }
         },
         error => {
