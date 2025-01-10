@@ -1048,7 +1048,7 @@ describe('RilevazioniComponent', () => {
       rilevazioniSrv.contaRicercaProdotto.and.returnValue(of(mockCountResponse));
       rilevazioniSrv.getRicercaProdotto.and.returnValue(of(mockGetRicercaProdotto));
 
-      component.inizializzaPaginazioneProdotto();
+      component.inizializzaPaginazioneProdotto(false);
 
       expect(component.layoutNumbersProdotto).toEqual([]);
       expect(rilevazioniSrv.contaRicercaProdotto).toHaveBeenCalledWith(
@@ -1085,7 +1085,7 @@ describe('RilevazioniComponent', () => {
 
       rilevazioniSrv.getRicercaContenzioso.and.returnValue(of(mockGetRicercaContenzioso));
 
-      component.inizializzaPaginazioneContenzioso();
+      component.inizializzaPaginazioneContenzioso(false);
 
       expect(component.layoutNumbersContenzioso).toEqual([]);
       expect(rilevazioniSrv.contaRicercaContenzioso).toHaveBeenCalledWith(
@@ -1872,6 +1872,7 @@ describe('RilevazioniComponent', () => {
     });
 
     it('should display alert if data.length from subsribe is equal to 0', () => {
+      component.ricercaAtt = true;
       expect(component.isLoading).toBeTrue();
 
       rilevazioniSrv.getRicercaProdotto.and.returnValue(of([]));
@@ -1921,6 +1922,7 @@ describe('RilevazioniComponent', () => {
     });
 
     it('should display alert if data.length from subsribe is equal to 0 and tabProdotto is equal to  1', () => {
+      component.ricercaAtt = true;
       expect(component.isLoading).toBeTrue();
 
       rilevazioniSrv.getRicercaContenzioso.and.returnValue(of([]));

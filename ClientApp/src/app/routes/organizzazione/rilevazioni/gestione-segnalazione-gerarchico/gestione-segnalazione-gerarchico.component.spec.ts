@@ -999,7 +999,7 @@ describe('GestioneSegnalazioneGerarchicoComponent', () => {
       component.formRicerca.get('slideToggleDaRisolvere')?.setValue(true);
       spyOn(component, 'aggiornaLayoutPaginazioneProdotto'); // Metodo che aggiorna il layout
       spyOn(component, 'ricercaProdotto'); // Metodo che esegue la ricerca
-      component.inizializzaPaginazioneProdotto();
+      component.inizializzaPaginazioneProdotto(false);
       expect(component.idStatoSegnalazione).toBe(3);
 
       expect(mockRilevazioniSrv.contaRicercaProdotto).toHaveBeenCalledWith(
@@ -1031,7 +1031,7 @@ describe('GestioneSegnalazioneGerarchicoComponent', () => {
       component.formRicerca.get('slideToggleDaRisolvereContenzioso')?.setValue(true);
       spyOn(component, 'aggiornaLayoutPaginazioneContenzioso'); // Metodo che aggiorna il layout
       spyOn(component, 'ricercaContenzioso'); // Metodo che esegue la ricerca
-      component.inizializzaPaginazioneContenzioso();
+      component.inizializzaPaginazioneContenzioso(false);
       expect(component.idStatoSegnalazione).toBe(3);
       expect(mockRilevazioniSrv.contaRicercaContenzioso).toHaveBeenCalledWith(
         component.settore === -1 ? null : component.settore,

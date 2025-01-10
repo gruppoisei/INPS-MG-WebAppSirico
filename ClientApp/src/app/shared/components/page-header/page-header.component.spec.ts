@@ -70,8 +70,8 @@ describe('PageHeaderComponent', () => {
     descrizioneSede: 'Descrizione Sede Centrale',
     appRoles: [
       'P12689 : Amministratore',
-      'P12801 : Operatore Territoriale di Provincia',
-      'P12799 : Operatore Territoriale Regionale',
+      'P12801 : Referente Territoriale',
+      'P12799 : Referente Regionale',
       'P13000 : Utente'
     ],
     indirizzoIp: '192.168.1.1',
@@ -100,17 +100,17 @@ describe('PageHeaderComponent', () => {
 
   it('should return correct role descriptions', () => {
     expect(component.showFieldRole('Amministratore')).toBe('Amministratore');
-    expect(component.showFieldRole('Operatore Centrale Amministrativo')).toBe(
-      'Operatore Centrale<br>Amministrativo'
+    expect(component.showFieldRole('Referente Centrale')).toBe(
+      'Referente Centrale'
     );
-    expect(component.showFieldRole('Operatore Centrale Informatico')).toBe(
-      'Operatore Centrale<br>Informatico'
+    expect(component.showFieldRole('Operatore Centrale')).toBe(
+      'Operatore Centrale'
     );
-    expect(component.showFieldRole('Operatore Territoriale di Provincia')).toBe(
-      'Operatore Territoriale<br>di Provincia'
+    expect(component.showFieldRole('Referente Territoriale')).toBe(
+      'Referente Territoriale'
     );
-    expect(component.showFieldRole('Operatore Territoriale Regionale')).toBe(
-      'Operatore Territoriale<br>Regionale'
+    expect(component.showFieldRole('Referente Regionale')).toBe(
+      'Referente Regionale'
     );
     expect(component.showFieldRole('Unknown Role')).toBeNull();
   });
