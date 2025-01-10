@@ -60,16 +60,16 @@
       </div>
 
       <div class="container-buttons">
-        <div class="container">
+       <div *ngIf="hidden == false" class="container">
           <input type="file" class="custom-file-input" accept=".xls, .xlsx" (change)="onFileSelected($event)" #fileUploader style="display:none">
 
-          <button mat-button class="btn-scarica" (click)="selectedFile ? onUpload() : fileUploader.click()">
+          <button [disabled]="true" mat-button class="btn-scarica" (click)="selectedFile ? onUpload() : fileUploader.click()">
             <mat-icon>cloud_upload</mat-icon>
             Censimento Utenti
           </button>
         </div>
-
-        <button (click)="ricercaFiltrata()" mat-button class="child-buttons child-buttons-conferma">
+        
+        <button [disabled]="true" (click)="ricercaFiltrata()" mat-button class="child-buttons child-buttons-conferma">
           Cerca
         </button>
 
@@ -159,11 +159,11 @@
   </mat-tab>
 
   <!-- Tab per Lista Scarti -->
-  <mat-tab label="Lista Scarti"> <br>
+  <mat-tab *ngIf="hidden == false" [disabled]="true" label="Lista Scarti"> <br>
     <p class="section-title">Lista Utenti Scartati | {{dataSourceScarti.length }} risultati su {{elemNumScarti}}</p>
     <div *ngIf="dataSourceScarti.length > 0; else nessunScarto">
       <table mat-table matSort (matSortChange)="sortData($event)" [dataSource]="dataSourceScarti" class="mat-elevation-z8">
-        <!-- Definizione colonne per lista scarti -->
+
         <tr mat-header-row *matHeaderRowDef="displayedColumnsScarti"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsScarti;" (click)="handleRowClick(row)"></tr>
 
@@ -211,5 +211,4 @@
       </mat-card>
     </ng-template>
   </mat-tab>
-
 </mat-tab-group>
