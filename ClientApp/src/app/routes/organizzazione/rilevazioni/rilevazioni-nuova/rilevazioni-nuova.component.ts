@@ -1166,7 +1166,9 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
           this.idSegnalazioneCasoInvia = response.id;
         } else {
           // console.error("Errore durante l'invio dei dati: Il backend ha restituito false");
-          this.openErrorDialog("Errore durante l'invio dei dati");
+          this.openErrorDialog("Errore durante l'invio dei dati. ERRORE: " + response.error.message);
+          console.log("response: " + response);
+          console.log("response.error.message: " + response.error.message );
         }
       },
       error: error => {
@@ -1174,7 +1176,7 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
         if(error.error.message == 'Esiste già una segnalazione identica con lo stato di bozza.')
           this.openErrorDialog(error.error.message);
         else
-          this.openErrorDialog("Errore durante l'invio dei dati")
+          this.openErrorDialog("Errore durante l'invio dei dati: " + error.error.message)
       },
     });
   }

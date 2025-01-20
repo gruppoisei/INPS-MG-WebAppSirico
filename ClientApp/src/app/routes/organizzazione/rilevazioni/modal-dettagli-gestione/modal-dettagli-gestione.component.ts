@@ -144,7 +144,7 @@ risolviSegnalazione(idStatoSalvataggio: number){
     const dialogConfig = new MatDialogConfig();
     dialogConfig.autoFocus = true;
     dialogConfig.width = '75vw';
-    dialogConfig.height = '80%';
+    dialogConfig.height = 'auto';
     dialogConfig.data =
      [
        idAspettoSegnalazione,
