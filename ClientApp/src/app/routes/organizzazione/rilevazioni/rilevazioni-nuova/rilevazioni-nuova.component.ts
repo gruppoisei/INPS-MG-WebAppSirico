@@ -1167,8 +1167,6 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
         } else {
           // console.error("Errore durante l'invio dei dati: Il backend ha restituito false");
           this.openErrorDialog("Errore durante l'invio dei dati. ERRORE: " + response.error.message);
-          console.log("response: " + response);
-          console.log("response.error.message: " + response.error.message );
         }
       },
       error: error => {

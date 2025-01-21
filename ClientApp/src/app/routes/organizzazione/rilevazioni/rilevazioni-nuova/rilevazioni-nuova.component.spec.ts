@@ -507,13 +507,14 @@ describe('RilevazioniNuovaComponent', () => {
 
     it('should call openErrorDialog if response is false', () => {
       const rilevazioneSrvSpy = jasmine.createSpyObj('RilevazioneService', ['salvaSegnalazioneProdotto']);
-      rilevazioneSrvSpy.salvaSegnalazioneProdotto.and.returnValue(of({ id: null }));
+      const errorMessage = 'Simulazione errore';
+      rilevazioneSrvSpy.salvaSegnalazioneProdotto.and.returnValue(of({ id: null, error: { message: errorMessage } }));
       component['rilevazioneSrv'] = rilevazioneSrvSpy;
 
       spyOn(component, 'openErrorDialog');
       (component as any).inviaSegnalazioneProdotto({ id: 0 }, 2);
 
-      expect(component.openErrorDialog).toHaveBeenCalledWith('Errore durante l\'invio dei dati');
+      expect(component.openErrorDialog).toHaveBeenCalledWith("Errore durante l'invio dei dati. ERRORE: " + errorMessage);
     });
 
     it('should call openErrorDialog if an error occurs', () => {
