@@ -1,7 +1,6 @@
 import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { MatDialog } from '@angular/material/dialog';
-import { MatTable } from '@angular/material/table';
 import { BachecaDTO, MessaggiService } from '@shared/services/messaggi.service';
 import { StorageService } from '@shared';
 import { BehaviorSubject, of, throwError } from 'rxjs';
@@ -59,12 +58,7 @@ describe('DashboardComponent', () => {
     expect(component.checkRoles).toHaveBeenCalled();
     expect(component.inizializzaPaginazione).toHaveBeenCalled();
   });
-
-  // it('should enable row click for admin roles', () => {
-  //   component.checkRoles();
-  //   expect(component.disableRowClick).toBeFalse();
-  // });
-
+ 
   it('should enable row click for admin roles', () => {
     component.disableRowClick = true;
     storageServiceMock.getItem.and.returnValue('P12689; P12799; P12800; P12801');
@@ -134,13 +128,6 @@ describe('DashboardComponent', () => {
     expect(component.ordinamentoColonna).toBeNull();
     expect(component.popolaTabella).toHaveBeenCalled();
   });
-
-  // it('should open dialog and handle row click for Modifica', () => {
-  //   spyOn(component, 'inizializzaPaginazione');
-  //   component.handleRowClick({ id: 1 }, 'Modifica');
-  //   expect(messaggiServiceMock.datiMessaggio$.next).toHaveBeenCalledWith({ id: 1 });
-  //   expect(dialogMock.open).toHaveBeenCalled();
-  // });
 
   it('should open dialog and handle row click for Modifica', fakeAsync(() => {
     spyOn(component, 'inizializzaPaginazione');
