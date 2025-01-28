@@ -1,10 +1,10 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { DashboardComponent } from './dashboard.component';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTable } from '@angular/material/table';
 import { BachecaDTO, MessaggiService } from '@shared/services/messaggi.service';
 import { StorageService } from '@shared';
-import { of, throwError } from 'rxjs';
+import { BehaviorSubject, of, throwError } from 'rxjs';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 describe('DashboardComponent', () => {
@@ -60,9 +60,24 @@ describe('DashboardComponent', () => {
     expect(component.inizializzaPaginazione).toHaveBeenCalled();
   });
 
+  // it('should enable row click for admin roles', () => {
+  //   component.checkRoles();
+  //   expect(component.disableRowClick).toBeFalse();
+  // });
+
   it('should enable row click for admin roles', () => {
+    component.disableRowClick = true;
+    storageServiceMock.getItem.and.returnValue('P12689; P12799; P12800; P12801');
     component.checkRoles();
     expect(component.disableRowClick).toBeFalse();
+    component.disableRowClick = true;
+    storageServiceMock.getItem.and.returnValue('P12690; P12799; P12800; P12801');
+    component.checkRoles();
+    expect(component.disableRowClick).toBeFalse();
+    component.disableRowClick = true;
+    storageServiceMock.getItem.and.returnValue('P12799; P12800; P12801');
+    component.checkRoles();
+    expect(component.disableRowClick).toBeTrue();
   });
 
   it('should initialize pagination and fetch message count', () => {
@@ -120,12 +135,28 @@ describe('DashboardComponent', () => {
     expect(component.popolaTabella).toHaveBeenCalled();
   });
 
-  it('should open dialog and handle row click for Modifica', () => {
+  // it('should open dialog and handle row click for Modifica', () => {
+  //   spyOn(component, 'inizializzaPaginazione');
+  //   component.handleRowClick({ id: 1 }, 'Modifica');
+  //   expect(messaggiServiceMock.datiMessaggio$.next).toHaveBeenCalledWith({ id: 1 });
+  //   expect(dialogMock.open).toHaveBeenCalled();
+  // });
+
+  it('should open dialog and handle row click for Modifica', fakeAsync(() => {
     spyOn(component, 'inizializzaPaginazione');
-    component.handleRowClick({ id: 1 }, 'Modifica');
-    expect(messaggiServiceMock.datiMessaggio$.next).toHaveBeenCalledWith({ id: 1 });
+    messaggiServiceMock.datiMessaggio$ = new BehaviorSubject<any>(null);
+    const row = 1;
+
+    component.handleRowClick({ id: row }, 'Modifica');
+    tick(500);
+    expect(messaggiServiceMock.datiMessaggio$.value).toEqual({ id: row });
     expect(dialogMock.open).toHaveBeenCalled();
-  });
+  
+    component.handleRowClick({ id: 1 }, 'Inserimento');
+    tick(500);
+    expect(messaggiServiceMock.datiMessaggio$.value).toBe(0);
+    expect(dialogMock.open).toHaveBeenCalled();
+  }));
 
   it('should format date and time correctly', () => {
     const result = component.displayFieldData('2024-11-14T12:34:56.789Z');
@@ -160,6 +191,14 @@ describe('DashboardComponent', () => {
     expect(component.pageCurr).toBe(1);
     expect(component.popolaTabella).toHaveBeenCalled();
   }); 
+
+  it('should set pageCurr to the specified page and call popolaTabella', () => {
+    spyOn(component, 'popolaTabella');
+    const page = 3;
+    component.setPageCurr(page);
+    expect(component.pageCurr).toBe(page);
+    expect(component.popolaTabella).toHaveBeenCalled();
+  });
   
   it('should go to the first page', () => {
     spyOn(component, 'popolaTabella');
@@ -198,4 +237,52 @@ describe('DashboardComponent', () => {
     expect(component.messaggioAttivo).toBeTrue(); 
   });
 
+  it('should not update messaggioAttivo when toggle is checked', () => {
+    const event = { checked: true }; 
+    component.onToggleChange(event); 
+    expect(component.messaggioAttivo).toBeTrue(); 
+  });
+
+  describe('truncateText', () => {
+    it('should truncate text longer than the limit and append "..."', () => {
+      const text = 'This is a very long text that needs to be truncated';
+      const limit = 50;
+      
+      const result = component.truncateText(text, limit);
+      expect(result).toBe('This is a very long text that needs to be truncate...');
+    });
+  
+    it('should return text unchanged if it is shorter than the limit', () => {
+      const text = 'Short text';
+      const limit = 50;
+  
+      const result = component.truncateText(text, limit);
+      expect(result).toBe(text);
+    });
+  
+    it('should return an empty string if the text is falsy (null, undefined, empty)', () => {
+      const text = '';
+      const limit = 50;
+  
+      const result = component.truncateText(text, limit);
+      expect(result).toBe('');
+    });
+  
+    it('should handle null text input correctly', () => {
+      const text = null;
+      const limit = 50;
+  
+      const result = component.truncateText(text!, limit);
+      expect(result).toBe('');
+    });
+  
+    it('should handle undefined text input correctly', () => {
+      const text = undefined;
+      const limit = 50;
+  
+      const result = component.truncateText(text!, limit);
+      expect(result).toBe('');
+    });
+  });
+  
 });

@@ -84,16 +84,16 @@ export class DashboardComponent implements OnInit {
         this.ordinamentoColonna,
         this.messaggioAttivo
       )
-      .subscribe(
-        (data: any[]) => {
+      .subscribe({
+        next: (data: any[]) => {
           this.data = data;
           this.isLoading = false;
         },
-        (error: any) => {
+        error: (error: any) => {
           console.error('Errore nel recupero dei dati: ', error);
           this.errorMessage = 'Errore nel recupero dei dati'
         }
-      );
+    });
   }
 
   sortData(sort: Sort) {
@@ -133,7 +133,7 @@ export class DashboardComponent implements OnInit {
 
   onToggleChange(event: any) {
     if (event.checked === false) {
-      this.messaggioAttivo == false;
+      this.messaggioAttivo = false;
     }
   }
 
