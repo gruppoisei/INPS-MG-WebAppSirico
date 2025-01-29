@@ -1,17 +1,17 @@
-import { Component, OnInit, ChangeDetectorRef, Injectable, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MtxDialog } from '@ng-matero/extensions/dialog';
-import { Router } from '@angular/router';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Sort } from '@angular/material/sort';
 import { StepperService } from '@shared/services/stepper.service';
 import { ModalDettagliGestioneComponent } from '../../modal-dettagli-gestione/modal-dettagli-gestione.component';
 import { ApprovazioneService } from '@shared/services/approvazione.service';
-import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxChange } from '@angular/material/checkbox';
 import { ModalDettalgiGestioneContenziosiComponent } from '../../modal-dettagli-gestione-contenziosi/modal-dettalgi-gestione-contenziosi.component';
 import { AspettiprodottiService } from '@shared/services/aspettiprodotti.service';
 import { Subject } from 'rxjs';
+import { segnalazione } from '@shared/interfaces/segnalazioneApprovazioni';
+
 
 @Component({
   selector: 'app-approvazioni',
@@ -47,13 +47,15 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
   minDate: any;
   maxDate: any;
 
+  errorMessage: string = "";
+
   constructor(
     public dialog: MtxDialog,
     private formBuilder: FormBuilder,
     public dialog2: MatDialog,
     private stepperService: StepperService,
-    private approvazionesrv: ApprovazioneService,
-    private aspettiProdottiService: AspettiprodottiService
+    public approvazionesrv: ApprovazioneService,
+    public aspettiProdottiService: AspettiprodottiService
   ) {
     this.formRicerca = this.formBuilder.group({
       settore: null,
@@ -63,11 +65,11 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
     });
 
     this.stepperService.dialogClosed$.subscribe(() => {
-      if (this.approvazionesrv.checkRisolviSegnalazione$.value == true) {
+      if (this.approvazionesrv.checkRisolviSegnalazione$.value) {
         this.approvazionesrv.checkRisolviSegnalazione$.next(false);
         this.inizializzaPagina();
       }
-      else if (this.aspettiProdottiService.checkNuovoAspetto$.value == true) {
+      else if (this.aspettiProdottiService.checkNuovoAspetto$.value) {
         this.aspettiProdottiService.checkNuovoAspetto$.next(false);
         this.inizializzaPagina();
       }
@@ -84,8 +86,6 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
   }
 
   async inizializzaPagina() {
-    // this.inizializzaPaginazione();
-
     try {
       await this.countSegnalazioni();
 
@@ -96,7 +96,7 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       }
     } catch (error) {
-      // console.error("Errore durante l'inizializzazione", error);
+      this.errorMessage = 'Errore durante l\'inizializzazione: ' + error;
     }
   }
 
@@ -110,7 +110,6 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
     } catch (error) {
       this.segnalazioni = [];
       this.isLoading = false;
-      throw error;
     }
   }
 
@@ -122,7 +121,6 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
         this.isLoading = false;
       },
       error: (error) => {
-        // console.error('Errore nel recupero delle segnalazioni', error);
         this.isLoading = false;
       }
     });
@@ -211,7 +209,7 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
       dialogConfig.autoFocus = true;
       dialogConfig.width = 'auto';
       dialogConfig.height = 'auto';
-      dialogConfig.data = segnalazioneSelezionata.id as number;
+      dialogConfig.data = segnalazioneSelezionata.id;
       const dialogRef = this.dialog2.open(ModalDettagliGestioneComponent, dialogConfig);
       dialogRef.afterClosed().subscribe(() => {
         this.stepperService.dialogClosed$.next();
@@ -222,7 +220,7 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
       dialogConfig.autoFocus = true;
       dialogConfig.width = 'auto';
       dialogConfig.height = 'auto';
-      dialogConfig.data = segnalazioneSelezionata.id as number;
+      dialogConfig.data = segnalazioneSelezionata.id;
       const dialogRef = this.dialog2.open(ModalDettalgiGestioneContenziosiComponent, dialogConfig);
       dialogRef.afterClosed().subscribe(() => {
         this.stepperService.dialogClosed$.next();
@@ -296,36 +294,14 @@ export class ApprovazioniComponent implements OnInit, OnDestroy {
         };
       });
 
-      this.approvazionesrv.confermaSegnalazioni(segnalazioniDaConfermare).subscribe(
-        async response => {
+      this.approvazionesrv.confermaSegnalazioni(segnalazioniDaConfermare).subscribe({
+        next: async (response) => {
           await this.inizializzaPagina();
           this.selectedKeys.clear(); // Pulisce la selezione dopo la conferma
         },
-        error => {
-          // console.error('Errore durante la conferma delle segnalazioni:', error);
+        error: (error) => {
+          this.errorMessage = 'Errore durante l\'inizializzazione: ' + error;
         }
-      );
+      });
     }
 }
-
-interface segnalazione {
-  areaId: number;
-  areaProdotto: string;
-  data1: string;
-  data2: string;
-  id: number;
-  inviata: boolean;
-  sede: string;
-  sedeId: number;
-  settoreId: number;
-  settoreMateria: string;
-  statoDesc: string;
-  statoId: number;
-  nuovoAspetto: boolean;
-  contenziosoId: number;
-  contenziosoDesc: string;
-}
- interface selectedSegnalazione{
-  id: number;
-  contenziosoId: number;
- }
