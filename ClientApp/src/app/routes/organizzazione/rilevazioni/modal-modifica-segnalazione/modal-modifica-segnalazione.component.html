@@ -51,10 +51,8 @@
               <span class="sub-title">{{segnalazioneContenzioso.sede}}</span></h3>
           </div>
           <div *ngIf="isAllegatoSegnalazione">
-            <h3>
-              <span class="top-title">Allegato</span>
-              <mat-icon>attach_file</mat-icon>
-            </h3>
+            <h3><span class="top-title">Allegato</span>
+              <button class="sub-title" mat-button (click)="downloadFileSegnalazione()"><mat-icon>attachment</mat-icon></button></h3>
           </div>
         </div>
 
