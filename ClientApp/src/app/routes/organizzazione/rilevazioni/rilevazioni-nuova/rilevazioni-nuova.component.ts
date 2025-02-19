@@ -8,7 +8,7 @@ import { Componente } from '@shared/models/componente.model';
 import { TaComponentiCriteri } from '@shared/models/ta-componenti-criteri.model';
 import { RilevazioneService } from '@shared/services/rilevazione.service';
 import { StatiRilevazione } from '@shared/models/stati-rilevazione.model';
-import { RilevazioneTaComponenteCriterioService } from '@shared/services/rilevazione-ta-componente-criterio.service';
+// import { RilevazioneTaComponenteCriterioService } from '@shared/services/rilevazione-ta-componente-criterio.service';
 import { Router } from '@angular/router';
 import {
   AbstractControl,
@@ -1104,33 +1104,7 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  private inviaSegnalazioneProdotto(datiSegnalazione: any, statoSegnalazione: number) {
-    const segnalazioneProdotto: SegnalazioneProdotto = {
-      id: datiSegnalazione.id ?? 0,
-      creato: datiSegnalazione.creato ?? new Date().toISOString(),
-      aggiornato: new Date().toISOString(),
-      confermata: true,
-      matricolaIns: this.storageService.getItem('matricola') ?? 'matins',
-      scadenza: new Date().toISOString(),
-      matricolaIncarico: 'matinc',
-      sede: this.formatToSixDigits(this.firstFormGroup.value.sede),
-      idStatoSalvataggioRilevazione: statoSegnalazione,
-      ruoloIns: this.selectRole(),
-      idArea: Number(this.firstFormGroup.value.areaProdotto) ?? datiSegnalazione.areaId,
-      aspettiSegnalazione: this.listaAspettiAggiunti.map(aspetto => ({
-        id: 0,
-        creato: new Date().toISOString(),
-        aggiornato: new Date().toISOString(),
-        idAspetto: aspetto.idAspetto < 0 ? 0 : aspetto.idAspetto, // Se ID è negativo, invialo come 0
-        nome: aspetto.nomeAspetto.replace(/\s+/g,' ').trim(),
-        idSegnalazioneProdotto: 0,
-        criticita: aspetto.descrizioneCriticita,
-        suggerimento: aspetto.descrizioneSuggerimento,
-      })),
-    };
-
-    let formData = new FormData();
-
+  private createFormDataProdotto(formData: FormData, segnalazioneProdotto: SegnalazioneProdotto) : FormData {
     (Object.keys(segnalazioneProdotto) as Array<keyof SegnalazioneProdotto>).forEach(key => {
       if (key === 'aspettiSegnalazione') {
         segnalazioneProdotto.aspettiSegnalazione.forEach((aspetto, index) => {
@@ -1158,12 +1132,97 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
     }
     formData.append('idAspetti', JSON.stringify(idAspetti));
 
+    return formData;
+  }
+
+  private createFormDataContenzioso(formData: FormData, segnalazioneContenzioso: SegnalazioneContenzioso) : FormData {
+    (Object.keys(segnalazioneContenzioso) as Array<keyof SegnalazioneProdotto>).forEach(key => {
+      if (key === 'aspettiSegnalazione') {
+        segnalazioneContenzioso.aspettiSegnalazione.forEach((aspetto, index) => {
+          Object.keys(aspetto).forEach(aspettoKey => {
+            formData.append(
+              `aspettiSegnalazione[${index}].${aspettoKey}`,
+              (aspetto as any)[aspettoKey]
+            );
+          });
+        });
+      } else {
+        formData.append(key, segnalazioneContenzioso[key] as any);
+      }
+    });
+
+    if (this.fileSegnalazione) {
+      formData.append('fileSegnalazione', this.fileSegnalazione);
+    }
+
+    const idAspetti: number[] = [];
+    if (this.filesAspetti.length > 0) {
+      this.filesAspetti.forEach(item => {
+        formData.append(`filesAspetti`, item.file);
+        idAspetti.push(item.idAspetto);
+      });
+    }
+    formData.append('idAspetti', JSON.stringify(idAspetti));
+
+    return formData;
+  }
+
+  private inviaSegnalazioneProdotto(datiSegnalazione: any, statoSegnalazione: number) {
+    const segnalazioneProdotto: SegnalazioneProdotto = {
+      id: datiSegnalazione.id ?? 0,
+      creato: datiSegnalazione.creato ?? new Date().toISOString(),
+      aggiornato: new Date().toISOString(),
+      confermata: true,
+      matricolaIns: this.storageService.getItem('matricola') ?? 'matins',
+      scadenza: new Date().toISOString(),
+      matricolaIncarico: 'matinc',
+      sede: this.formatToSixDigits(this.firstFormGroup.value.sede),
+      idStatoSalvataggioRilevazione: statoSegnalazione,
+      ruoloIns: this.selectRole(),
+      idArea: Number(this.firstFormGroup.value.areaProdotto) ?? datiSegnalazione.areaId,
+      aspettiSegnalazione: this.listaAspettiAggiunti.map(aspetto => ({
+        id: 0,
+        creato: new Date().toISOString(),
+        aggiornato: new Date().toISOString(),
+        idAspetto: aspetto.idAspetto < 0 ? 0 : aspetto.idAspetto, // Se ID è negativo, invialo come 0
+        nome: aspetto.nomeAspetto.replace(/\s+/g,' ').trim(),
+        idSegnalazioneProdotto: 0,
+        criticita: aspetto.descrizioneCriticita,
+        suggerimento: aspetto.descrizioneSuggerimento,
+      })),
+    };
+
+    console.log(segnalazioneProdotto);
+
+    let formData = new FormData();
+    this.createFormDataProdotto(formData, segnalazioneProdotto)
+
     this.rilevazioneSrv.salvaSegnalazioneProdotto(formData).subscribe({
       next: response => {
         if (response && response.id !== null && response.id !== undefined) {
           statoSegnalazione == 2 ? null : this.router.navigate(['/segnalazione/inserimento']);
           this.statoSegnalazione = statoSegnalazione;
           this.idSegnalazioneCasoInvia = response.id;
+          this.openErrorDialog("Segnalazione salvata correttamente. " + response.messaggio);
+          ///////////////////////////PREPARO LA FORMDATA PER GLI ALLEGATI//////////////////////////////////////
+          let formData = new FormData();
+          formData.append('idSegnalazione', response.id.toString());  
+          formData.append('idNuovoAspetto', response.idNuovoAspetto);  
+          this.createFormDataProdotto(formData, segnalazioneProdotto);
+          ////////////////////////////CHIAMO LA FUNZIONE NEL SERVICE//////////////////////////////////////
+          if (this.fileSegnalazione || this.filesAspetti.length > 0)
+          {
+            this.documentiService.salvaAllegatiSegnalazioneProdotto(formData).subscribe({
+              next: response => {
+                console.log('response: ' + response);
+              },
+              error: error => {{
+                console.log('error: ' + error.error.message);
+                this.openErrorDialog(error.error.message);
+              }}
+            })
+          }
+          ////////////////////////////////////////////////////////////////////////////////////////////////
         } else {
           // console.error("Errore durante l'invio dei dati: Il backend ha restituito false");
           this.openErrorDialog("Errore durante l'invio dei dati. ERRORE: " + response.error.message);
@@ -1206,36 +1265,11 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
         Number(this.firstFormGroup.value.tipologiaContenzioso) ?? datiSegnalazione.contenziosoId,
     };
 
+    console.log(segnalazioneContenzioso);
+
     let formData = new FormData();
-
-    (Object.keys(segnalazioneContenzioso) as Array<keyof SegnalazioneProdotto>).forEach(key => {
-      if (key === 'aspettiSegnalazione') {
-        segnalazioneContenzioso.aspettiSegnalazione.forEach((aspetto, index) => {
-          Object.keys(aspetto).forEach(aspettoKey => {
-            formData.append(
-              `aspettiSegnalazione[${index}].${aspettoKey}`,
-              (aspetto as any)[aspettoKey]
-            );
-          });
-        });
-      } else {
-        formData.append(key, segnalazioneContenzioso[key] as any);
-      }
-    });
-
-    if (this.fileSegnalazione) {
-      formData.append('fileSegnalazione', this.fileSegnalazione);
-    }
-
-    const idAspetti: number[] = [];
-    if (this.filesAspetti.length > 0) {
-      this.filesAspetti.forEach(item => {
-        formData.append(`filesAspetti`, item.file);
-        idAspetti.push(item.idAspetto);
-      });
-    }
-    formData.append('idAspetti', JSON.stringify(idAspetti));
-
+    this.createFormDataContenzioso(formData, segnalazioneContenzioso);
+    
     this.rilevazioneSrv.salvaSegnalazioneContenzioso(formData).subscribe({
       next: response => {
         if (response.id !== null || response.id !== undefined) {
@@ -1243,6 +1277,25 @@ export class RilevazioniNuovaComponent implements OnInit, OnDestroy {
           this.statoSegnalazione = statoSegnalazione;
           segnalazioneContenzioso.id = response.id;
           this.idSegnalazioneCasoInvia = response.id;
+          ///////////////////////////PREPARO LA FORMDATA PER GLI ALLEGATI//////////////////////////////////////
+          let formData = new FormData();
+          formData.append('idSegnalazione', response.id.toString());  
+          formData.append('idNuovoAspetto', response.idNuovoAspetto);  
+          this.createFormDataContenzioso(formData, segnalazioneContenzioso);
+          ////////////////////////////CHIAMO LA FUNZIONE NEL SERVICE//////////////////////////////////////
+          if (this.fileSegnalazione || this.filesAspetti.length > 0)
+          {
+            this.documentiService.salvaAllegatiSegnalazioneContenzioso(formData).subscribe({
+              next: response => {
+                console.log('response: ' + response);
+              },
+              error: error => {{
+                console.log('error: ' + error.error.message);
+                this.openErrorDialog(error.error.message);
+              }}
+            })
+          }
+          ////////////////////////////////////////////////////////////////////////////////////////////////
         } else {
           console.error("Errore durante l'invio dei dati: Il backend ha restituito false");
           this.openErrorDialog("Errore durante l'invio dei dati");

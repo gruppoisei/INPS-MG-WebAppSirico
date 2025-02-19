@@ -1,13 +1,15 @@
 using Microsoft.Extensions.FileProviders;
 using System.Net.WebSockets;
 using System.IO;
+using INPS_Sirico_WebAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpContextAccessor();  
 
 // Aggiungi i servizi al contenitore
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<DocumentiService>(); // Aggiungi il DocumentiService nel DI
 
 // Configura per servire i file statici dal percorso wwwroot/ClientApp/dist
 builder.Services.AddSpaStaticFiles(configuration =>

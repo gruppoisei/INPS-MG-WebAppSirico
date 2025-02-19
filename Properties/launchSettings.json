@@ -18,8 +18,19 @@
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MS_SIRICOAPI": "http://localhost:5250/api/",
         //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
-        "WEB_SOCKET": "ws://localhost:5250/api/notification"
+        "WEB_SOCKET": "ws://localhost:5250/api/notification",
         //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
+        "PATHGENERICO": "C:/SiricoNew/",
+        "CARTELLA_PRODOTTI_DATI_GENERALI": "ProdottiDatiGenerali",
+        "CARTELLA_CONTENZIOSI_DATI_GENERALI": "ContenziosiDatiGenerali",
+        "CARTELLA_CONTENZIOSI_CRITICITA": "ContenziosiCriticita",
+        "CARTELLA_PRODOTTI_CRITICITA": "ProdottiCriticita",
+        "DIMENSIONEMB": "5",
+        "TIPOESTENSIONE": ".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.bmp",
+        "FILEPROVINCIALE": "FileProvinciale",
+        "FILEREGIONALE": "FileRegionale",
+        "FILEAMMINISTRATIVO": "FileAmministrativo",
+        "FILEAMMINISTRATORE": "FileAmministratore"
       }
     },
     "https": {
@@ -33,7 +44,6 @@
         //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
         "WEB_SOCKET": "ws://localhost:5250/api/notification"
         //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
-
       }
     },
     "IIS Express": {
