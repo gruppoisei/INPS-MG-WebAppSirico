@@ -29,74 +29,13 @@ export class RilevazioneService {
   idMod = 0;
   constructor(private http: HttpClient) {}
 
-  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI;
+  //private apiUrl = environment.MS_SIRICOAPI + environment.API_URI;
+  private mgUrl = environment.MG_URL;
 
   tabNomeSegnalazione!: string;
   tabNomeSegnalazione$: BehaviorSubject<string | undefined> = new BehaviorSubject<string | undefined>(this.tabNomeSegnalazione);
 
-  //getRilevazioni with optional paramethers
-  /*  getRilevazioni(
-    idProdotto: number,
-    idProdottoTipologiaLavoratore: number,
-    idAttore: number,
-    idTipologiaRicorso: number,
-    idProceduraRiferimento: number,
-    dataInizio: string,
-    dataFine: string,
-    dataScadenza: boolean,
-    dim: string,
-    ordine: string,
-    pagina: number
-  ): Observable<Rilevazione[]> {
-    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni?';
-    // let url = 'http://localhost:5250/api/Prodotto/contaRicerca';
-    let parametriUrl = '';
-    if (idProdotto > 0) {
-      parametriUrl += '&idProdotto=' + idProdotto;
-    }
-    if (idProdottoTipologiaLavoratore > 0) {
-      parametriUrl += '&idProdottoTipologiaLavoratore=' + idProdottoTipologiaLavoratore;
-    }
-    if (idAttore > 0) {
-      parametriUrl += '&idAttore=' + idAttore;
-    }
-    if (idTipologiaRicorso > 0) {
-      parametriUrl += '&idTipologiaRicorso=' + idTipologiaRicorso;
-    }
-    if (idProceduraRiferimento > 0) {
-      parametriUrl += '&idProceduraRiferimento=' + idProceduraRiferimento;
-    }
-    if (dataInizio) {
-      parametriUrl += '&dataInizio=' + dataInizio;
-    }
-    if (dataFine) {
-      parametriUrl += '&dataFine=' + dataFine;
-    }
-    if (dataScadenza) {
-      parametriUrl += '&dataScadenza=' + dataScadenza;
-    }
-    parametriUrl += '&dimensione=' + dim + '&ordine=' + ordine + '&pagina=' + pagina;
-    url = url + parametriUrl.substring(1);
-    console.log('url: ', url)
-    return this.http.get<Rilevazione[]>(url);
-  }
-
-  getRilevazioneId(id: number): Observable<Rilevazione> {
-    return this.http.get<Rilevazione>(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/' + id);
-  } */
-
-  /*   getRilevazioni(idProdotto: number): Observable<Rilevazione> {
-    return this.http.get<Rilevazione>(environment.MS_SIRICOAPI + environment.API_URI+'rilevazioni?idProdotto='+idProdotto);
-  } */
-
-
   contaRicercaProdotto(settore?: number | null, area?: number | null, sede?: string[] | null, dataInizio?: string | null, dataFine?: string | null, idStatoSegnalazione?: number | null, ruolo?: string | null, utenteLoggato?: string | null, sourceCall?: string | null, sedeVuota?: boolean | null): Observable<{count: number}> {
-
-    // console.log('dataInizio:',dataInizio!);
-    // console.log('dataInizio:',dataInizio!.setHours(dataInizio!.getHours() + (2/3)));
-    // console.log('new Date(dataInizio):',new Date(dataInizio!.setHours(dataInizio!.getHours() + 2)));
-    // console.log('new Date',new Date(Date.now()));
-
     let params = new HttpParams();
 
     if (settore) params = params.set('settore', settore.toString());
@@ -117,15 +56,15 @@ export class RilevazioneService {
     if (utenteLoggato) params = params.set('utenteLoggato', utenteLoggato);
     if (sourceCall) params = params.set('sourceCall', sourceCall);
     if (sedeVuota) params = params.set('sedeVuoto', sedeVuota);
-    // console.log('params:',params);
 
-    return this.http.get<{ count: number }>(`${this.apiUrl}SegnalazioneProdotto/contaRicerca`, {
+    debugger;
+
+    return this.http.get<{ count: number }>(`${this.mgUrl}SegnalazioneProdottoGateway/contaRicerca`, {
       params,
     });
   }
 
   contaRicercaContenzioso(settore?: number | null, area?: number | null, sede?: string[] | null, dataInizio?: string | null, dataFine?: string | null, idStatoSegnalazione?: number | null, idTipologiaContenzioso?: number | null, ruolo?: string | null, utenteLoggato?: string | null, sourceCall?: string | null, sedeVuota?: boolean | null): Observable<{count: number}> {
-
     let params = new HttpParams()
 
     if (settore) params = params.set('settore', settore.toString());
@@ -139,7 +78,7 @@ export class RilevazioneService {
         });
       }
     }
-    // if (sede) params = params.set('sede', sede);
+
     if (dataInizio) params = params.set('dataInizio', dataInizio);
     if (dataFine) params = params.set('dataFine', dataFine);
     if (idStatoSegnalazione) params = params.set('idStatoSegnalazione', idStatoSegnalazione.toString());
@@ -149,14 +88,12 @@ export class RilevazioneService {
     if (sourceCall) params = params.set('sourceCall', sourceCall);
     if (sedeVuota) params = params.set('sedeVuoto', sedeVuota);
     return this.http.get<{ count: number }>(
-      `${this.apiUrl}SegnalazioniContenziosi/contaRicercaContenziosi`,
+      `${this.mgUrl}SegnalazioniContenziosiGateway/contaRicercaContenziosi`,
       { params }
     );
   }
 
   getRicercaProdotto(quantita: number, pagina: number, settore?: number | null, area?: number | null, sede?: string[] | null, dataInizio?: string | null, dataFine?: string | null, idStatoSegnalazione?: number | null, ruolo?: string | null, utenteLoggato?: string | null, ordineColonna?: string | null, sourceCall?: string | null, sedeVuota?: boolean | null): Observable<any[]> {
-
-
     let params = new HttpParams()
       .set('quantita', quantita.toString())
       .set('pagina', pagina.toString());
@@ -182,7 +119,7 @@ export class RilevazioneService {
     if (sedeVuota) params = params.set('sedeVuoto', sedeVuota);
 
     return this.http
-      .get<any[]>(`${this.apiUrl}SegnalazioneProdotto/getRicerca`, { params })
+      .get<any[]>(`${this.mgUrl}SegnalazioneProdottoGateway/getRicerca`, { params })
       .pipe(
         map((datiEndpoint: any[]) =>
           datiEndpoint.map(item => ({
@@ -196,7 +133,7 @@ export class RilevazioneService {
             statoId: item.statoId,
             statoDesc: item.statoDescrizione,
             sede: item.sedeNome,
-            sedeId: item.sedeId, // codice sede
+            sedeId: item.sedeId,
             inviata: item.inviata,
             chiusa: item.chiusa,
             scadenza: this.formatDate(item.scadenza),
@@ -207,7 +144,6 @@ export class RilevazioneService {
   }
 
   getRicercaContenzioso(quantita: number, pagina: number, settore?: number | null, area?: number | null, sede?: string[] | null, dataInizio?: string | null, dataFine?: string | null, idStatoSegnalazione?: number | null, idTipologiaContenzioso?: number | null, ruolo?: string | null, utenteLoggato?: string | null, ordineColonna?: string | null, sourceCall?: string | null, sedeVuota?: boolean | null): Observable<any[]> {
-
     let params = new HttpParams()
       .set('quantita', quantita.toString())
       .set('pagina', pagina.toString());
@@ -223,7 +159,7 @@ export class RilevazioneService {
         });
       }
     }
-    // if (sede) params = params.set('sede', sede);
+
     if (dataInizio) params = params.set('dataInizio', dataInizio);
     if (dataFine) params = params.set('dataFine', dataFine);
     if (idStatoSegnalazione)
@@ -237,7 +173,7 @@ export class RilevazioneService {
     if (sedeVuota) params = params.set('sedeVuoto', sedeVuota);
 
     return this.http
-      .get<any[]>(`${this.apiUrl}SegnalazioniContenziosi/getRicercaContenziosi`, { params })
+      .get<any[]>(`${this.mgUrl}SegnalazioniContenziosiGateway/getRicercaContenziosi`, { params })
       .pipe(
         map((datiEndpoint: any[]) =>
           datiEndpoint.map(item => ({
@@ -281,53 +217,39 @@ export class RilevazioneService {
 
    salvaSegnalazioneProdotto(segnalazioneProdotto: any): Observable<any> {
     return this.http.post<any>(
-      `${this.apiUrl}SegnalazioniEAspettiProdotti/salvaSegnalazioneProdotto`,
+      `${this.mgUrl}SegnalazioniEAspettiProdottiGateway/salvaSegnalazioneProdotto`,
       segnalazioneProdotto
     );
   }
 
   salvaSegnalazioneContenzioso(segnalazioneContenzioso: any): Observable<any> {
-    /* if (segnalazioneContenzioso.idArea == 0) {
-      segnalazioneContenzioso.idArea = null;
-    }
-    if (segnalazioneContenzioso.contenziosoId == 0) {
-      segnalazioneContenzioso.contenziosoId = null;
-    } */
-    return this.http.post<any>(`${this.apiUrl}SegnalazioniEAspettiContenzioso/salvaSegnalazione`, segnalazioneContenzioso);
+    return this.http.post<any>(`${this.mgUrl}SegnalazioniEAspettiContenziosoGateway/salvaSegnalazione`, segnalazioneContenzioso);
   }
-    /* salvaSegnalazioneProdotto(segnalazioneProdotto: FormData): Observable<any> {
-      return this.http.post<any>(`${this.apiUrl}api/SegnalazioniEAspettiProdotti/salvaSegnalazioneProdotto`, segnalazioneProdotto);
-    }
-
-    salvaSegnalazioneContenzioso(segnalazioneContenzioso: FormData): Observable<any> {
-      return this.http.post<any>(`${this.apiUrl}api/SegnalazioniEAspettiContenzioso/salvaSegnalazione`, segnalazioneContenzioso);
-    } */
-
 
   getDettagliSegnalazioneById(id: number): Observable<any> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get<any>(
-      `${this.apiUrl}SegnalazioniEAspettiProdotti/getDettagliSegnalazioneById`,
+      `${this.mgUrl}SegnalazioniEAspettiProdottiGateway/getDettagliSegnalazioneById`,
       { params }
     );
   }
 
   getDettagliAspettoSegnalazioneById(id: number): Observable<any> {
     return this.http.get<any>(
-      `${this.apiUrl}SegnalazioniEAspettiProdotti/getAspettoSegnalazioneById/${id}`
+      `${this.mgUrl}SegnalazioniEAspettiProdottiGateway/getAspettoSegnalazioneById/${id}`
     );
   }
 
   getDettagliAspettoSegnalazioneContenziosoById(id: number): Observable<any> {
     return this.http.get<any>(
-      `${this.apiUrl}SegnalazioniEAspettiContenzioso/getAspettoSegnalazioneById/${id}`
+      `${this.mgUrl}SegnalazioniEAspettiContenziosoGateway/getAspettoSegnalazioneById/${id}`
     );
   }
 
   getDettagliSegnalazioneContenziosoById(id: number): Observable<any> {
     const params = new HttpParams().set('id', id.toString());
     return this.http.get<any>(
-      `${this.apiUrl}SegnalazioniEAspettiContenzioso/getDettagliSegnalazioneContenziosoById`,
+      `${this.mgUrl}SegnalazioniEAspettiContenziosoGateway/getDettagliSegnalazioneContenziosoById`,
       { params }
     );
   }
@@ -335,151 +257,14 @@ export class RilevazioneService {
   updateIntegrazioni(integrazioni: salvaDettagliASDTO[], matricola: string,statoSalvataggioSegnalazione: number): Observable<any> {
     const headers = { 'content-type': 'application/json' };
     const payload = {integrazioni, matricola, statoSalvataggioSegnalazione,};
-    return this.http.post<any>(`${this.apiUrl}SegnalazioniEAspettiProdotti/aggiornaDettagliSegnalazione`, payload, { headers });
+    return this.http.post<any>(`${this.mgUrl}SegnalazioniEAspettiProdottiGateway/aggiornaDettagliSegnalazione`, payload, { headers });
   }
 
   updateIntegrazioniContezioso(integrazioni: salvaDettagliASDTO[], matricola: string, statoSalvataggioSegnalazione: number): Observable<any> {
     const headers = { 'content-type': 'application/json' };
     const payload = {integrazioni, matricola, statoSalvataggioSegnalazione,};
-    return this.http.post<any>(`${this.apiUrl}SegnalazioniEAspettiContenzioso/aggiornaDettagliSegnalazione`, payload, { headers });
+    return this.http.post<any>(`${this.mgUrl}SegnalazioniEAspettiContenziosoGateway/aggiornaDettagliSegnalazione`, payload, { headers });
   }
-
-  /*   saveRilevazione(rilevazione: Rilevazione): Observable<any> {
-    // alert(JSON.stringify(rilevazione));
-    console.log(JSON.stringify(rilevazione));
-    const headers = { 'content-type': 'application/json' };
-    const body = JSON.stringify(rilevazione);
-    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni', body, { headers });
-  }
-
-  updateRilevazione(rilevazione: Rilevazione): Observable<any> {
-    // alert(JSON.stringify(rilevazione));
-    //console.log(JSON.stringify(rilevazione));
-    const headers = { 'content-type': 'application/json' };
-    const body = JSON.stringify(rilevazione);
-    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni' + '/aggiorna', body, { headers });
-  } */
-  /*
-  conta(
-    idProdotto: number,
-    idProdottoTipologiaLavoratore: number,
-    idAttore: number,
-    idTipologiaRicorso: number,
-    idProceduraRiferimento: number,
-    dataInizio: string,
-    dataFine: string,
-    dataScadenza: boolean
-  ): Observable<number> {
-    // console.log('conta');
-    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/conta';
-    let parametriUrl = '';
-    if (idProdotto > 0) {
-      parametriUrl += '&idProdotto=' + idProdotto;
-    }
-    if (idProdottoTipologiaLavoratore > 0) {
-      parametriUrl += '&idProdottoTipologiaLavoratore=' + idProdottoTipologiaLavoratore;
-    }
-    if (idAttore > 0) {
-      parametriUrl += '&idAttore=' + idAttore;
-    }
-    if (idTipologiaRicorso > 0) {
-      parametriUrl += '&idTipologiaRicorso=' + idTipologiaRicorso;
-    }
-    if (idProceduraRiferimento > 0) {
-      parametriUrl += '&idProceduraRiferimento=' + idProceduraRiferimento;
-    }
-    if (dataInizio) {
-      parametriUrl += '&dataInizio=' + dataInizio;
-    }
-    if (dataFine) {
-      parametriUrl += '&dataFine=' + dataFine;
-    }
-    if (dataScadenza) {
-      parametriUrl += '&dataScadenza=' + dataScadenza;
-    }
-    console.log('url: ', url)
-    if (parametriUrl.substring(1)) {
-      url = url + '?' + parametriUrl.substring(1);
-    }
-    return this.http.get<number>(url);
-  } */
-
-  /* getRilevazioniExcel(
-    idProdotto: number,
-    idProdottoTipologiaLavoratore: number,
-    idAttore: number,
-    idTipologiaRicorso: number,
-    idProceduraRiferimento: number,
-    dataInizio: string,
-    dataFine: string,
-    dataScadenza: string,
-    account: string,
-    matricola: string
-  ): Observable<Rilevazione[]> {
-    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni?';
-    let parametriUrl = '';
-    if (idProdotto > 0) {
-      parametriUrl += '&idProdotto=' + idProdotto;
-    }
-    if (idProdottoTipologiaLavoratore > 0) {
-      parametriUrl += '&idProdottoTipologiaLavoratore=' + idProdottoTipologiaLavoratore;
-    }
-    if (idAttore > 0) {
-      parametriUrl += '&idAttore=' + idAttore;
-    }
-    if (idTipologiaRicorso > 0) {
-      parametriUrl += '&idTipologiaRicorso=' + idTipologiaRicorso;
-    }
-    if (idProceduraRiferimento > 0) {
-      parametriUrl += '&idProceduraRiferimento=' + idProceduraRiferimento;
-    }
-    if (dataInizio) {
-      parametriUrl += '&dataInizio=' + dataInizio;
-    }
-    if (dataFine) {
-      parametriUrl += '&dataFine=' + dataFine;
-    }
-    if (dataScadenza) {
-      parametriUrl += '&dataScadenza=' + dataScadenza;
-    }
-    if (account) {
-      parametriUrl += '&account=' + account;
-    }
-    if (matricola) {
-      parametriUrl += '&matricola=' + matricola;
-    }
-    url = url + parametriUrl.substring(1);
-    return this.http.get<Rilevazione[]>(url);
-  }
-
-  prendiInCarico(id: number): Observable<any> {
-    const headers = { 'content-type': 'application/json' };
-    const body = '';
-    return this.http.post(environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/' + id + '/presaIncarico', body, {
-      headers,
-    });
-  }
-
-  getScadenzaRilevazioni(
-    scadenza: string,
-    account: string,
-    matricola: string
-  ): Observable<Rilevazione[]> {
-    let url = environment.MS_SIRICOAPI + environment.API_URI + 'rilevazioni/scadenzaRilevazioni';
-    let parametriUrl = '';
-    if (account) {
-      parametriUrl += '&account=' + account;
-    }
-
-    if (matricola) {
-      parametriUrl += '&matricola=' + matricola;
-    }
-    if (scadenza != '' && scadenza != null) {
-      parametriUrl += '&scadenza=' + scadenza;
-    }
-    url = url + '?' + parametriUrl.substring(1);
-    return this.http.get<Rilevazione[]>(url);
-  } */
 
   httpOptions: Object = {
     headers: new HttpHeaders({
@@ -493,15 +278,15 @@ export class RilevazioneService {
 
     if (tipologiaSegnalazione == 'Prodotto') {
       return this.http.delete(
-        this.apiUrl +
-          'SegnalazioniEAspettiProdotti/eliminaSegnalazioneEDettagli/' +
+        this.mgUrl +
+          'SegnalazioniEAspettiProdottiGateway/eliminaSegnalazioneEDettagli/' +
           idSegnalazione,
         { headers }
       );
-    } /*if (tipologiaSegnalazione == 'Contenzioso')*/ else {
+    } else {
       return this.http.delete(
-        this.apiUrl +
-          'SegnalazioniEAspettiContenzioso/eliminaSegnalazioneEDettagli/' +
+        this.mgUrl +
+          'SegnalazioniEAspettiContenziosoGateway/eliminaSegnalazioneEDettagli/' +
           idSegnalazione,
         { headers }
       );
@@ -513,37 +298,20 @@ export class RilevazioneService {
 
     if (tipologiaSegnalazione == 'Prodotto') {
       return this.http.post<any>(
-        `${this.apiUrl}SegnalazioneProdotto/aggiorna-stato-segnalazione?idSegnalazione=` +
+        `${this.mgUrl}SegnalazioneProdottoGateway/aggiorna-stato-segnalazione?idSegnalazione=` +
           idSegnalazione +
           `&idStatoSegnalazione=` +
           (statoId + 1),
         headers
-      ); //this.httpOptions);
+      );
     } else {
       return this.http.post<any>(
-        `${this.apiUrl}SegnalazioniContenziosi/aggiorna-stato-segnalazione?idSegnalazione=` +
+        `${this.mgUrl}SegnalazioniContenziosiGateway/aggiorna-stato-segnalazione?idSegnalazione=` +
           idSegnalazione +
           `&idStatoSegnalazione=` +
           (statoId + 1),
         headers
-      ); //this.httpOptions);
+      );
     }
   }
 }
-
-// export interface DC_getSegnalazioneDTO
-// {
-//     public long Id { get; set; }
-//     public DateTime? DataInvio { get; set; }
-//     public DateTime? DataRisoluzione { get; set; }
-//     public long? SettoreId { get; set; }
-//     public string? SettoreNome { get; set; }
-//     public long AreaId { get; set; }
-//     public string? AreaNome { get; set; }
-//     public int StatoId { get; set; }
-//     public string? StatoDescrizione { get; set; }
-//     public string? SedeId { get; set; }
-//     public string? SedeNome { get; set; }
-//     public long? contenziosoId { get; set; }
-//     public string? contenziosoDesc { get; set; }
-// }

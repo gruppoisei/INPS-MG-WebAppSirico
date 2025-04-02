@@ -225,7 +225,7 @@ describe('ListaUtentiComponent', () => {
       expect(component._filterRegione).toHaveBeenCalled();
 
       expect(component.inizializzaPaginazione).toHaveBeenCalled();
-      expect(component.inizializzaPaginazioneScarti).toHaveBeenCalled();
+      //expect(component.inizializzaPaginazioneScarti).toHaveBeenCalled();
     });
   });
   

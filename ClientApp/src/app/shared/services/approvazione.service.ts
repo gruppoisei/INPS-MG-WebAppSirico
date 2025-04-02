@@ -11,7 +11,8 @@ export class ApprovazioneService {
   checkRisolviSegnalazione!: boolean;
   checkRisolviSegnalazione$: BehaviorSubject<boolean | undefined> = new BehaviorSubject<boolean | undefined>(this.checkRisolviSegnalazione);
 
-  private baseUrl = environment.MS_SIRICOAPI + environment.API_URI + 'approvazione';
+  //private baseUrl = environment.MS_SIRICOAPI + environment.API_URI + 'approvazione';
+  private mgwUrl = environment.MG_URL + 'ApprovazioneGateway'
 
   constructor(private http: HttpClient) { }
 
@@ -20,7 +21,7 @@ export class ApprovazioneService {
     if (ordineColonna) {
       params.ordineColonna = ordineColonna;
     }
-    return this.http.get<any[]>(`${this.baseUrl}/getSegnalazioniDaConfermare`, { params }).pipe(
+    return this.http.get<any[]>(`${this.mgwUrl}/getSegnalazioniDaConfermare`, { params }).pipe(
       map(datiEndpoint =>
         datiEndpoint.map(item => ({
           id: item.id,
@@ -45,11 +46,11 @@ export class ApprovazioneService {
   }
 
   confermaSegnalazioni(segnalazioni: any[]): Observable<string> {
-    return this.http.post<string>(`${this.baseUrl}/confermaSegnalazioni`, segnalazioni, { responseType: 'text' as 'json' });
+    return this.http.post<string>(`${this.mgwUrl}/confermaSegnalazioni`, segnalazioni, { responseType: 'text' as 'json' });
   }
 
   getSegnalazioniCount(): Promise<number> {
-    return this.http.get<{ totalCount: number }>(`${this.baseUrl}/count`).pipe(
+    return this.http.get<{ totalCount: number }>(`${this.mgwUrl}/count`).pipe(
       map(response => response.totalCount)
     ).toPromise() as Promise<number>;
   }

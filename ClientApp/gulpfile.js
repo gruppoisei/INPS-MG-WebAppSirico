@@ -8,5 +8,10 @@ gulp.task('copy-dist-to-wwwroot', () => {
         .pipe(gulp.dest(path.join(__dirname, '..', 'wwwroot', 'ClientApp'))); // Copia in wwwroot/ClientApp
 });
 
-// Esportiamo la task direttamente senza una default task
-exports['copy-dist-to-wwwroot'] = gulp.task('copy-dist-to-wwwroot');
+// Task di default che invoca la task copy-dist-to-wwwroot
+function defaultTask(cb) {
+    gulp.series('copy-dist-to-wwwroot')(cb);  // Esegue la task copy-dist-to-wwwroot come task di default
+}
+
+exports.default = defaultTask;
+exports['copy-dist-to-wwwroot'] = gulp.task('copy-dist-to-wwwroot'); // Esportiamo anche il task separato

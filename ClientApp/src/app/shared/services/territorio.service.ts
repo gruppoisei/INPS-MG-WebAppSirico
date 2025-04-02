@@ -14,19 +14,23 @@ export interface SedeDto {
 })
 export class TerritorioService {
   private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Territorio/';
+  private mgUrl = environment.MG_URL + 'TerritorioGateway/';
 
   constructor(private http: HttpClient) {}
 
   getAllSediSorted(): Observable<any> {
     return this.http
-      .get<{ sedeCodSede: string; sedeDesc: string }[]>(`${this.apiUrl}getAllSediSorted`)
+      .get<{ sedeCodSede: string; sedeDesc: string }[]>(`${this.mgUrl}getAllSediSorted`)
       .pipe(map(sedi => sedi.map(s => ({ id: parseInt(s.sedeCodSede, 10), nome: s.sedeDesc }))));
   }
 
   getSediSortedRegione(regCodSede: string | null): Observable<any> {
+    console.log('apiUrl: ' + this.apiUrl);
+    console.log('mgUrl: ' + this.mgUrl);
+    console.log('regCodSede: ' + regCodSede);
     return this.http
       .get<{ sedeCodSede: string; sedeDesc: string }[]>(
-        `${this.apiUrl}getSediSortedRegione/${regCodSede}`
+        `${this.mgUrl}getSediSortedRegione/${regCodSede}`
       )
       .pipe(map(sedi => sedi.map(s => ({ id: parseInt(s.sedeCodSede, 10), nome: s.sedeDesc }))));
   }
@@ -34,7 +38,7 @@ export class TerritorioService {
   getSediSortedProvincia(provCodSede: string | null): Observable<any> {
     return this.http
       .get<{ sedeCodSede: string; sedeDesc: string }[]>(
-        `${this.apiUrl}getSediSortedProvincia/${provCodSede}`
+        `${this.mgUrl}getSediSortedProvincia/${provCodSede}`
       )
       .pipe(map(sedi => sedi.map(s => ({ id: parseInt(s.sedeCodSede, 10), nome: s.sedeDesc }))));
   }
@@ -108,21 +112,21 @@ export class TerritorioService {
   }
 
   getRegioni(): Observable<any[]> {
-    let url = this.apiUrl + 'getAllRegioniSorted'
+    let url = this.mgUrl + 'getAllRegioniSorted'
     return this.http.get<any[]>(url);
   }
 
   getProvince(): Observable<any[]> {
-    let url = this.apiUrl + 'getAllProvinceSorted'
+    let url = this.mgUrl + 'getAllProvinceSorted'
     return this.http.get<any[]>(url);
   }
 
   getAllSediByIdRegione(codiceRegione: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}getSediSortedRegione/${codiceRegione}`);
+    return this.http.get<any[]>(`${this.mgUrl}getSediSortedRegione/${codiceRegione}`);
   }
 
   getAllProvinceByIdRegione(codiceRegione: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}getProvinceRegionebyRegCodSede/${codiceRegione}`);
+    return this.http.get<any[]>(`${this.mgUrl}getProvinceRegionebyRegCodSede/${codiceRegione}`);
   }
 
   verificaSediIntegrazioneRegionale(descSedeSegnalazione: string, sediUtente: string[]): Observable<{risultato: boolean}>{
@@ -132,10 +136,10 @@ export class TerritorioService {
       params = params.append('sediUtente', sedi)
     });
 
-    return this.http.get<{risultato: boolean}>(`${this.apiUrl}VerificaSediIntegrazioneRegionale`, { params })
+    return this.http.get<{ risultato: boolean }>(`${this.mgUrl}VerificaSediIntegrazioneRegionale`, { params })
   }
 
   getRegioniByIdSede(codiceSede: string): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}getRegioneByCodSede/${codiceSede}`);
+    return this.http.get<any>(`${this.mgUrl}getRegioneByCodSede/${codiceSede}`);
   }
 }

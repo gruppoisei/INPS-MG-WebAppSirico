@@ -70,6 +70,10 @@ export class AppComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
+    //console.log('var ambiente: ' + environment.MS_SIRICOAPI);
+    console.log('Per Collaudo');
+    console.log('window.location.href: ', window.location.href);
+
     this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {
         // Controlla se la navigazione è verso la route /dashboard
@@ -100,7 +104,7 @@ export class AppComponent implements OnInit {
         this.getComunicazioni();
       }
     }, 0);
-  
+
   }
 
   codeRuoliAccesso: string[] = [];
@@ -168,7 +172,12 @@ export class AppComponent implements OnInit {
           }
 
           // Reindirizzamento alla dashboard
-          window.location.href = '/dashboard';
+          if (window.location.href.includes("APP02/SunAM/SiricoWeb")) {
+            window.location.href = window.location.href + "/dashboard";
+          } else {
+            window.location.href = "/dashboard";
+          }
+
         } catch (error) {
           console.error("Errore durante la fetch delle descrizioni delle sedi:", error);
           this.showErrorMessage("Errore durante il caricamento delle descrizioni delle sedi.");
@@ -248,8 +257,13 @@ export class AppComponent implements OnInit {
                   this.storageService.remove('listaSedi');
                 }
 
-                // this.router.navigate(['/dashboard']);
-                window.location.href = '/dashboard';
+                // Reindirizzamento alla dashboard
+                if (window.location.href.includes("APP02/SunAM/SiricoWeb")) {
+                  window.location.href = window.location.href + "/dashboard";
+                } else {
+                  window.location.href = "/dashboard";
+                }
+
               },
               error: (err) => {
                 if (err.error.message) {

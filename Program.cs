@@ -1,23 +1,61 @@
-using Microsoft.Extensions.FileProviders;
+﻿using Microsoft.Extensions.FileProviders;
 using System.Net.WebSockets;
-using System.IO;
-using INPS_Sirico_WebAPI.Services;
+using System.Xml.Linq;
+using INPS_MVC_WebAppSirico.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpContextAccessor();  
+// 🔹 Percorso del file web.config
+var webConfigPath = Path.Combine(Directory.GetCurrentDirectory(), "web.config");
+
+// 🔹 Creiamo un dizionario per le configurazioni estratte
+var webConfigValues = new Dictionary<string, string>();
+
+if (File.Exists(webConfigPath))
+{
+    try
+    {
+        var doc = XDocument.Load(webConfigPath);
+        var appSettings = doc.Descendants("appSettings").Descendants("add");
+
+        foreach (var setting in appSettings)
+        {
+            var key = setting.Attribute("key")?.Value;
+            var value = setting.Attribute("value")?.Value;
+
+            if (!string.IsNullOrEmpty(key) && value != null)
+            {
+                webConfigValues[key] = value;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        // Errore ignorato, nessun messaggio in console
+    }
+}
+
+// 🔹 Configurazione dell'applicazione
+builder.Configuration
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddInMemoryCollection(webConfigValues) // Sovrascrive i valori di appsettings.json
+    .AddEnvironmentVariables();
+
+builder.Services.AddHttpContextAccessor();
 
 // Aggiungi i servizi al contenitore
 builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<DocumentiService>(); // Aggiungi il DocumentiService nel DI
 
-// Configura per servire i file statici dal percorso wwwroot/ClientApp/dist
+// Configura per servire i file statici dal percorso wwwroot/ClientApp
 builder.Services.AddSpaStaticFiles(configuration =>
 {
     configuration.RootPath = Path.Combine("wwwroot", "ClientApp");
 });
 
 // Abilitare HttpClientFactory
+builder.Services.AddControllers();
 builder.Services.AddHttpClient();
 
 var app = builder.Build();
@@ -34,7 +72,6 @@ app.UseStaticFiles(); // Serve file statici da wwwroot
 app.UseSpaStaticFiles(); // Serve file statici per la SPA (ClientApp/dist)
 app.UseWebSockets();
 app.UseRouting();
-
 app.UseAuthorization();
 
 // Configurazione SPA
@@ -43,7 +80,7 @@ app.UseSpa(spa =>
     // Configura il percorso della SPA
     spa.Options.SourcePath = "ClientApp";
     spa.Options.DefaultPage = "/ClientApp/index.html"; // La pagina predefinita da servire
-    
+
     // Assicurati che i file statici vengano trattati correttamente
     spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions
     {
@@ -57,6 +94,7 @@ app.UseSpa(spa =>
 app.Use(async (context, next) =>
 {
     if (context.Request.Path.StartsWithSegments("/api/notification") && context.WebSockets.IsWebSocketRequest)
+    //if (context.Request.Path.StartsWithSegments("/microgateway/NotificationHubGateway") && context.WebSockets.IsWebSocketRequest)
     {
         var webSocket = await context.WebSockets.AcceptWebSocketAsync();
         using var client = new ClientWebSocket();
@@ -106,5 +144,4 @@ app.Use(async (context, next) =>
 });
 
 app.MapControllers();
-
 app.Run();

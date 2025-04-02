@@ -228,47 +228,6 @@ import { IdmUser } from '@shared/interfaces/Idm-user';
       }));
     });
 
-    // describe('getAccountIdmLoggato', () => {
-    //   it('should fetch user data, parse roles and sede descriptions, and redirect to dashboard', fakeAsync(() => {
-    //     // Mock dei servizi
-    //     infoUtentiService.WhoAmI.and.returnValue(of(userResponse));
-    //     // infoUtentiService.fetchSedeDescriptions.and.returnValue(of(sedeDescriptions));
-    
-    //     // Mock dello storageService per il setItem
-    //     // storageService.setItem.and.callThrough();
-    
-    //     // Eseguiamo la chiamata al metodo
-    //     component.getAccountIdmLoggato();
-    //     // tick(); // Avanzare il timer per gestire la chiamata asincrona
-    
-    //     // // Verifica che i dati siano stati salvati nello storage
-    //     expect(storageService.setItem).toHaveBeenCalledWith('username', 'Username');
-    //     expect(storageService.setItem).toHaveBeenCalledWith('matricola', 'E000-123');
-    //     expect(storageService.setItem).toHaveBeenCalledWith('allroles', 'P12689; P12801; P12799; P13000');
-    //     expect(storageService.setItem).toHaveBeenCalledWith('roleDesc', [
-    //       'Amministratore',
-    //       'Referente Territoriale',
-    //       'Referente Regionale',
-    //       'Utente'
-    //     ]);
-    //     expect(storageService.setItem).toHaveBeenCalledWith('isLogged', true);
-    
-    //     // Verifica che la listaSedi sia correttamente formattata
-    //     expect(storageService.setItem).toHaveBeenCalledWith('listaSedi', [
-    //       { sedeCode: '050000', descSede: 'P12801', role: 'Amministratore' },
-    //       { sedeCode: '500000', descSede: 'P12801', role: 'Referente Territoriale' },
-    //       { sedeCode: '040000', descSede: 'P12801', role: 'Referente Regionale' }
-    //     ]);
-    
-    //     // Verifica che il router abbia effettuato il reindirizzamento
-    //     expect(window.location.href).toBe('/dashboard');
-    //   }));
-    // });
-  
-    // il metodo verrà rimosso in ambiente inps, test omesso
-    // describe('getAccountLoggato', () => {
-    // });
-
     describe('getComunicazioni', () => {
       it('should open the popup if comunicazioni are returned', () => {
         const mockComunicazioni = JSON.parse(mockComunicazioniJSON);

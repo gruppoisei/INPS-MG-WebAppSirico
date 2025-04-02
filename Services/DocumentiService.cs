@@ -1,32 +1,31 @@
-﻿// using INPS_Sirico_WebAPI.Core.Entities;
-using System.Text.RegularExpressions;
-// using INPS_Sirico_WebAPI.DTO;
+﻿using System.Text.RegularExpressions;
 using System.IO.Compression;
 
-
-namespace INPS_Sirico_WebAPI.Services
+namespace INPS_MVC_WebAppSirico.Services
 {
-    public class DocumentiService //: IService
+    public class DocumentiService
     {
+        private readonly IConfiguration _configuration;
 
-        // private readonly SiricoNewContext _context;
+        public DocumentiService(IConfiguration configuration)
+        {
+            _configuration = configuration;
+        }
 
-        // public DocumentiService(SiricoNewContext context)
-        // {
-        //     _context = context;
-        // }
         public VerificaAllegatoDTO VerificaAggiungiAllegato(IFormFile file)
         {
             try
             {
                 VerificaAllegatoDTO response = new VerificaAllegatoDTO();
 
-                string? tipo = Environment.GetEnvironmentVariable("TIPOESTENSIONE");//infoAllegato[0].Valore;
-                int dimensioneMax = Convert.ToInt32(Environment.GetEnvironmentVariable("DIMENSIONEMB"));
+                string? tipo = _configuration["TIPOESTENSIONE"] ?? "VARIABILE NON TROVATA";
+                int dimensioneMax = Convert.ToInt32(_configuration["DIMENSIONEMB"] ?? "0");
 
                 response.TipoAllegatoValido = VerificaTipoAllegato(file.FileName, tipo);
                 response.DimensioneAllegatoValida = VerificaDimensioneAllegato((int)file.Length, dimensioneMax);
                 response.FormatoAllegatoValido = VerificaFormatoAllegato(file);
+
+                response.tipoEstensione = tipo;
 
                 return response;
             }
@@ -41,13 +40,13 @@ namespace INPS_Sirico_WebAPI.Services
             switch (ruolo)
             {
                 case "P12689":
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEAMMINISTRATORE"));
+                    return Path.Combine(baseFolder, _configuration["FILEAMMINISTRATORE"] ?? "VARIABILE NON TROVATA");
                 case "P12690":
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEAMMINISTRATIVO"));
+                    return Path.Combine(baseFolder, _configuration["FILEAMMINISTRATIVO"] ?? "VARIABILE NON TROVATA");
                 case "P12799":
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEREGIONALE"));
+                    return Path.Combine(baseFolder, _configuration["FILEREGIONALE"] ?? "VARIABILE NON TROVATA");
                 case "P12801":
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEPROVINCIALE"));
+                    return Path.Combine(baseFolder, _configuration["FILEPROVINCIALE"] ?? "VARIABILE NON TROVATA");
                 default:
                     return baseFolder;
             }
@@ -84,6 +83,7 @@ namespace INPS_Sirico_WebAPI.Services
                 throw new Exception("Errore dimensione file : " + ex.Message);
             }
         }
+        
         private bool VerificaFormatoAllegato(IFormFile fileAllegato)
         {
             try
@@ -140,6 +140,13 @@ namespace INPS_Sirico_WebAPI.Services
                             trovato = true;
                         }
                         break;
+                    case ".png":
+                        if (binData.Length > 8 && binData[0] == 0x89 && binData[1] == 0x50 && binData[2] == 0x4E && binData[3] == 0x47 &&
+                            binData[4] == 0x0D && binData[5] == 0x0A && binData[6] == 0x1A && binData[7] == 0x0A)
+                        {
+                            trovato = true;
+                        }
+                        break;
                 }
 
                 return trovato;
@@ -150,14 +157,37 @@ namespace INPS_Sirico_WebAPI.Services
             }
         }
 
-        private string GetFilePath(string folderName)
+        private async Task<string> GetFilePath(string folderName)
         {
             try
             {
                 string? filePath = "";
 
-                filePath = Environment.GetEnvironmentVariable("PATHGENERICO").Replace(@"\\", @"\").Replace(@"\\\\", @"\\");
-                string? subDir = Environment.GetEnvironmentVariable(folderName);
+                filePath = _configuration["PATHGENERICO"] ?? "VARIABILE NON TROVATA"; //"\\\\filesrvs.ser-test.inps\\root\\Applicazioni\\Web\\Sirico";
+
+                string ? subDir = "";
+
+                if (folderName == "CARTELLA_PRODOTTI_DATI_GENERALI")
+                {
+                    subDir = _configuration["CARTELLA_PRODOTTI_DATI_GENERALI"] ?? "VARIABILE NON TROVATA";
+                }
+
+                if (folderName == "CARTELLA_CONTENZIOSI_DATI_GENERALI")
+                {
+                    subDir = _configuration["CARTELLA_CONTENZIOSI_DATI_GENERALI"] ?? "VARIABILE NON TROVATA";
+                }
+
+
+                if (folderName == "CARTELLA_PRODOTTI_CRITICITA")
+                {
+                    subDir = _configuration["CARTELLA_PRODOTTI_CRITICITA"] ?? "VARIABILE NON TROVATA";
+                }
+
+                if (folderName == "CARTELLA_CONTENZIOSI_CRITICITA")
+                {
+                    subDir = _configuration["CARTELLA_CONTENZIOSI_CRITICITA"] ?? "VARIABILE NON TROVATA";
+                }
+
                 string? fullPath = Path.Combine(filePath, subDir);
 
                 return fullPath;
@@ -167,51 +197,64 @@ namespace INPS_Sirico_WebAPI.Services
             {
                 throw new InvalidOperationException("Errore percorso non trovato" + ex);
             }
-        }
-        private string CreateDirectory(long? id, string folderName)
+        }       
+
+        private async Task<string> CreateDirectory(long? id, string folderName)
         {
+            string fullPath = "";
+            string lsFolderPath = "";
+            bool contiene3slah = false;
             try
             {
-                string fullPath = GetFilePath(folderName);
-                string lsFolderPath = (id != null) ? Path.Combine(fullPath, id.ToString()) : fullPath;
-                Directory.CreateDirectory(lsFolderPath);
+                fullPath = await GetFilePath(folderName);
+                lsFolderPath = (id != null) ? Path.Combine(fullPath, id.ToString()) : fullPath;
+
+                if (lsFolderPath.Contains(@"\\\"))
+                {
+                    lsFolderPath = lsFolderPath.Replace(@"\\\", @"\");
+                    contiene3slah = true;
+                }
+
+
+                if (!Directory.Exists(lsFolderPath))
+                {
+                    Directory.CreateDirectory(lsFolderPath);
+                }
                 return lsFolderPath;
             }
             catch (Exception ex)
             {
-                throw new InvalidOperationException("Impossibile creare la cartella" + ex);
+                string msg = ex.Message + " " + "fullpath: " + fullPath + " lsFolderPath: " + lsFolderPath + "contiene 3 slash: " + contiene3slah + " utente applicativo: " + Environment.UserName;
+                throw new InvalidOperationException("Impossibile creare la cartella " + msg);
             }
         }
 
         public async Task<bool> SalvaFileAllegati(long? id, List<IFormFile> fileAllegati, string folderName, string[]? risultato, bool isProvinciale = false, bool isRegionale = false, bool isAmministrativo = false, bool isAmministratore = false)
         {
-
-            // risultato = risultato.Select(s => s == "-1" ? idNuovoAspetto : s).ToArray();
-
             string GetRuoloFolder(string baseFolder)
             {
                 if (isAmministratore)
                 {
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEAMMINISTRATORE"));
+                    return Path.Combine(baseFolder, _configuration["FILEAMMINISTRATORE"] ?? "VARIABILE NON TROVATA");
                 }
                 else if (isAmministrativo)
                 {
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEAMMINISTRATIVO"));
+                    return Path.Combine(baseFolder, _configuration["FILEAMMINISTRATIVO"] ?? "VARIABILE NON TROVATA");
                 }
                 else if (isRegionale)
                 {
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEREGIONALE"));
+                    return Path.Combine(baseFolder, _configuration["FILEREGIONALE"] ?? "VARIABILE NON TROVATA");
                 }
                 else if (isProvinciale)
                 {
-                    return Path.Combine(baseFolder, Environment.GetEnvironmentVariable("FILEPROVINCIALE"));
+                    return Path.Combine(baseFolder, _configuration["FILEPROVINCIALE"] ?? "VARIABILE NON TROVATA");
                 }
                 return baseFolder;
-            }
+            }            
 
             if (risultato == null)
             {
-                string allegatiFolder = CreateDirectory(id, folderName);
+                string allegatiFolder = await CreateDirectory(id, folderName);
                 allegatiFolder = GetRuoloFolder(allegatiFolder);
 
                 if (!Directory.Exists(allegatiFolder))
@@ -237,17 +280,23 @@ namespace INPS_Sirico_WebAPI.Services
                     }
                     catch (Exception ex)
                     {
-                        throw new Exception($"Errore durante il salvataggio del file: {ex.Message}");
+                        string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                        throw new Exception($"Errore durante il salvataggio del file: {msg}");
                     }
                 }
             }
             else
             {
-                string baseFolder = CreateDirectory(id, folderName);
+                string baseFolder = await CreateDirectory(id, folderName);
 
                 for (int i = 0; i < risultato.Length; i++)
                 {
                     string aspettoFolder = Path.Combine(baseFolder, risultato[i]);
+
+                    if (aspettoFolder.Contains(@"\\\"))
+                    {
+                        aspettoFolder = aspettoFolder.Replace(@"\\\", @"\");
+                    }
 
                     if (!Directory.Exists(aspettoFolder))
                     {
@@ -276,9 +325,14 @@ namespace INPS_Sirico_WebAPI.Services
 
         public async Task<bool> DeleteFileSegnalazioneAsync(long id, string filename, string folderName, string? ruolo)
         {
-            string filePath = GetFilePath(folderName);
+            string filePath = await GetFilePath(folderName);
 
             string datiGeneraliPath = Path.Combine(filePath, id.ToString());
+
+            if (datiGeneraliPath.Contains(@"\\\"))
+            {
+                datiGeneraliPath = datiGeneraliPath.Replace(@"\\\", @"\");
+            }
 
             if (!Directory.Exists(datiGeneraliPath))
             {
@@ -351,9 +405,14 @@ namespace INPS_Sirico_WebAPI.Services
 
         public async Task<bool> DeleteFileAspettoAsync(long id, long idAspetto, string fileName, string folderName, string ruolo)
         {
-            string filePath = GetFilePath(folderName);
+            string filePath = await GetFilePath(folderName);
             string aspettiPath = Path.Combine(filePath, id.ToString());
             string aspettoFilePath = Path.Combine(aspettiPath, idAspetto.ToString());
+
+            if (aspettoFilePath.Contains(@"\\\"))
+            {
+                aspettoFilePath = aspettoFilePath.Replace(@"\\\", @"\");
+            }
 
             if (!Directory.Exists(aspettoFilePath))
             {
@@ -383,16 +442,25 @@ namespace INPS_Sirico_WebAPI.Services
             {
                 return false;
             }
-
         }
+
         public async Task<bool> DeleteAllFilesSegnalazioneAsync(long idSegnalazione, string cartellaSegnalazione, string cartellaAspetti)
         {
-            string filePath = GetFilePath(cartellaSegnalazione);
+            string filePath = await GetFilePath(cartellaSegnalazione);
             string pathSegnalazione = Path.Combine(filePath, idSegnalazione.ToString());
-            string filePathAspetti = GetFilePath(cartellaAspetti);
+            string filePathAspetti = await GetFilePath(cartellaAspetti);
             string pathAspetti = Path.Combine(filePathAspetti, idSegnalazione.ToString());
 
+            if (pathSegnalazione.Contains(@"\\\"))
+            {
+                pathSegnalazione = pathSegnalazione.Replace(@"\\\", @"\");
+            }
             bool segnalazioneExists = Directory.Exists(pathSegnalazione);
+
+            if (pathAspetti.Contains(@"\\\"))
+            {
+                pathAspetti = pathAspetti.Replace(@"\\\", @"\");
+            }
             bool aspettiExists = Directory.Exists(pathAspetti);
 
             if (!segnalazioneExists && !aspettiExists)
@@ -413,16 +481,22 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (Exception ex)
             {
-                throw new DirectoryNotFoundException("Nessuna directory trovata: " + ex);
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new DirectoryNotFoundException("Nessuna directory trovata: " + msg);
             }
             return false;
         }
 
         public async Task<(byte[] FileContent, string FileName)> GetFileSegnalazioneByIdAsync(long id, string folderName, string? ruolo)
         {
-            string filePath = GetFilePath(folderName);
+            string filePath = await GetFilePath(folderName);
 
             string datiGeneraliPath = Path.Combine(filePath, id.ToString());
+
+            if (datiGeneraliPath.Contains(@"\\\"))
+            {
+                datiGeneraliPath = datiGeneraliPath.Replace(@"\\\", @"\");
+            }
 
             if (!Directory.Exists(datiGeneraliPath))
             {
@@ -432,6 +506,11 @@ namespace INPS_Sirico_WebAPI.Services
             if (!string.IsNullOrEmpty(ruolo))
             {
                 string roleFolderPath = GetRuoloFolder(datiGeneraliPath, ruolo);
+
+                if (roleFolderPath.Contains(@"\\\"))
+                {
+                    roleFolderPath = roleFolderPath.Replace(@"\\\", @"\");
+                }
 
                 if (!Directory.Exists(roleFolderPath))
                 {
@@ -489,9 +568,14 @@ namespace INPS_Sirico_WebAPI.Services
 
         public virtual async Task<(byte[] FileContent, string FileName)> GetFileAspettoByIdAsync(long id, long idAspetto, string folderName, string ruolo)
         {
-            string filePath = GetFilePath(folderName);
+            string filePath = await GetFilePath(folderName);
             string aspettiPath = Path.Combine(filePath, id.ToString());
             string aspettoFilePath = Path.Combine(aspettiPath, idAspetto.ToString());
+
+            if (aspettoFilePath.Contains(@"\\\"))
+            {
+                aspettoFilePath = aspettoFilePath.Replace(@"\\\", @"\");
+            }
 
             if (!Directory.Exists(aspettoFilePath))
             {
@@ -551,8 +635,13 @@ namespace INPS_Sirico_WebAPI.Services
 
             try
             {
-                string filePath = GetFilePath(folderName);
+                string filePath = await GetFilePath(folderName);
                 string aspettiPath = Path.Combine(filePath, idSegnalazione.ToString());
+
+                if (aspettiPath.Contains(@"\\\"))
+                {
+                    aspettiPath = aspettiPath.Replace(@"\\\", @"\");
+                }
 
                 if (!Directory.Exists(aspettiPath))
                 {
@@ -562,6 +651,11 @@ namespace INPS_Sirico_WebAPI.Services
                 foreach (var idAspetto in idAspetti)
                 {
                     string aspettoFolderPath = Path.Combine(aspettiPath, idAspetto.ToString());
+
+                    if (aspettoFolderPath.Contains(@"\\\"))
+                    {
+                        aspettoFolderPath = aspettoFolderPath.Replace(@"\\\", @"\");
+                    }
 
                     if (!Directory.Exists(aspettoFolderPath))
                     {
@@ -604,7 +698,8 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante la verifica degli allegati della segnalazione", ex);
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore durante la verifica degli allegati della segnalazione: {msg}");
             }
         }
 
@@ -612,19 +707,36 @@ namespace INPS_Sirico_WebAPI.Services
         {
             try
             {
-                string filePath = GetFilePath(folderName);
+                string filePath = await GetFilePath(folderName);
                 string idSegnalazionePathAspetti = Path.Combine(filePath, idSegnalazione.ToString());
+
+                if (idSegnalazionePathAspetti.Contains(@"\\\"))
+                {
+                    idSegnalazionePathAspetti = idSegnalazionePathAspetti.Replace(@"\\\", @"\");
+                }
 
                 if (!Directory.Exists(idSegnalazionePathAspetti))
                 {
                     return false;
                 }
                 string idAspettoPath = Path.Combine(idSegnalazionePathAspetti, idAspetto.ToString());
+
+                if (idAspettoPath.Contains(@"\\\"))
+                {
+                    idAspettoPath = idAspettoPath.Replace(@"\\\", @"\");
+                }
+
                 if (!Directory.Exists(idAspettoPath))
                 {
                     return false;
                 }
                 string aspettoRuoloPath = GetRuoloFolder(idAspettoPath, ruolo);
+
+                if (aspettoRuoloPath.Contains(@"\\\"))
+                {
+                    aspettoRuoloPath = aspettoRuoloPath.Replace(@"\\\", @"\");
+                }
+
                 if (!Directory.Exists(aspettoRuoloPath))
                 {
                     return false;
@@ -634,7 +746,8 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante la verifica degli allegati della segnalazione", ex);
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore durante la verifica degli allegati della segnalazione: {msg}");
             }
         }
 
@@ -642,10 +755,13 @@ namespace INPS_Sirico_WebAPI.Services
         {
             try
             {
-                string filePath = GetFilePath(folderName);
-                Console.WriteLine(filePath);
-
+                string filePath = await GetFilePath(folderName);
                 string datiGeneraliPath = Path.Combine(filePath, idSegnalazione.ToString());
+
+                if (datiGeneraliPath.Contains(@"\\\"))
+                {
+                    datiGeneraliPath = datiGeneraliPath.Replace(@"\\\", @"\");
+                }
 
                 if (!Directory.Exists(datiGeneraliPath))
                 {
@@ -668,6 +784,11 @@ namespace INPS_Sirico_WebAPI.Services
                 {
                     string ruoloFolder = GetRuoloFolder(datiGeneraliPath, ruolo);
 
+                    if (ruoloFolder.Contains(@"\\\"))
+                    {
+                        ruoloFolder = ruoloFolder.Replace(@"\\\", @"\");
+                    }
+
                     if (Directory.Exists(ruoloFolder))
                     {
                         bool hasFiles = Directory.EnumerateFiles(ruoloFolder).Any();
@@ -683,7 +804,8 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (Exception ex)
             {
-                throw new Exception("Errore durante la verifica degli allegati della segnalazione", ex);
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore durante la verifica degli allegati della segnalazione: {msg}");
             }
         }
 
@@ -691,7 +813,7 @@ namespace INPS_Sirico_WebAPI.Services
         {
             try
             {
-                string allegatiFolder = CreateDirectory(idSegnalazione, folderName);
+                string allegatiFolder = await CreateDirectory(idSegnalazione, folderName);
 
                 allegatiFolder = GetRuoloFolder(allegatiFolder, ruolo);
                 Directory.CreateDirectory(allegatiFolder);
@@ -712,7 +834,8 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (Exception ex)
             {
-                throw new Exception($"Errore durante l'allegato del file: {ex.Message}");
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore durante l'allegato del file: {msg}");
             }
         }
 
@@ -720,7 +843,7 @@ namespace INPS_Sirico_WebAPI.Services
         {
             try
             {
-                string filePath = CreateDirectory(idSegnalazione, folderName);
+                string filePath = await CreateDirectory(idSegnalazione, folderName);
 
                 string aspettoFolder = Path.Combine(filePath, idAspetto.ToString());
                 Directory.CreateDirectory(aspettoFolder);
@@ -745,15 +868,18 @@ namespace INPS_Sirico_WebAPI.Services
             }
             catch (IOException ioEx)
             {
-                throw new Exception($"Errore di I/O durante l'allegato del file: {ioEx.Message}");
+                string msg = ioEx.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore di I/O durante l'allegato del file: {msg}");
             }
             catch (UnauthorizedAccessException uaEx)
             {
-                throw new Exception($"Accesso negato durante l'allegato del file: {uaEx.Message}");
+                string msg = uaEx.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Accesso negato durante l'allegato del file: {msg}");
             }
             catch (Exception ex)
             {
-                throw new Exception($"Errore durante l'allegato del file: {ex.Message}");
+                string msg = ex.Message + " " + "utente applicativo: " + Environment.UserName;
+                throw new Exception($"Errore durante l'allegato del file: {msg}");
             }
         }
     }

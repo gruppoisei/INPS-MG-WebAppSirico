@@ -17,20 +17,24 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MS_SIRICOAPI": "http://localhost:5250/api/",
-        //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
         "WEB_SOCKET": "ws://localhost:5250/api/notification",
         //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
+        "CODAPPLICATIVO": "A8006",
+        "XIBMClientId": "6cbaede6295052cc33021348824932a0",
+        "XIBMClientSecret": "YTQ2ZjgwMmZmZjIxNjk0NjQ0Y2QxNjhmMDhhZjAxMTk=",
+        "CodiceAssetApplicativo": "WA04122",
         "PATHGENERICO": "C:/SiricoNew/",
         "CARTELLA_PRODOTTI_DATI_GENERALI": "ProdottiDatiGenerali",
         "CARTELLA_CONTENZIOSI_DATI_GENERALI": "ContenziosiDatiGenerali",
         "CARTELLA_CONTENZIOSI_CRITICITA": "ContenziosiCriticita",
         "CARTELLA_PRODOTTI_CRITICITA": "ProdottiCriticita",
         "DIMENSIONEMB": "5",
-        "TIPOESTENSIONE": ".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.bmp",
+        "TIPOESTENSIONE": ".doc,.docx,.xls,.xlsx,.pdf,.jpg,.jpeg,.bmp,.png",
         "FILEPROVINCIALE": "FileProvinciale",
         "FILEREGIONALE": "FileRegionale",
         "FILEAMMINISTRATIVO": "FileAmministrativo",
-        "FILEAMMINISTRATORE": "FileAmministratore"
+        "FILEAMMINISTRATORE": "FileAmministratore",
+        "MS_SiricoGatewayClient": "http://localhost:5250"
       }
     },
     "https": {
@@ -41,7 +45,6 @@
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
         "MS_SIRICOAPI": "http://localhost:5250/api/",
-        //"MS_SIRICOAPI": "http://192.0.2.147:100/api/",
         "WEB_SOCKET": "ws://localhost:5250/api/notification"
         //"WEB_SOCKET": "ws://192.0.2.147:100/api/notification",
       }

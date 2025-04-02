@@ -6,11 +6,12 @@ module.exports = function (config) {
     basePath: '',
     frameworks: ['jasmine', '@angular-devkit/build-angular'],
     plugins: [
-      require('karma-jasmine'),
-      require('karma-chrome-launcher'),
-      require('karma-jasmine-html-reporter'),
-      require('karma-coverage'),
-      require('@angular-devkit/build-angular/plugins/karma')
+      require("karma-jasmine"),
+      require("karma-chrome-launcher"),
+      require("karma-jasmine-html-reporter"),
+      require("karma-coverage"),
+      require("karma-sonarqube-reporter"),
+      require("@angular-devkit/build-angular/plugins/karma"),
     ],
     client: {
       jasmine: {
@@ -25,25 +26,29 @@ module.exports = function (config) {
       suppressAll: true // removes the duplicated traces
     },
     coverageReporter: {
-      dir: require('path').join(__dirname, './coverage/sirico'),
-      subdir: '.',
-      reporters: [
-        { type: 'html' },
-        { type: 'text-summary' }
-      ]
+      dir: require("path").join(__dirname, "./coverage"),
+      subdir: ".",
+      reporters: [ { type: 'lcov' }]
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
     autoWatch: true,
-    browsers: ['Chrome'],
-    singleRun: false,
+	browsers: ["MyChromeHeadless"],
+    customLaunchers: {
+      MyChromeHeadless: {
+        base: "ChromeHeadless",
+        flags: ["--no-sandbox"],
+      },
+    },
+    singleRun: true,
     restartOnFileChange: true,
     files: [
-      'node_modules/zone.js/dist/zone.js',
+	  'node_modules/zone.js/dist/zone.js',
       'node_modules/zone.js/dist/zone-testing.js',
       'src/test.ts',
+      // altri file...
     ],
   });
 };

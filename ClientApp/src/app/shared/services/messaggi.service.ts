@@ -8,7 +8,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class MessaggiService {
 
-  private apiUrl = environment.MS_SIRICOAPI +  environment.API_URI + 'Bacheca/';
+  //private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'Bacheca/';
+  private mgUrl = environment.MG_URL + 'BachecaGateway/';
 
   datiMessaggio!: any;
   datiMessaggio$: BehaviorSubject<any | undefined> = new BehaviorSubject<any | undefined>(this.datiMessaggio);
@@ -20,11 +21,7 @@ export class MessaggiService {
 
   contaMessaggi(attivo: boolean): Observable<{ totale: number }> {
 
-    // const URL = this.apiUrl + 'contaMessaggiAttivi';
-    const URL = `${this.apiUrl}contaMessaggi?visibilita=${attivo}`;
-
-    // console.log('params:',params);
-    // console.log('URL:',URL);
+    const URL = `${this.mgUrl}contaMessaggi?visibilita=${attivo}`;
     return this.http.get<{ totale: number }>(URL);
   }
 
@@ -36,9 +33,7 @@ export class MessaggiService {
     if (ordinamentoColonna) params = params.set('ordinamentoColonna', ordinamentoColonna);
     if (attivo != null && attivo != undefined) params = params.set('visibilita', attivo.toString());
 
-    const URL = this.apiUrl + 'getAllMessaggi' + '?' + params.toString();
-    // const URL = this.apiUrl + 'getAllMessaggi' + '?' + params.toString() + '&visibilita=' + attivo;
-
+    const URL = this.mgUrl + 'getAllMessaggi' + '?' + params.toString();
     return this.http.get<BachecaDTO[]>(URL);
   }
 
@@ -47,17 +42,15 @@ export class MessaggiService {
     console.log('Request body:', body);
 
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}updateMessaggioAttivo`;
-
+    const url = `${this.mgUrl}updateMessaggioAttivo`;
     return this.http.put<any>(url, body, { headers });
   }
-
 
   insertMessaggio(oggettoMessaggio: string, contenutoMessaggio: string, matricolaUtente: string): Observable<boolean>  {
 
     const body = {oggettoMessaggio, contenutoMessaggio, matricolaUtente}
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}insertMessaggio`;
+    const url = `${this.mgUrl}insertMessaggio`;
 
     return this.http.post<any>(url, body, {headers});
   }
@@ -65,7 +58,7 @@ export class MessaggiService {
   disattivaMessaggioAttivo(idMessaggio: number): Observable<boolean>  {
 
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}disattivaMessaggio?idMessaggio=${idMessaggio}`;
+    const url = `${this.mgUrl}disattivaMessaggio?idMessaggio=${idMessaggio}`;
 
     return this.http.get<any>(url, {headers});
   }
@@ -73,11 +66,10 @@ export class MessaggiService {
   riattivaMessaggioDisattivato(idMessaggio: number): Observable<boolean>  {
 
     const headers = { 'content-type': 'application/json' };
-    const url = `${this.apiUrl}riattivaMessaggio?idMessaggio=${idMessaggio}`;
+    const url = `${this.mgUrl}riattivaMessaggio?idMessaggio=${idMessaggio}`;
 
     return this.http.get<any>(url, {headers});
   }
-
 }
 
 export interface BachecaDTO {
@@ -86,7 +78,5 @@ export interface BachecaDTO {
   oggetto: string;
   messaggio: string;
   utente: string;
-  //nome: string;
-  //cognome: string;
   visibile: boolean;
 }

@@ -8,4 +8,5 @@ export const environment = {    // da usare in INPS
   // MS_SIRICOAPI: 'http://ms01098-siricoapi-af-bi.apps.ocps.sviluppo.inps.it',
   useHash: false,
   loginIDM: true,
+  environmentName: 'production' // Nome personalizzato dell'ambiente
 };

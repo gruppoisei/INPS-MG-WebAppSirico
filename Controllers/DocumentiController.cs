@@ -1,11 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
-// using INPS_Sirico_WebAPI.DTO;
-using INPS_Sirico_WebAPI.Services;
+using INPS_MVC_WebAppSirico.Services;
 
-namespace INPS_Sirico_WebAPI.Controllers
+namespace INPS_MVC_WebAppSirico.Controllers
 {
     [Route("microgateway/[controller]")]
-    // [Route("api/[controller]")]
     [ApiController]
     public class DocumentiController : ControllerBase
     {
@@ -158,8 +156,9 @@ namespace INPS_Sirico_WebAPI.Controllers
                 {
                     return BadRequest(new
                     {
-                        Message = "Il formato del file non è supportato.<br>" +
-                        "Assicurati che il file sia in uno dei seguenti formati: .doc, .docx, .xls, .xlsx, .pdf, .jpeg, .jpg, .bmp."
+                        Message = "Il formato del file non è supportato.<br> " + 
+                        "Tipo Estensione: " + res.tipoEstensione + "<br> " + 
+                        " Assicurati che il file sia in uno dei seguenti formati: .doc, .docx, .xls, .xlsx, .pdf, .jpeg, .jpg, .bmp, .png."
                     });
                 }
                 if (res.DimensioneAllegatoValida is false)
@@ -175,7 +174,7 @@ namespace INPS_Sirico_WebAPI.Controllers
                     return BadRequest(new
                     {
                         Message = "Il formato del file non è valido.<br>" +
-                        "Assicurati che sia un file genuino nei formati supportati: .doc, .docx, .xls, .xlsx, .pdf, .jpeg, .jpg, .bmp."
+                        "Assicurati che sia un file genuino nei formati supportati: .doc, .docx, .xls, .xlsx, .pdf, .jpeg, .jpg, .bmp, .png."
                     });
                 }
 
@@ -306,11 +305,10 @@ namespace INPS_Sirico_WebAPI.Controllers
                 return StatusCode(500, new { message = "Errore durante l'inserimento del file", error = ex.Message });
             }
         }
-    
+
 
 
         [HttpPost("salvaAllegatiSegnalazioneProdotto")]
-        //public async Task<ActionResult<bool>> SalvaSegnalazioneProdotto([FromBody] SalvaSegnalazioneDTO segnalazioneCompletaDto, [FromForm] List<IFormFile> fileAllegati)
         public async Task<IActionResult> SalvaAllegatiSegnalazioneProdotto(
             [FromForm] int idSegnalazione,
             [FromForm] int idNuovoAspetto,
@@ -331,19 +329,18 @@ namespace INPS_Sirico_WebAPI.Controllers
                 if (fileSegnalazione.Count > 0)
                 {
                     result = await documentiService.SalvaFileAllegati(idSegnalazione, fileSegnalazione, "CARTELLA_PRODOTTI_DATI_GENERALI", null, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
-                    // result = await documentiService.SalvaFileAllegati(segnalazione.Id, fileSegnalazione, "CARTELLA_PRODOTTI_DATI_GENERALI", null, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
                 }
 
                 if (filesAspetti.Count > 0)
                 {
                     string[] arrayAspetti = idAspetti[0].Trim('[', ']').Split(',').Select(s => s.Trim()).ToArray();
-                    if (idNuovoAspetto != -1) {
+                    if (idNuovoAspetto != -1)
+                    {
                         arrayAspetti = arrayAspetti.Select(s => s == "-1" ? idNuovoAspetto.ToString() : s).ToArray();
                     }
 
                     // Salva i file allegati
                     result = await documentiService.SalvaFileAllegati(idSegnalazione, filesAspetti, "CARTELLA_PRODOTTI_CRITICITA", arrayAspetti, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
-                    // result = await documentiService.SalvaFileAllegati(segnalazione.Id, filesAspetti, "CARTELLA_PRODOTTI_CRITICITA", arrayAspetti, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
                 }
 
                 return Ok(new { message = result });
@@ -353,9 +350,8 @@ namespace INPS_Sirico_WebAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-    
+
         [HttpPost("salvaAllegatiSegnalazioneContenzioso")]
-        //public async Task<ActionResult<bool>> SalvaSegnalazioneProdotto([FromBody] SalvaSegnalazioneDTO segnalazioneCompletaDto, [FromForm] List<IFormFile> fileAllegati)
         public async Task<IActionResult> SalvaAllegatiSegnalazioneContenzioso(
             [FromForm] int idSegnalazione,
             [FromForm] int idNuovoAspetto,
@@ -376,19 +372,18 @@ namespace INPS_Sirico_WebAPI.Controllers
                 if (fileSegnalazione.Count > 0)
                 {
                     result = await documentiService.SalvaFileAllegati(idSegnalazione, fileSegnalazione, "CARTELLA_CONTENZIOSI_DATI_GENERALI", null, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
-                    // result = await documentiService.SalvaFileAllegati(segnalazione.Id, fileSegnalazione, "CARTELLA_PRODOTTI_DATI_GENERALI", null, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
                 }
 
                 if (filesAspetti.Count > 0)
                 {
                     string[] arrayAspetti = idAspetti[0].Trim('[', ']').Split(',').Select(s => s.Trim()).ToArray();
-                    if (idNuovoAspetto != -1) {
+                    if (idNuovoAspetto != -1)
+                    {
                         arrayAspetti = arrayAspetti.Select(s => s == "-1" ? idNuovoAspetto.ToString() : s).ToArray();
                     }
 
                     // Salva i file allegati
                     result = await documentiService.SalvaFileAllegati(idSegnalazione, filesAspetti, "CARTELLA_CONTENZIOSI_CRITICITA", arrayAspetti, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
-                    // result = await documentiService.SalvaFileAllegati(segnalazione.Id, filesAspetti, "CARTELLA_PRODOTTI_CRITICITA", arrayAspetti, isProvinciale, isRegionale, isAmministrativo, isAmministratore);
                 }
 
                 return Ok(new { message = result });
@@ -398,7 +393,7 @@ namespace INPS_Sirico_WebAPI.Controllers
                 return BadRequest(new { message = ex.Message });
             }
         }
-    
+
     }
 }
 
@@ -409,6 +404,8 @@ public class VerificaAllegatoDTO
     public bool TipoAllegatoValido { get; set; }
     public bool DimensioneAllegatoValida { get; set; }
     public bool FormatoAllegatoValido { get; set; }
+
+    public string? tipoEstensione { get; set; }
 }
 
 public class SalvaSegnalazioneDTO
@@ -424,16 +421,16 @@ public class SalvaSegnalazioneDTO
     public long? IdArea { get; set; }
     public List<AspettiSegnalazioniProdottiDTO>? AspettiSegnalazione { get; set; } = new List<AspettiSegnalazioniProdottiDTO>();
 
-    public long? ContenziosoId {  get; set; }
+    public long? ContenziosoId { get; set; }
 }
 
 public class AspettiSegnalazioniProdottiDTO
 {
-    public long? Id { get; set; } 
-    public DateTime? Creato { get; set; } 
-    public DateTime? Aggiornato { get; set; } 
-    public long? IdAspetto { get; set; } 
-    public string? Nome { get; set; } 
+    public long? Id { get; set; }
+    public DateTime? Creato { get; set; }
+    public DateTime? Aggiornato { get; set; }
+    public long? IdAspetto { get; set; }
+    public string? Nome { get; set; }
     public long? IdSegnalazioneProdotto { get; set; }
     public string? Criticita { get; set; }
     public string? Suggerimento { get; set; }

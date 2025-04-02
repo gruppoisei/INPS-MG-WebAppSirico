@@ -91,8 +91,8 @@ export class ListaUtentiComponent implements OnInit {
   layoutDimScarti = 6; //elementi paginazione
   layoutNumbersScarti: number[] = []; //numeri del paginatore
   numPagesScarti = ['5', '10', '20', '50', '100']; //possibili righe di paginazione
-
-  hidden: boolean = true;   // nasconde il mat-tab Lista Scarti e il button Censimento Utenti 
+  
+  hidden: boolean = true;   // nasconde il mat-tab Lista Scarti e il button Censimento Utenti
 
   ngOnInit(): void {
 
@@ -118,7 +118,7 @@ export class ListaUtentiComponent implements OnInit {
     );
 
     this.inizializzaPaginazione();  // this.popolaTabella() invocata dentro inizializzaPaginazione()
-    this.inizializzaPaginazioneScarti();  // this.loadScarti() invocata dentro inizializzaPaginazioneScarti()
+    //this.inizializzaPaginazioneScarti();  // this.loadScarti() invocata dentro inizializzaPaginazioneScarti()
   }
 
   ngAfterViewInit() {

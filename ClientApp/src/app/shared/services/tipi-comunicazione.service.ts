@@ -9,12 +9,13 @@ import { Observable } from 'rxjs';
 })
 export class TipiComunicazioneService {
 
-  private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'TipiComunicazioni/';
+  //private apiUrl = environment.MS_SIRICOAPI + environment.API_URI + 'TipiComunicazioni/';
+  private mgUrl = environment.MG_URL + 'TipiComunicazioniGateway/';
 
   constructor(private http: HttpClient) { }
 
   getTipiComunicazioni():Observable<TipoComunicazione[]>{
-    return this.http.get<TipoComunicazione[]>(`${this.apiUrl}GetAllTipoComunicazioni`)
+    return this.http.get<TipoComunicazione[]>(`${this.mgUrl}GetAllTipoComunicazioni`)
   }
 
 }

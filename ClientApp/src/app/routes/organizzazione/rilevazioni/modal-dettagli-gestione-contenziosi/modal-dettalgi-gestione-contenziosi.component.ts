@@ -297,7 +297,13 @@ export class ModalDettalgiGestioneContenziosiComponent implements OnInit {
       return '';
     }
 
-    if (this.ruolo.split(';').map(ruolo => ruolo.trim()).some(ruolo => ruolo === this.ruoloAmministrativo)){
+    console.log('ruolo: ' + this.ruolo);
+
+    if (this.ruolo.split(';').map(ruolo => ruolo.trim()).some(ruolo => ruolo === 'P12689')){
+      return 'P12689';
+    }
+
+    else if (this.ruolo.split(';').map(ruolo => ruolo.trim()).some(ruolo => ruolo === this.ruoloAmministrativo)){
       return this.ruoloAmministrativo;
     }
 
@@ -307,10 +313,6 @@ export class ModalDettalgiGestioneContenziosiComponent implements OnInit {
 
     else if (this.ruolo.split(';').map(ruolo => ruolo.trim()).some(ruolo => ruolo === this.ruoloProvinciale)){
       return this.ruoloProvinciale;
-    }
-
-    else if (this.ruolo.split(';').map(ruolo => ruolo.trim()).some(ruolo => ruolo === 'P12689')){
-      return 'P12689';
     }
 
     return '';

@@ -11,7 +11,8 @@ export class LogsService {
   idAttivo = 0;
   json: any;
 
-  api_url = environment.MS_SIRICOAPI + environment.API_URI + 'Log/';
+  //api_url = environment.MS_SIRICOAPI + environment.API_URI + 'Log/';
+  private mgUrl = environment.MG_URL + 'LogGateway/';
 
   constructor(private http: HttpClient) {}
 
@@ -47,7 +48,7 @@ export class LogsService {
     params = params.set('dimensione', dim2);
     params = params.set('pagina', pagina2.toString());
 
-    const url = this.api_url + 'cercaSoloLogEventi';
+    const url = this.mgUrl + 'cercaSoloLogEventi';
     return this.http.get<any>(url, { params });
   }
 
@@ -70,16 +71,16 @@ export class LogsService {
     params = params.set('dimensione', dim);
     params = params.set('pagina', pagina.toString());
 
-    const url = this.api_url + 'filtraPerLogError';
+    const url = this.mgUrl + 'filtraPerLogError';
     return this.http.get<any>(url, { params });
   }
 
   getLogsId(id: number): Observable<any> {
-    return this.http.get<any>(this.api_url + 'getById/' + id);
+    return this.http.get<any>(this.mgUrl + 'getById/' + id);
   }
 
   conta(): Observable<number> {
-    return this.http.get<number>(this.api_url + 'conta');
+    return this.http.get<number>(this.mgUrl + 'conta');
   }
 
   contaErrori(
@@ -95,7 +96,7 @@ export class LogsService {
     if (dataInizio) params = params.set('dataInizio', this.formatDate(dataInizio));
     if (dataFine) params = params.set('dataFine', this.formatDate(dataFine));
 
-    const url = this.api_url + 'contaPerLogError';
+    const url = this.mgUrl + 'contaPerLogError';
 
     return this.http.get<{ count: number }>(url, { params }).pipe(
       map(response => response.count)
@@ -103,12 +104,12 @@ export class LogsService {
   }
 
   getTipiLogApplicativi(): Observable<TipiLogApplicativi[]> {
-    let url = this.api_url + 'tipi-log-usati';
+    let url = this.mgUrl + 'tipi-log-usati';
     return this.http.get<TipiLogApplicativi[]>(url);
   }
 
   getLogsParam(dim: string, ordine: string | null, pagina: number): Observable<any> {
-    let url = `${this.api_url}getAll/?dimensione=${dim}&ordine=${ordine}&pagina=${pagina}`;
+    let url = `${this.mgUrl}getAll/?dimensione=${dim}&ordine=${ordine}&pagina=${pagina}`;
     return this.http.get<any>(url);
   }
 
@@ -127,11 +128,10 @@ export class LogsService {
     if (dataFine) params = params.set('dataFine', this.formatDate(dataFine));
     if (tipoLog !== undefined && tipoLog !== null) params = params.set('tipo', tipoLog.toString());
 
-    const url = this.api_url + 'contaPerLogEventi';
+    const url = this.mgUrl + 'contaPerLogEventi';
 
     return this.http.get<{ count: number }>(url, { params }).pipe(
       map(response => response.count)
     );
   }
 }
-

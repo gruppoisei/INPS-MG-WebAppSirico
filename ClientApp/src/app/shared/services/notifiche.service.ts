@@ -22,10 +22,12 @@ export class NotificheService {
   count45To60Days$ = this.countSegnalazioni45To60DaysSubject.asObservable();
 
   private baseUrl =  environment.MS_SIRICOAPI + environment.API_URI + 'notification';
+  //private mgUrl = environment.MG_URL + 'NotificationHubGateway/';
 
   constructor() {
     this.hubConnection = new signalR.HubConnectionBuilder()
     .withUrl(this.baseUrl)
+    //.withUrl(this.mgUrl)
     .build();
 
   this.hubConnection.on('ReceiveNotificationCount', (count: number) => {
@@ -83,8 +85,4 @@ export class NotificheService {
     this.hubConnection.invoke('SendSegnalazioniFrom45To60')
       .catch(error => console.error(error))
   }
-
-
-
-
 }
